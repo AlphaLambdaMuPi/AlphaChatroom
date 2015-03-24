@@ -1,80 +1,94 @@
+#!/usr/bin/env python3
+
 import sys
 import math
 import time
-from PyQt5 import QtGui, QtWidgets, QtCore#, QPainter
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+from PyQt5.QtQml import *
+from PyQt5.QtQuick import *
+import asyncio
+from quamash import QEventLoop
+import json
 
-w = 0
-z = 0
-app = 0
+@asyncio.coroutine
+def zzz():
+    i = 0
+    while True:
+        print(i)
+        yield from asyncio.sleep(0.5)
+        i += 1
 
-def zzfunc():
-  global z
-  z = 0
+@asyncio.coroutine
+def tcp_client_connect():
+    r, w = yield from asyncio.open_connection('140.112.18.210', 9007)
+    x = { 'abc': 'alphabetagamma',
+            'nick': 'zzzzzzz'}
+    while True:
+        print(123)
+        mesg = json.dumps(x) + '\n'
+        w.write(mesg.encode())
 
-class Qww(QtWidgets.QWidget):
-  def __init__(self):
-    super().__init__()
-    self.resize(600, 800)
-    self.initUI()
-    self.setMouseTracking(True)
+        data = yield from r.readline()
+        print('456', data.decode())
 
-  def initUI(self):
-    lb1 = QtWidgets.QLabel('zzz', self)
-    lb1.move(10, 10)
+class Logic(QObject):
+    def __init__(self):
+        super().__init__()
+        self.a = 100
 
-    b1 = QtWidgets.QPushButton('Btn', self)
-    global app
-    b1.clicked.connect(lambda : app.quit())
-    b1.setToolTip('This is <b> zzz </b>')
-    b1.resize(b1.sizeHint())
-    b1.move(100, 100)
-
-    self.c1 = QtWidgets.QGraphicsView(self)
-    self.c1.setGeometry(0, 0, 400, 400)
-    sc = QtWidgets.QGraphicsScene()
-    sc.setSceneRect(0, 0, 300, 300)
-    self.c1.setScene(sc)
-    sc.addLine(0, 0, 300, 500)
-
-    self.c1.mouseMoveEvent = lambda e: sc.addLine(0, 0, e.x()-50, e.y()-50)
-
-  def paintEvent(self, event):
-    self.c1 = QtGui.QPainter()
-    self.c1.begin(self)
-    self.c1.drawLine(0, 0, 100, 100)
-    self.c1.end()
-
-    self.show()
-    self.mousePressEvent = lambda e: self.c1.drawLine(-50, -50, e.x(), e.y())
-    #self.mouseMoveEvent = lambda e: print(e.x(), e.y())
+    @pyqtSlot()
+    def hello(self):
+        print('Hello!')
+        loop = asyncio.get_event_loop()
 
 
-  def wow(self, e):
-    self.setToolTip('wooowooowoo')
-    print('WoooWoooWooooo')
+        print('F1: ', loop.is_running())
+        try:
+            loop.create_task(tcp_client_connect())
+        except Exception as e:
+            print(e)
+            print('F2: ', loop.is_running())
 
-#class myCanvas(QPainter):
-  #pass
 
-def func():
-  a, r = 600, 200
-  global z
-  w.resize(a + r * math.sin(z*math.pi/100)
-         , a + r * math.cos(z*math.pi/100))
-  time.sleep(0.001)
-  z += 1
 
 def main():
-  global app
-  app = QtWidgets.QApplication(sys.argv)
-  global w
-  w = Qww()
-  w.show()
+    app = QApplication(sys.argv)
+    loop = QEventLoop(app)
+    asyncio.set_event_loop(loop)
+    engine = QQmlApplicationEngine()
+    engine.load(QUrl('main_gui.qml'))
+    topLevel = engine.rootObjects()[0]
 
-  tm = QtCore.QTimer()
-  tm.timeout.connect(func)
-  tm.start(1)
-  sys.exit(app.exec_())
+    logic = Logic()
+    engine.rootContext().setContextProperty('logic', logic)
+    topLevel.show()
+
+    x = { 'abc': 'alphabetagamma',
+         'nick': 'zzzzzzz'}
+
+    @asyncio.coroutine
+    def tcp_client_connect():
+        r, w = yield from asyncio.open_connection('140.112.18.210', 9007)
+        while True:
+            mesg = json.dumps(x) + '\n'
+            print(mesg)
+            w.write(mesg.encode())
+
+            data = yield from r.readline()
+            print(data.decode())
+
+
+
+    #appView = QQuickView()
+    #appView.setSource(QUrl('main_gui.qml'))
+    #appView.show()
+    #main = MainHandle()
+    #appView.rootContext().setContextProperty('main', main)
+
+
+
+    loop.run_until_complete(app.exec_())
 
 if __name__ == '__main__':
-  main()
+    main()
