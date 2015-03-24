@@ -1,47 +1,52 @@
 #! /usr/bin/env python
 
 import asyncio
+import logging
+
+from connection import Connection
 from user import User
 from channel import Channel
 
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+
 class ChatServer:
     def __init__(self):
-        self.channels = {}
-        self.users = {}
-        self.name = "SYSTEM"
-        self.hellostr = "Hi {}, this is your current nickname."
+        self._channels = {}
+        self._users = {}
+        self._name = "SYSTEM"
+        self._hellostr = "Hi {}, this is your current nickname."
 
     @asyncio.coroutine
     def __call__(self, sr, sw):
-        data = yield from sr.read()
-        try:
-            data = json.loads(data.decode())
-        except UnicodeError:
-            logger.info("can't convert byte to string")
-        except ValueError:
-            logger.info("get wrong json format")
+        conn = Connection(sr, sw)
+        data = yield from conn.recv()
         
-        if "nick" in data and data['nick'] != self.name:
-            nick = self.gen_nick(data['nick'])
-            self.users[nick] = User(self, nick, sr, sw)
-            self.users[nick].send_call('init_conn', self.name, nick)
-            self.users[nick].send(
-                self.hellostr.format(nick),
-                self.name
-            )
-            res = yield from self.users[nick].run()
-            if res == False:
-                del self.users[nick]
+        if not data:
+            return
 
-    def gen_nick(nick):
-        while nick in self.users:
+        if "nick" in data and data['nick'] != self._name:
+            nick = self.gen_nick(data['nick'])
+            self._users[nick] = User(self, nick, conn)
+            self._users[nick].send_call('init_conn', self._name, nick)
+            self._users[nick].send(
+                self._hellostr.format(nick),
+                self._name
+            )
+            res = yield from self._users[nick].run()
+            if res == False:
+                del self._users[nick]
+
+    def gen_nick(self, nick):
+        while nick in self._users:
             nick = nick + '_'
         return nick
 
     def get_channel(self, chname):
-        if chname not in self.channels:
-            self.channels[chname] = Channel(self, chname)
-        return self.channels[chname]
+        if chname not in self._channels:
+            self._channels[chname] = Channel(self, chname)
+        return self._channels[chname]
 
 # global object       
 chat_server = ChatServer() 
+

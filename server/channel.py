@@ -1,7 +1,6 @@
 #! /usr/bin/env python
 
 import asyncio
-import json
 import logging
 
 logging.basicConfig(level=logging.DEBUG)
@@ -9,20 +8,20 @@ logger = logging.getLogger(__name__)
 
 class Channel:
     def __init__(self, server, name):
-        self.server = server
-        self.name = name
-        self.users = {}
+        self._server = server
+        self._name = name
+        self._users = {}
 
     def _broadcast(self, data):
-        for user in self.users.values():
-            user._send(data)
+        for user in self._users.values():
+            user._conn.send(data)
 
     def add_user(self, user):
-        self.users[user.nick] = user
+        self._users[user.get_nick()] = user
 
     def remove_user(self, user):
         try:
-            del self.users[user.nick]
+            del self._users[user.nick]
             return True
         except KeyError:
             return False
