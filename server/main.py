@@ -5,9 +5,10 @@ import logging
 import server
 
 from server import chat_server
+import logsetting
 
-async_logger = logging.getLogger("asyncio")
-async_logger.setLevel(logging.WARNING)
+logsetting.log_setup()
+logger = logging.getLogger()
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
@@ -15,7 +16,7 @@ if __name__ == "__main__":
     start_server = asyncio.start_server(chat_server, '0.0.0.0', 9007)
     s = loop.run_until_complete(start_server)
 
-    print('serving on', s.sockets[0].getsockname())
+    logger.info('serving on {}'.format(s.sockets[0].getsockname()))
     try:
         loop.run_forever()
     except KeyboardInterrupt:

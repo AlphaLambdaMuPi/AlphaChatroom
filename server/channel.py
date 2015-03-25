@@ -3,13 +3,13 @@
 import asyncio
 import logging
 
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
 
 class Channel:
     def __init__(self, server, name):
+        self.name = name
+
         self._server = server
-        self._name = name
         self._users = {}
 
     def _broadcast(self, data):
@@ -17,7 +17,11 @@ class Channel:
             user._conn.send(data)
 
     def add_user(self, user):
-        self._users[user.get_nick()] = user
+        if user not in self._users:
+            self._users[user.nick] = user
+            return True
+        else:
+            return False
 
     def remove_user(self, user):
         try:

@@ -3,12 +3,11 @@
 import asyncio
 import logging
 
-from connection import Connection
+from connection import JsonConnection
 from user import User
 from channel import Channel
 
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
 
 class ChatServer:
     def __init__(self):
@@ -19,7 +18,7 @@ class ChatServer:
 
     @asyncio.coroutine
     def __call__(self, sr, sw):
-        conn = Connection(sr, sw)
+        conn = JsonConnection(sr, sw)
         data = yield from conn.recv()
         
         if not data:
@@ -42,9 +41,12 @@ class ChatServer:
             nick = nick + '_'
         return nick
 
-    def get_channel(self, chname):
+    def get_channel(self, chname, create=True):
         if chname not in self._channels:
-            self._channels[chname] = Channel(self, chname)
+            if create:
+                self._channels[chname] = Channel(self, chname)
+            else:
+                return None
         return self._channels[chname]
 
 # global object       
