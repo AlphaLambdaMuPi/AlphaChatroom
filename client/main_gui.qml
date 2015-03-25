@@ -41,14 +41,6 @@ ApplicationWindow {
                 id: listView
                 anchors.fill: parent
                 model: ListModel {
-                    ListElement {
-                        sender: "Server"
-                        dataText: "I 7122ed..."
-                    }
-                    ListElement {
-                        sender: "Server"
-                        dataText: "zzzzzzzz"
-                    }
                 }
                 delegate: Rectangle {
                     width: parent.width
@@ -56,6 +48,12 @@ ApplicationWindow {
                     color: 'red'
                     Text {
                         text: '<b>' + sender + ': </b>' + dataText
+                    }
+                }
+                add: Transition {
+                    NumberAnimation { 
+                        properties: 'y'
+                        duration: 200
                     }
                 }
             }
@@ -95,9 +93,6 @@ ApplicationWindow {
     }
 
     function pushList(s) {
-        listView.model.append({
-            sender: 'server',
-            dataText: s
-        });
+        listView.model.append(s);
     }
 }

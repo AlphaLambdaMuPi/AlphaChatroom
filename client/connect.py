@@ -7,9 +7,6 @@ from settings import *
 from logsetting import *
 logger = logging.getLogger('root')
 
-logger.debug('123131231231321')
-print('1231')
-
 @asyncio.coroutine
 def test_el():
     i = 0
@@ -23,13 +20,10 @@ def test_el():
 
 
 class Connect:
-    def __init__(self, logic):
+    def __init__(self, medium):
         self.loop = asyncio.get_event_loop()
         self.queue = asyncio.Queue()
-        self.logic = logic
-        self.connected = False
-        self.joined = False
-        self.channel = 'zzzzzz'
+        self.medium = medium
 
     def start(self):
         logger.info('Start connect')
@@ -37,22 +31,6 @@ class Connect:
         self.loop.create_task(self.start_tcp_connection(fut))
         self.loop.create_task(self.send_loop(fut))
         self.loop.create_task(self.receive_loop(fut))
-        self.putq( {'nick': 'bobogei'} )
-        self.putq( {'type': 'CALL',
-            'func': 'join',
-            'params': ['zzzzzz']} )
-        self.connected = self.joined = True
-
-    def send_text(self, s):
-        if not self.joined:
-            logger.warning( 'Send text but not joined' )
-            return
-
-        self.putq( {
-            'type': 'CALL',
-            'func': 'route_message',
-            'params': ['CHANNEL', self.channel, s],
-        })
             
 
     def putq(self, x):
@@ -91,7 +69,10 @@ class Connect:
         while True:
             data = yield from self.reader.readline()
             logger.debug('receive: %s ', data)
-            self.logic.receive(data.decode())
+            try:
+                self.medium.receive(json.loads(data.decode()))
+            except Exception as e:
+                logger.error('Json decode error: %s', str(e))
             if not len(data) and self.reader.at_eof():
                 logger.info('Server connection closed')
                 return 
