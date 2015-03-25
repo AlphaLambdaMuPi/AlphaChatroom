@@ -38,6 +38,7 @@ ApplicationWindow {
             color: 'white'
 
             ListView {
+                id: listView
                 anchors.fill: parent
                 model: ListModel {
                     ListElement {
@@ -59,7 +60,7 @@ ApplicationWindow {
                 }
             }
 
-            Row {
+            RowLayout {
                 height: 200
                 width: parent.width
                 anchors.bottom: parent.bottom
@@ -71,7 +72,7 @@ ApplicationWindow {
                         left: parent.left
                         margins: 20
                     }
-                    width: parent.width * 0.7
+                    Layout.preferredWidth: parent.width * 0.7
                     text: 'epsilon'
                     //height: parent.height
                 }
@@ -79,7 +80,6 @@ ApplicationWindow {
                     anchors {
                         top: parent.top
                         bottom: parent.bottom
-                        left: sentText.right
                         right: parent.right
                         margins: 20
                     }
@@ -92,5 +92,12 @@ ApplicationWindow {
                 }
             }
         }
+    }
+
+    function pushList(s) {
+        listView.model.append({
+            sender: 'server',
+            dataText: s
+        });
     }
 }

@@ -23,9 +23,13 @@ def test_el():
 
 
 class Connect:
-    def __init__(self):
+    def __init__(self, logic):
         self.loop = asyncio.get_event_loop()
         self.queue = asyncio.Queue()
+        self.logic = logic
+        self.connected = False
+        self.joined = False
+        self.channel = 'zzzzzz'
 
     def start(self):
         logger.info('Start connect')
@@ -37,18 +41,31 @@ class Connect:
         self.putq( {'type': 'CALL',
             'func': 'join',
             'params': ['zzzzzz']} )
+        self.connected = self.joined = True
+
+    def send_text(self, s):
+        if not self.joined:
+            logger.warning( 'Send text but not joined' )
+            return
+
+        self.putq( {
+            'type': 'CALL',
+            'func': 'route_message',
+            'params': ['CHANNEL', self.channel, s],
+        })
+            
 
     def putq(self, x):
         self.queue.put_nowait(x)
 
     @asyncio.coroutine
     def start_tcp_connection(self, fut):
-        #try:
-        self.reader, self.writer = yield from asyncio.open_connection(SERVER_IP, 9007)
-        print(self.reader, self.writer)
-        #except Exception as e:
-        #logger.error(e)
-            #return False
+        try:
+            self.reader, self.writer = yield from asyncio.open_connection(SERVER_IP, 9007)
+        except Exception as e:
+            logger.error(e)
+            return False
+
         logger.info('Connected')
         fut.set_result(True)
         return True
@@ -74,5 +91,8 @@ class Connect:
         while True:
             data = yield from self.reader.readline()
             logger.debug('receive: %s ', data)
+            self.logic.receive(data.decode())
             if not len(data) and self.reader.at_eof():
+                logger.info('Server connection closed')
                 return 
+

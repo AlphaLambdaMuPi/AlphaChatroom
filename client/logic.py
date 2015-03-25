@@ -19,7 +19,7 @@ class Logic(QObject):
     def __init__(self, root):
         super().__init__()
         self.root = root
-        self.connect = Connect()
+        self.connect = Connect(self)
 
     @pyqtSlot()
     def hello(self):
@@ -33,4 +33,13 @@ class Logic(QObject):
     @pyqtSlot(str)
     def send(self, s):
         logger.debug(s)
+        self.connect.send_text(s)
+    
+    def receive(self, s):
+        try:
+            print(s, self.root.pushList)
+        except Exception as e:
+            print(e)
+        self.root.pushList(s)
+        #root
 
