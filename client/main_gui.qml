@@ -27,6 +27,7 @@ ApplicationWindow {
                     anchors.fill: parent
                     onClicked: {
                         logic.hello()
+                        console.log('123')
                     }
                 }
             }

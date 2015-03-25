@@ -10,10 +10,10 @@ import logging
 LOG_FILE_NAME = 'client.log'
 logging.basicConfig(filename=LOG_FILE_NAME,
                     filemode='a',
-                    format='[%(asctime)s.%(msecs)d] %(name)s - %(levelname)s : %(message)s',
+                    format='[%(asctime)s.%(msecs)d] %(module)s - %(levelname)s : %(message)s',
                     datefmt='%H:%M:%S',
                     level=logging.DEBUG)
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('root')
 
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
@@ -22,57 +22,25 @@ from PyQt5.QtQuick import *
 
 from quamash import QEventLoop
 
-@asyncio.coroutine
-def test_el():
-    i = 0
-    while True:
-        print(i)
-        yield from asyncio.sleep(0.5)
-        i += 1
-
-        if i > 10:
-            return
-
-@asyncio.coroutine
-def tcp_client_connect():
-
-    try:
-        reader, writer = yield from asyncio.open_connection('140.112.18.210', 9007)
-    except Exception as e:
-        logger.error(e)
-        return
-
-    while True:
-        mesg = json.dumps(x) + '\n'
-        writer.write(mesg.encode())
-        logger.debug(1, 2)
-
-        data = yield from reader.readline()
+#from logic import Logic
+from connect import Connect
+from logsetting import *
 
 class Logic(QObject):
     def __init__(self):
         super().__init__()
-        self.a = 100
+        self.connect = Connect()
 
-    @pyqtSlot()
+    @pyqtSignature("")
     def hello(self):
         loop = asyncio.get_event_loop()
-
         logger.debug('Start Connect')
-        try:
-            loop.create_task(tcp_client_connect())
-        except Exception as e:
-            logger.error(e)
+        return
+        #try:
+            #self.connect.start()
+        #except Exception as e:
+            #logger.error(e)
 
-
-def init_logging():
-    formatter = logging.Formatter(fmt = '[%(asctime)s.%(msecs)d] %(name)s - %(levelname)s : %(message)s'
-                                  ,datefmt = '%H:%M:%S')
-    console = logging.StreamHandler(sys.stdout)
-    console.setLevel(logging.DEBUG)
-    console.setFormatter(formatter)
-    logger.addHandler(console)
-    logger.debug('Logging Config Done')
 
 def app_setup():
     '''
@@ -99,7 +67,7 @@ def app_setup():
 
 def main():
 
-    init_logging()
+    init_logging(logger)
 
     app_setup()
 
