@@ -64,14 +64,33 @@ ApplicationWindow {
                 width: parent.width
                 anchors.bottom: parent.bottom
                 TextArea {
+                    id: textArea
+                    anchors {
+                        top: parent.top
+                        bottom: parent.bottom
+                        left: parent.left
+                        margins: 20
+                    }
                     width: parent.width * 0.7
+                    text: 'epsilon'
+                    //height: parent.height
                 }
                 Button {
-                    width: parent.width * 0.3
+                    anchors {
+                        top: parent.top
+                        bottom: parent.bottom
+                        left: sentText.right
+                        right: parent.right
+                        margins: 20
+                    }
+                    //implicitWidth: parent.width*0.3
                     text: 'Send'
+                    onClicked: {
+                        logic.send( textArea.text )
+                        textArea.text = ''
+                    }
                 }
             }
-
         }
     }
 }

@@ -11,8 +11,26 @@ from quamash import QEventLoop
 from settings import *
 from logsetting import *
 from connect import Connect
+
+import logsetting
 logger = logging.getLogger('root')
 
-init_logging(logger)
+class Logic(QObject):
+    def __init__(self, root):
+        super().__init__()
+        self.root = root
+        self.connect = Connect()
 
+    @pyqtSlot()
+    def hello(self):
+        loop = asyncio.get_event_loop()
+        logger.debug('Start Connect')
+        #try:
+        self.connect.start()
+        #except Exception as e:
+        #logger.error(e)
+
+    @pyqtSlot(str)
+    def send(self, s):
+        logger.debug(s)
 
