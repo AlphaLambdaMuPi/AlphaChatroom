@@ -16,17 +16,22 @@ import logsetting
 logger = logging.getLogger('root')
 
 class Logic(QObject):
-    def __init__(self, root):
+    def __init__(self):
         super().__init__()
-        self.root = root
         self.medium = Medium(self)
+
+    def setRoot(self, root):
+        self.root = root
 
     @pyqtSlot()
     def hello(self):
         self.medium.connect_server()
+        
+    @pyqtSlot(str)
+    def login(self, nick):
         self.medium.login('alpha')
         self.medium.join_channel('beta') 
-        
+        self.root.onLoggedIn()
 
     @pyqtSlot(str)
     def send(self, s):
@@ -34,9 +39,14 @@ class Logic(QObject):
         self.medium.send_msg('beta', s)
     
     def receive_msg(self, fr, s):
-        self.root.pushList({
+        self.root.receive_msg({
+            'type': 'text',
             'sender': fr,
-            'dataText': s
+            'mesg': s
         })
+
+    def join_channel(self, s):
+        self.root.channelAdd(s)
+
 
 

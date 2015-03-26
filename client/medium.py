@@ -15,7 +15,7 @@ class Medium:
     def __init__(self, logic):
         self.connect = Connect(self)
         self.state = 0
-        self.channels = set()
+        self.channels = []
         self.logic = logic
         pass
 
@@ -38,7 +38,7 @@ class Medium:
             return
 
         self.state = 2
-        self.channels = set()
+        self.channels = []
 
     def join_channel(self, channel_name):
 
@@ -50,13 +50,14 @@ class Medium:
             })
         except Exception as e:
             logging.error('Cant join server: %s', str(e))
-        print(channel_name)
+
+        logger.info('Success joined channel: %s', channel_name)
         self.success_join(channel_name)
 
 
     def success_join(self, channel):
-        self.channels.add(channel)
-        print(channel, self.channels)
+        self.channels.append(channel)
+        self.logic.join_channel(channel)
 
     def send_msg(self, channel_name, mesg):
         if channel_name not in self.channels:
