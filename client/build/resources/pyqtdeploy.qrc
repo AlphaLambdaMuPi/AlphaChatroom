@@ -182,8 +182,14 @@
         <file>concurrent/futures/_base.pyo</file>
         <file>concurrent/futures/process.pyo</file>
         <file>concurrent/futures/thread.pyo</file>
+        <file>opcode.pyo</file>
         <file>struct.pyo</file>
         <file>subprocess.pyo</file>
         <file>libffi.so</file>
+        <file>quamash/__init__.pyo</file>
+        <file>quamash/_common.pyo</file>
+        <file>quamash/_unix.pyo</file>
+        <file>quamash/_windows.pyo</file>
+        <file>PyQt5/__init__.pyo</file>
     </qresource>
 </RCC>

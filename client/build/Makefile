@@ -12,10 +12,10 @@ MAKEFILE      = Makefile
 
 CC            = gcc
 CXX           = g++
-DEFINES       = -DPYQTDEPLOY_FROZEN_MAIN -DPYQTDEPLOY_OPTIMIZED -DXML_STATIC -DHAVE_EXPAT_CONFIG_H -DQT_NO_DEBUG -DQT_CORE_LIB
+DEFINES       = -DPYQTDEPLOY_FROZEN_MAIN -DPYQTDEPLOY_OPTIMIZED -DXML_STATIC -DHAVE_EXPAT_CONFIG_H -DQT_NO_DEBUG -DQT_QUICKWIDGETS_LIB -DQT_QUICK_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_QML_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -O2 -march=x86-64 -mtune=generic -O2 -pipe -fstack-protector-strong --param=ssp-buffer-size=4 -w -D_REENTRANT -fPIE $(DEFINES)
 CXXFLAGS      = -pipe -O2 -march=x86-64 -mtune=generic -O2 -pipe -fstack-protector-strong --param=ssp-buffer-size=4 -w -D_REENTRANT -fPIE $(DEFINES)
-INCPATH       = -I. -I/src/Python-3.4.3/Modules/_multiprocessing -I/src/Python-3.4.3/Modules -I/src/Python-3.4.3/Modules/_ctypes -isystem /usr/include/python3.4m -I/src/Python-3.4.3/Modules/expat -isystem /usr/include/qt -isystem /usr/include/qt/QtCore -I. -I/usr/lib/qt/mkspecs/linux-g++
+INCPATH       = -I. -I/src/Python-3.4.3/Modules/expat -I/src/Python-3.4.3/Modules/_ctypes -I/src/Python-3.4.3/Modules/_multiprocessing -I../../../python_static/include/python3.4m -I/src/Python-3.4.3/Modules -isystem /usr/include/qt -isystem /usr/include/qt/QtQuickWidgets -isystem /usr/include/qt/QtQuick -isystem /usr/include/qt/QtWidgets -isystem /usr/include/qt/QtGui -isystem /usr/include/qt/QtQml -isystem /usr/include/qt/QtNetwork -isystem /usr/include/qt/QtCore -I. -I/usr/lib/qt/mkspecs/linux-g++
 QMAKE         = /usr/lib/qt/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -36,7 +36,7 @@ DISTNAME      = AlphaChatroom1.0.0
 DISTDIR = /home/step5/AlphaChatroom/client/build/.tmp/AlphaChatroom1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-O1 -Wl,-O1,--sort-common,--as-needed,-z,relro
-LIBS          = $(SUBLIBS) -lssl -lcrypto -L/usr/lib -lpython3.4m -lutil -ldl -lQt5Core -lpthread -lffi 
+LIBS          = $(SUBLIBS) -lssl -lcrypto -L/home/step5/python_static/lib/python3.4/site-packages -lsip -lffi -L/home/step5/python_static/lib/python3.4/site-packages/PyQt5 -lQt -lQtGui -lQtCore -lQtQml -lQtNetwork -lQtQuick -lQtWidgets -lQtQuickWidgets -lreadline -L/home/step5/python_static/lib -lpython3.4m -lutil -ldl -lQt5QuickWidgets -lQt5Quick -lQt5Widgets -lQt5Gui -lQt5Qml -lQt5Network -lQt5Core -lGL -lpthread 
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -51,72 +51,74 @@ OBJECTS_DIR   = ./
 SOURCES       = pyqtdeploy_main.cpp \
 		pyqtdeploy_start.cpp \
 		pdytools_module.cpp \
-		/src/Python-3.4.3/Modules/selectmodule.c \
-		/src/Python-3.4.3/Modules/pyexpat.c \
-		/src/Python-3.4.3/Modules/_ctypes/callbacks.c \
 		/src/Python-3.4.3/Modules/sha256module.c \
-		/src/Python-3.4.3/Modules/sha512module.c \
-		/src/Python-3.4.3/Modules/_ctypes/cfield.c \
+		/src/Python-3.4.3/Modules/pyexpat.c \
 		/src/Python-3.4.3/Modules/mathmodule.c \
-		/src/Python-3.4.3/Modules/timemodule.c \
-		/src/Python-3.4.3/Modules/_multiprocessing/multiprocessing.c \
-		/src/Python-3.4.3/Modules/_ctypes/callproc.c \
-		/src/Python-3.4.3/Modules/_multiprocessing/semaphore.c \
 		/src/Python-3.4.3/Modules/_math.c \
-		/src/Python-3.4.3/Modules/_json.c \
-		/src/Python-3.4.3/Modules/arraymodule.c \
-		/src/Python-3.4.3/Modules/_randommodule.c \
-		/src/Python-3.4.3/Modules/binascii.c \
-		/src/Python-3.4.3/Modules/_pickle.c \
-		/src/Python-3.4.3/Modules/_ssl.c \
-		/src/Python-3.4.3/Modules/_datetimemodule.c \
-		/src/Python-3.4.3/Modules/_ctypes/stgdict.c \
+		/src/Python-3.4.3/Modules/_ctypes/cfield.c \
 		/src/Python-3.4.3/Modules/expat/xmltok.c \
+		/src/Python-3.4.3/Modules/timemodule.c \
+		/src/Python-3.4.3/Modules/_ctypes/callbacks.c \
+		/src/Python-3.4.3/Modules/_ctypes/stgdict.c \
+		/src/Python-3.4.3/Modules/_ctypes/callproc.c \
+		/src/Python-3.4.3/Modules/_ssl.c \
+		/src/Python-3.4.3/Modules/_multiprocessing/multiprocessing.c \
+		/src/Python-3.4.3/Modules/arraymodule.c \
 		/src/Python-3.4.3/Modules/_heapqmodule.c \
+		/src/Python-3.4.3/Modules/mmapmodule.c \
 		/src/Python-3.4.3/Modules/expat/xmlparse.c \
 		/src/Python-3.4.3/Modules/_bisectmodule.c \
-		/src/Python-3.4.3/Modules/expat/xmlrole.c \
-		/src/Python-3.4.3/Modules/_ctypes/_ctypes.c \
-		/src/Python-3.4.3/Modules/mmapmodule.c \
 		/src/Python-3.4.3/Modules/sha1module.c \
-		/src/Python-3.4.3/Modules/socketmodule.c \
+		/src/Python-3.4.3/Modules/selectmodule.c \
+		/src/Python-3.4.3/Modules/_json.c \
+		/src/Python-3.4.3/Modules/expat/xmlrole.c \
+		/src/Python-3.4.3/Modules/_multiprocessing/semaphore.c \
+		/src/Python-3.4.3/Modules/_randommodule.c \
+		/src/Python-3.4.3/Modules/binascii.c \
+		/src/Python-3.4.3/Modules/_datetimemodule.c \
+		/src/Python-3.4.3/Modules/sha512module.c \
 		/src/Python-3.4.3/Modules/md5module.c \
+		/src/Python-3.4.3/Modules/_pickle.c \
+		/src/Python-3.4.3/Modules/_ctypes/_ctypes.c \
+		/src/Python-3.4.3/Modules/socketmodule.c \
 		/src/Python-3.4.3/Modules/_posixsubprocess.c \
+		/src/Python-3.4.3/Modules/readline.c \
 		/src/Python-3.4.3/Modules/grpmodule.c qrc_pyqtdeploy.cpp
 OBJECTS       = pyqtdeploy_main.o \
 		pyqtdeploy_start.o \
 		pdytools_module.o \
-		selectmodule.o \
-		pyexpat.o \
-		callbacks.o \
 		sha256module.o \
-		sha512module.o \
-		cfield.o \
+		pyexpat.o \
 		mathmodule.o \
-		timemodule.o \
-		multiprocessing.o \
-		callproc.o \
-		semaphore.o \
 		_math.o \
-		_json.o \
-		arraymodule.o \
-		_randommodule.o \
-		binascii.o \
-		_pickle.o \
-		_ssl.o \
-		_datetimemodule.o \
-		stgdict.o \
+		cfield.o \
 		xmltok.o \
+		timemodule.o \
+		callbacks.o \
+		stgdict.o \
+		callproc.o \
+		_ssl.o \
+		multiprocessing.o \
+		arraymodule.o \
 		_heapqmodule.o \
+		mmapmodule.o \
 		xmlparse.o \
 		_bisectmodule.o \
-		xmlrole.o \
-		_ctypes.o \
-		mmapmodule.o \
 		sha1module.o \
-		socketmodule.o \
+		selectmodule.o \
+		_json.o \
+		xmlrole.o \
+		semaphore.o \
+		_randommodule.o \
+		binascii.o \
+		_datetimemodule.o \
+		sha512module.o \
 		md5module.o \
+		_pickle.o \
+		_ctypes.o \
+		socketmodule.o \
 		_posixsubprocess.o \
+		readline.o \
 		grpmodule.o \
 		qrc_pyqtdeploy.o
 DIST          = /usr/lib/qt/mkspecs/features/spec_pre.prf \
@@ -128,6 +130,54 @@ DIST          = /usr/lib/qt/mkspecs/features/spec_pre.prf \
 		/usr/lib/qt/mkspecs/common/g++-base.conf \
 		/usr/lib/qt/mkspecs/common/g++-unix.conf \
 		/usr/lib/qt/mkspecs/qconfig.pri \
+		/usr/lib/qt/mkspecs/modules/qt_Attica.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KActivities.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KArchive.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KAuth.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KBookmarks.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KCMUtils.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KCodecs.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KCompletion.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KConfigCore.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KConfigGui.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KConfigWidgets.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KCoreAddons.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KCrash.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KDBusAddons.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KDeclarative.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KDEWebKit.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KEmoticons.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KGlobalAccel.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KGuiAddons.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KHtml.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KI18n.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KIconThemes.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KIdleTime.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KIOCore.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KIOFileWidgets.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KIOWidgets.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KItemModels.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KItemViews.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KJobWidgets.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KJS.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KJSApi.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KNewStuff.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KNotifications.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KNotifyConfig.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KNTLM.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KParts.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KPlotting.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KPty.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KrossCore.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KrossUi.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KService.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KTextEditor.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KTextWidgets.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KUnitConversion.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KWallet.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KWidgetsAddons.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KWindowSystem.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KXmlGui.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_bluetooth.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_bluetooth_private.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_bootstrap_private.pri \
@@ -219,6 +269,12 @@ DIST          = /usr/lib/qt/mkspecs/features/spec_pre.prf \
 		/usr/lib/qt/mkspecs/modules/qt_lib_xml_private.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_xmlpatterns.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_xmlpatterns_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_phonon4qt5.pri \
+		/usr/lib/qt/mkspecs/modules/qt_QuickAddons.pri \
+		/usr/lib/qt/mkspecs/modules/qt_Solid.pri \
+		/usr/lib/qt/mkspecs/modules/qt_SonnetCore.pri \
+		/usr/lib/qt/mkspecs/modules/qt_SonnetUi.pri \
+		/usr/lib/qt/mkspecs/modules/qt_ThreadWeaver.pri \
 		/usr/lib/qt/mkspecs/features/qt_functions.prf \
 		/usr/lib/qt/mkspecs/features/qt_config.prf \
 		/usr/lib/qt/mkspecs/linux-g++/qmake.conf \
@@ -231,6 +287,8 @@ DIST          = /usr/lib/qt/mkspecs/features/spec_pre.prf \
 		/usr/lib/qt/mkspecs/features/qt.prf \
 		/usr/lib/qt/mkspecs/features/resources.prf \
 		/usr/lib/qt/mkspecs/features/moc.prf \
+		/usr/lib/qt/mkspecs/features/unix/opengl.prf \
+		/usr/lib/qt/mkspecs/features/uic.prf \
 		/usr/lib/qt/mkspecs/features/unix/thread.prf \
 		/usr/lib/qt/mkspecs/features/testcase_targets.prf \
 		/usr/lib/qt/mkspecs/features/exceptions.prf \
@@ -241,37 +299,38 @@ DIST          = /usr/lib/qt/mkspecs/features/spec_pre.prf \
 		frozen_main.h pyqtdeploy_main.cpp \
 		pyqtdeploy_start.cpp \
 		pdytools_module.cpp \
-		/src/Python-3.4.3/Modules/selectmodule.c \
-		/src/Python-3.4.3/Modules/pyexpat.c \
-		/src/Python-3.4.3/Modules/_ctypes/callbacks.c \
 		/src/Python-3.4.3/Modules/sha256module.c \
-		/src/Python-3.4.3/Modules/sha512module.c \
-		/src/Python-3.4.3/Modules/_ctypes/cfield.c \
+		/src/Python-3.4.3/Modules/pyexpat.c \
 		/src/Python-3.4.3/Modules/mathmodule.c \
-		/src/Python-3.4.3/Modules/timemodule.c \
-		/src/Python-3.4.3/Modules/_multiprocessing/multiprocessing.c \
-		/src/Python-3.4.3/Modules/_ctypes/callproc.c \
-		/src/Python-3.4.3/Modules/_multiprocessing/semaphore.c \
 		/src/Python-3.4.3/Modules/_math.c \
-		/src/Python-3.4.3/Modules/_json.c \
-		/src/Python-3.4.3/Modules/arraymodule.c \
-		/src/Python-3.4.3/Modules/_randommodule.c \
-		/src/Python-3.4.3/Modules/binascii.c \
-		/src/Python-3.4.3/Modules/_pickle.c \
-		/src/Python-3.4.3/Modules/_ssl.c \
-		/src/Python-3.4.3/Modules/_datetimemodule.c \
-		/src/Python-3.4.3/Modules/_ctypes/stgdict.c \
+		/src/Python-3.4.3/Modules/_ctypes/cfield.c \
 		/src/Python-3.4.3/Modules/expat/xmltok.c \
+		/src/Python-3.4.3/Modules/timemodule.c \
+		/src/Python-3.4.3/Modules/_ctypes/callbacks.c \
+		/src/Python-3.4.3/Modules/_ctypes/stgdict.c \
+		/src/Python-3.4.3/Modules/_ctypes/callproc.c \
+		/src/Python-3.4.3/Modules/_ssl.c \
+		/src/Python-3.4.3/Modules/_multiprocessing/multiprocessing.c \
+		/src/Python-3.4.3/Modules/arraymodule.c \
 		/src/Python-3.4.3/Modules/_heapqmodule.c \
+		/src/Python-3.4.3/Modules/mmapmodule.c \
 		/src/Python-3.4.3/Modules/expat/xmlparse.c \
 		/src/Python-3.4.3/Modules/_bisectmodule.c \
-		/src/Python-3.4.3/Modules/expat/xmlrole.c \
-		/src/Python-3.4.3/Modules/_ctypes/_ctypes.c \
-		/src/Python-3.4.3/Modules/mmapmodule.c \
 		/src/Python-3.4.3/Modules/sha1module.c \
-		/src/Python-3.4.3/Modules/socketmodule.c \
+		/src/Python-3.4.3/Modules/selectmodule.c \
+		/src/Python-3.4.3/Modules/_json.c \
+		/src/Python-3.4.3/Modules/expat/xmlrole.c \
+		/src/Python-3.4.3/Modules/_multiprocessing/semaphore.c \
+		/src/Python-3.4.3/Modules/_randommodule.c \
+		/src/Python-3.4.3/Modules/binascii.c \
+		/src/Python-3.4.3/Modules/_datetimemodule.c \
+		/src/Python-3.4.3/Modules/sha512module.c \
 		/src/Python-3.4.3/Modules/md5module.c \
+		/src/Python-3.4.3/Modules/_pickle.c \
+		/src/Python-3.4.3/Modules/_ctypes/_ctypes.c \
+		/src/Python-3.4.3/Modules/socketmodule.c \
 		/src/Python-3.4.3/Modules/_posixsubprocess.c \
+		/src/Python-3.4.3/Modules/readline.c \
 		/src/Python-3.4.3/Modules/grpmodule.c
 QMAKE_TARGET  = AlphaChatroom
 DESTDIR       = #avoid trailing-slash linebreak
@@ -312,6 +371,54 @@ Makefile: AlphaChatroom.pro /usr/lib/qt/mkspecs/linux-g++/qmake.conf /usr/lib/qt
 		/usr/lib/qt/mkspecs/common/g++-base.conf \
 		/usr/lib/qt/mkspecs/common/g++-unix.conf \
 		/usr/lib/qt/mkspecs/qconfig.pri \
+		/usr/lib/qt/mkspecs/modules/qt_Attica.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KActivities.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KArchive.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KAuth.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KBookmarks.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KCMUtils.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KCodecs.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KCompletion.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KConfigCore.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KConfigGui.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KConfigWidgets.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KCoreAddons.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KCrash.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KDBusAddons.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KDeclarative.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KDEWebKit.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KEmoticons.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KGlobalAccel.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KGuiAddons.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KHtml.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KI18n.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KIconThemes.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KIdleTime.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KIOCore.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KIOFileWidgets.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KIOWidgets.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KItemModels.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KItemViews.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KJobWidgets.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KJS.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KJSApi.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KNewStuff.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KNotifications.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KNotifyConfig.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KNTLM.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KParts.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KPlotting.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KPty.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KrossCore.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KrossUi.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KService.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KTextEditor.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KTextWidgets.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KUnitConversion.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KWallet.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KWidgetsAddons.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KWindowSystem.pri \
+		/usr/lib/qt/mkspecs/modules/qt_KXmlGui.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_bluetooth.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_bluetooth_private.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_bootstrap_private.pri \
@@ -403,6 +510,12 @@ Makefile: AlphaChatroom.pro /usr/lib/qt/mkspecs/linux-g++/qmake.conf /usr/lib/qt
 		/usr/lib/qt/mkspecs/modules/qt_lib_xml_private.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_xmlpatterns.pri \
 		/usr/lib/qt/mkspecs/modules/qt_lib_xmlpatterns_private.pri \
+		/usr/lib/qt/mkspecs/modules/qt_phonon4qt5.pri \
+		/usr/lib/qt/mkspecs/modules/qt_QuickAddons.pri \
+		/usr/lib/qt/mkspecs/modules/qt_Solid.pri \
+		/usr/lib/qt/mkspecs/modules/qt_SonnetCore.pri \
+		/usr/lib/qt/mkspecs/modules/qt_SonnetUi.pri \
+		/usr/lib/qt/mkspecs/modules/qt_ThreadWeaver.pri \
 		/usr/lib/qt/mkspecs/features/qt_functions.prf \
 		/usr/lib/qt/mkspecs/features/qt_config.prf \
 		/usr/lib/qt/mkspecs/linux-g++/qmake.conf \
@@ -415,6 +528,8 @@ Makefile: AlphaChatroom.pro /usr/lib/qt/mkspecs/linux-g++/qmake.conf /usr/lib/qt
 		/usr/lib/qt/mkspecs/features/qt.prf \
 		/usr/lib/qt/mkspecs/features/resources.prf \
 		/usr/lib/qt/mkspecs/features/moc.prf \
+		/usr/lib/qt/mkspecs/features/unix/opengl.prf \
+		/usr/lib/qt/mkspecs/features/uic.prf \
 		/usr/lib/qt/mkspecs/features/unix/thread.prf \
 		/usr/lib/qt/mkspecs/features/testcase_targets.prf \
 		/usr/lib/qt/mkspecs/features/exceptions.prf \
@@ -422,7 +537,16 @@ Makefile: AlphaChatroom.pro /usr/lib/qt/mkspecs/linux-g++/qmake.conf /usr/lib/qt
 		/usr/lib/qt/mkspecs/features/lex.prf \
 		AlphaChatroom.pro \
 		resources/pyqtdeploy.qrc \
-		/usr/lib/libQt5Core.prl
+		/usr/lib/libQtGui.prl \
+		/usr/lib/libQtCore.prl \
+		/usr/lib/libQtNetwork.prl \
+		/usr/lib/libQt5QuickWidgets.prl \
+		/usr/lib/libQt5Quick.prl \
+		/usr/lib/libQt5Gui.prl \
+		/usr/lib/libQt5Core.prl \
+		/usr/lib/libQt5Qml.prl \
+		/usr/lib/libQt5Network.prl \
+		/usr/lib/libQt5Widgets.prl
 	$(QMAKE) -o Makefile AlphaChatroom.pro
 /usr/lib/qt/mkspecs/features/spec_pre.prf:
 /usr/lib/qt/mkspecs/common/shell-unix.conf:
@@ -433,6 +557,54 @@ Makefile: AlphaChatroom.pro /usr/lib/qt/mkspecs/linux-g++/qmake.conf /usr/lib/qt
 /usr/lib/qt/mkspecs/common/g++-base.conf:
 /usr/lib/qt/mkspecs/common/g++-unix.conf:
 /usr/lib/qt/mkspecs/qconfig.pri:
+/usr/lib/qt/mkspecs/modules/qt_Attica.pri:
+/usr/lib/qt/mkspecs/modules/qt_KActivities.pri:
+/usr/lib/qt/mkspecs/modules/qt_KArchive.pri:
+/usr/lib/qt/mkspecs/modules/qt_KAuth.pri:
+/usr/lib/qt/mkspecs/modules/qt_KBookmarks.pri:
+/usr/lib/qt/mkspecs/modules/qt_KCMUtils.pri:
+/usr/lib/qt/mkspecs/modules/qt_KCodecs.pri:
+/usr/lib/qt/mkspecs/modules/qt_KCompletion.pri:
+/usr/lib/qt/mkspecs/modules/qt_KConfigCore.pri:
+/usr/lib/qt/mkspecs/modules/qt_KConfigGui.pri:
+/usr/lib/qt/mkspecs/modules/qt_KConfigWidgets.pri:
+/usr/lib/qt/mkspecs/modules/qt_KCoreAddons.pri:
+/usr/lib/qt/mkspecs/modules/qt_KCrash.pri:
+/usr/lib/qt/mkspecs/modules/qt_KDBusAddons.pri:
+/usr/lib/qt/mkspecs/modules/qt_KDeclarative.pri:
+/usr/lib/qt/mkspecs/modules/qt_KDEWebKit.pri:
+/usr/lib/qt/mkspecs/modules/qt_KEmoticons.pri:
+/usr/lib/qt/mkspecs/modules/qt_KGlobalAccel.pri:
+/usr/lib/qt/mkspecs/modules/qt_KGuiAddons.pri:
+/usr/lib/qt/mkspecs/modules/qt_KHtml.pri:
+/usr/lib/qt/mkspecs/modules/qt_KI18n.pri:
+/usr/lib/qt/mkspecs/modules/qt_KIconThemes.pri:
+/usr/lib/qt/mkspecs/modules/qt_KIdleTime.pri:
+/usr/lib/qt/mkspecs/modules/qt_KIOCore.pri:
+/usr/lib/qt/mkspecs/modules/qt_KIOFileWidgets.pri:
+/usr/lib/qt/mkspecs/modules/qt_KIOWidgets.pri:
+/usr/lib/qt/mkspecs/modules/qt_KItemModels.pri:
+/usr/lib/qt/mkspecs/modules/qt_KItemViews.pri:
+/usr/lib/qt/mkspecs/modules/qt_KJobWidgets.pri:
+/usr/lib/qt/mkspecs/modules/qt_KJS.pri:
+/usr/lib/qt/mkspecs/modules/qt_KJSApi.pri:
+/usr/lib/qt/mkspecs/modules/qt_KNewStuff.pri:
+/usr/lib/qt/mkspecs/modules/qt_KNotifications.pri:
+/usr/lib/qt/mkspecs/modules/qt_KNotifyConfig.pri:
+/usr/lib/qt/mkspecs/modules/qt_KNTLM.pri:
+/usr/lib/qt/mkspecs/modules/qt_KParts.pri:
+/usr/lib/qt/mkspecs/modules/qt_KPlotting.pri:
+/usr/lib/qt/mkspecs/modules/qt_KPty.pri:
+/usr/lib/qt/mkspecs/modules/qt_KrossCore.pri:
+/usr/lib/qt/mkspecs/modules/qt_KrossUi.pri:
+/usr/lib/qt/mkspecs/modules/qt_KService.pri:
+/usr/lib/qt/mkspecs/modules/qt_KTextEditor.pri:
+/usr/lib/qt/mkspecs/modules/qt_KTextWidgets.pri:
+/usr/lib/qt/mkspecs/modules/qt_KUnitConversion.pri:
+/usr/lib/qt/mkspecs/modules/qt_KWallet.pri:
+/usr/lib/qt/mkspecs/modules/qt_KWidgetsAddons.pri:
+/usr/lib/qt/mkspecs/modules/qt_KWindowSystem.pri:
+/usr/lib/qt/mkspecs/modules/qt_KXmlGui.pri:
 /usr/lib/qt/mkspecs/modules/qt_lib_bluetooth.pri:
 /usr/lib/qt/mkspecs/modules/qt_lib_bluetooth_private.pri:
 /usr/lib/qt/mkspecs/modules/qt_lib_bootstrap_private.pri:
@@ -524,6 +696,12 @@ Makefile: AlphaChatroom.pro /usr/lib/qt/mkspecs/linux-g++/qmake.conf /usr/lib/qt
 /usr/lib/qt/mkspecs/modules/qt_lib_xml_private.pri:
 /usr/lib/qt/mkspecs/modules/qt_lib_xmlpatterns.pri:
 /usr/lib/qt/mkspecs/modules/qt_lib_xmlpatterns_private.pri:
+/usr/lib/qt/mkspecs/modules/qt_phonon4qt5.pri:
+/usr/lib/qt/mkspecs/modules/qt_QuickAddons.pri:
+/usr/lib/qt/mkspecs/modules/qt_Solid.pri:
+/usr/lib/qt/mkspecs/modules/qt_SonnetCore.pri:
+/usr/lib/qt/mkspecs/modules/qt_SonnetUi.pri:
+/usr/lib/qt/mkspecs/modules/qt_ThreadWeaver.pri:
 /usr/lib/qt/mkspecs/features/qt_functions.prf:
 /usr/lib/qt/mkspecs/features/qt_config.prf:
 /usr/lib/qt/mkspecs/linux-g++/qmake.conf:
@@ -536,6 +714,8 @@ Makefile: AlphaChatroom.pro /usr/lib/qt/mkspecs/linux-g++/qmake.conf /usr/lib/qt
 /usr/lib/qt/mkspecs/features/qt.prf:
 /usr/lib/qt/mkspecs/features/resources.prf:
 /usr/lib/qt/mkspecs/features/moc.prf:
+/usr/lib/qt/mkspecs/features/unix/opengl.prf:
+/usr/lib/qt/mkspecs/features/uic.prf:
 /usr/lib/qt/mkspecs/features/unix/thread.prf:
 /usr/lib/qt/mkspecs/features/testcase_targets.prf:
 /usr/lib/qt/mkspecs/features/exceptions.prf:
@@ -543,7 +723,16 @@ Makefile: AlphaChatroom.pro /usr/lib/qt/mkspecs/linux-g++/qmake.conf /usr/lib/qt
 /usr/lib/qt/mkspecs/features/lex.prf:
 AlphaChatroom.pro:
 resources/pyqtdeploy.qrc:
+/usr/lib/libQtGui.prl:
+/usr/lib/libQtCore.prl:
+/usr/lib/libQtNetwork.prl:
+/usr/lib/libQt5QuickWidgets.prl:
+/usr/lib/libQt5Quick.prl:
+/usr/lib/libQt5Gui.prl:
 /usr/lib/libQt5Core.prl:
+/usr/lib/libQt5Qml.prl:
+/usr/lib/libQt5Network.prl:
+/usr/lib/libQt5Widgets.prl:
 qmake: FORCE
 	@$(QMAKE) -o Makefile AlphaChatroom.pro
 
@@ -560,7 +749,7 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents resources/pyqtdeploy.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents pyqtdeploy_version.h frozen_bootstrap.h frozen_main.h $(DISTDIR)/
-	$(COPY_FILE) --parents pyqtdeploy_main.cpp pyqtdeploy_start.cpp pdytools_module.cpp /src/Python-3.4.3/Modules/selectmodule.c /src/Python-3.4.3/Modules/pyexpat.c /src/Python-3.4.3/Modules/_ctypes/callbacks.c /src/Python-3.4.3/Modules/sha256module.c /src/Python-3.4.3/Modules/sha512module.c /src/Python-3.4.3/Modules/_ctypes/cfield.c /src/Python-3.4.3/Modules/mathmodule.c /src/Python-3.4.3/Modules/timemodule.c /src/Python-3.4.3/Modules/_multiprocessing/multiprocessing.c /src/Python-3.4.3/Modules/_ctypes/callproc.c /src/Python-3.4.3/Modules/_multiprocessing/semaphore.c /src/Python-3.4.3/Modules/_math.c /src/Python-3.4.3/Modules/_json.c /src/Python-3.4.3/Modules/arraymodule.c /src/Python-3.4.3/Modules/_randommodule.c /src/Python-3.4.3/Modules/binascii.c /src/Python-3.4.3/Modules/_pickle.c /src/Python-3.4.3/Modules/_ssl.c /src/Python-3.4.3/Modules/_datetimemodule.c /src/Python-3.4.3/Modules/_ctypes/stgdict.c /src/Python-3.4.3/Modules/expat/xmltok.c /src/Python-3.4.3/Modules/_heapqmodule.c /src/Python-3.4.3/Modules/expat/xmlparse.c /src/Python-3.4.3/Modules/_bisectmodule.c /src/Python-3.4.3/Modules/expat/xmlrole.c /src/Python-3.4.3/Modules/_ctypes/_ctypes.c /src/Python-3.4.3/Modules/mmapmodule.c /src/Python-3.4.3/Modules/sha1module.c /src/Python-3.4.3/Modules/socketmodule.c /src/Python-3.4.3/Modules/md5module.c /src/Python-3.4.3/Modules/_posixsubprocess.c /src/Python-3.4.3/Modules/grpmodule.c $(DISTDIR)/
+	$(COPY_FILE) --parents pyqtdeploy_main.cpp pyqtdeploy_start.cpp pdytools_module.cpp /src/Python-3.4.3/Modules/sha256module.c /src/Python-3.4.3/Modules/pyexpat.c /src/Python-3.4.3/Modules/mathmodule.c /src/Python-3.4.3/Modules/_math.c /src/Python-3.4.3/Modules/_ctypes/cfield.c /src/Python-3.4.3/Modules/expat/xmltok.c /src/Python-3.4.3/Modules/timemodule.c /src/Python-3.4.3/Modules/_ctypes/callbacks.c /src/Python-3.4.3/Modules/_ctypes/stgdict.c /src/Python-3.4.3/Modules/_ctypes/callproc.c /src/Python-3.4.3/Modules/_ssl.c /src/Python-3.4.3/Modules/_multiprocessing/multiprocessing.c /src/Python-3.4.3/Modules/arraymodule.c /src/Python-3.4.3/Modules/_heapqmodule.c /src/Python-3.4.3/Modules/mmapmodule.c /src/Python-3.4.3/Modules/expat/xmlparse.c /src/Python-3.4.3/Modules/_bisectmodule.c /src/Python-3.4.3/Modules/sha1module.c /src/Python-3.4.3/Modules/selectmodule.c /src/Python-3.4.3/Modules/_json.c /src/Python-3.4.3/Modules/expat/xmlrole.c /src/Python-3.4.3/Modules/_multiprocessing/semaphore.c /src/Python-3.4.3/Modules/_randommodule.c /src/Python-3.4.3/Modules/binascii.c /src/Python-3.4.3/Modules/_datetimemodule.c /src/Python-3.4.3/Modules/sha512module.c /src/Python-3.4.3/Modules/md5module.c /src/Python-3.4.3/Modules/_pickle.c /src/Python-3.4.3/Modules/_ctypes/_ctypes.c /src/Python-3.4.3/Modules/socketmodule.c /src/Python-3.4.3/Modules/_posixsubprocess.c /src/Python-3.4.3/Modules/readline.c /src/Python-3.4.3/Modules/grpmodule.c $(DISTDIR)/
 
 
 clean:compiler_clean 
@@ -601,6 +790,7 @@ qrc_pyqtdeploy.cpp: resources/pyqtdeploy.qrc \
 		resources/weakref.pyo \
 		resources/copy.pyo \
 		resources/linecache.pyo \
+		resources/opcode.pyo \
 		resources/tempfile.pyo \
 		resources/tokenize.pyo \
 		resources/uu.pyo \
@@ -757,6 +947,7 @@ qrc_pyqtdeploy.cpp: resources/pyqtdeploy.qrc \
 		resources/importlib/machinery.pyo \
 		resources/collections/abc.pyo \
 		resources/collections/__init__.pyo \
+		resources/PyQt5/__init__.pyo \
 		resources/urllib/__init__.pyo \
 		resources/urllib/parse.pyo \
 		resources/ctypes/wintypes.pyo \
@@ -768,13 +959,19 @@ qrc_pyqtdeploy.cpp: resources/pyqtdeploy.qrc \
 		resources/ctypes/macholib/dylib.pyo \
 		resources/ctypes/macholib/__init__.pyo \
 		resources/http/client.pyo \
-		resources/http/__init__.pyo
+		resources/http/__init__.pyo \
+		resources/quamash/_common.pyo \
+		resources/quamash/_windows.pyo \
+		resources/quamash/__init__.pyo \
+		resources/quamash/_unix.pyo
 	/usr/lib/qt/bin/rcc -name pyqtdeploy resources/pyqtdeploy.qrc -o qrc_pyqtdeploy.cpp
 
 compiler_moc_header_make_all:
 compiler_moc_header_clean:
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
+compiler_uic_make_all:
+compiler_uic_clean:
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
 compiler_yacc_impl_make_all:
@@ -785,85 +982,588 @@ compiler_clean: compiler_rcc_clean
 
 ####### Compile
 
-pyqtdeploy_main.o: pyqtdeploy_main.cpp 
+pyqtdeploy_main.o: pyqtdeploy_main.cpp ../../../python_static/include/python3.4m/Python.h \
+		../../../python_static/include/python3.4m/patchlevel.h \
+		../../../python_static/include/python3.4m/pyconfig.h \
+		../../../python_static/include/python3.4m/pymacconfig.h \
+		../../../python_static/include/python3.4m/pyport.h \
+		../../../python_static/include/python3.4m/pymacro.h \
+		../../../python_static/include/python3.4m/pyatomic.h \
+		../../../python_static/include/python3.4m/dynamic_annotations.h \
+		../../../python_static/include/python3.4m/pymath.h \
+		../../../python_static/include/python3.4m/pytime.h \
+		../../../python_static/include/python3.4m/object.h \
+		../../../python_static/include/python3.4m/pymem.h \
+		../../../python_static/include/python3.4m/objimpl.h \
+		../../../python_static/include/python3.4m/typeslots.h \
+		../../../python_static/include/python3.4m/pyhash.h \
+		../../../python_static/include/python3.4m/pydebug.h \
+		../../../python_static/include/python3.4m/bytearrayobject.h \
+		../../../python_static/include/python3.4m/bytesobject.h \
+		../../../python_static/include/python3.4m/unicodeobject.h \
+		../../../python_static/include/python3.4m/longobject.h \
+		../../../python_static/include/python3.4m/longintrepr.h \
+		../../../python_static/include/python3.4m/boolobject.h \
+		../../../python_static/include/python3.4m/floatobject.h \
+		../../../python_static/include/python3.4m/complexobject.h \
+		../../../python_static/include/python3.4m/rangeobject.h \
+		../../../python_static/include/python3.4m/memoryobject.h \
+		../../../python_static/include/python3.4m/tupleobject.h \
+		../../../python_static/include/python3.4m/listobject.h \
+		../../../python_static/include/python3.4m/dictobject.h \
+		../../../python_static/include/python3.4m/enumobject.h \
+		../../../python_static/include/python3.4m/setobject.h \
+		../../../python_static/include/python3.4m/methodobject.h \
+		../../../python_static/include/python3.4m/moduleobject.h \
+		../../../python_static/include/python3.4m/funcobject.h \
+		../../../python_static/include/python3.4m/classobject.h \
+		../../../python_static/include/python3.4m/fileobject.h \
+		../../../python_static/include/python3.4m/pycapsule.h \
+		../../../python_static/include/python3.4m/traceback.h \
+		../../../python_static/include/python3.4m/pystate.h \
+		../../../python_static/include/python3.4m/sliceobject.h \
+		../../../python_static/include/python3.4m/cellobject.h \
+		../../../python_static/include/python3.4m/iterobject.h \
+		../../../python_static/include/python3.4m/genobject.h \
+		../../../python_static/include/python3.4m/descrobject.h \
+		../../../python_static/include/python3.4m/warnings.h \
+		../../../python_static/include/python3.4m/weakrefobject.h \
+		../../../python_static/include/python3.4m/structseq.h \
+		../../../python_static/include/python3.4m/namespaceobject.h \
+		../../../python_static/include/python3.4m/codecs.h \
+		../../../python_static/include/python3.4m/pyerrors.h \
+		../../../python_static/include/python3.4m/pyarena.h \
+		../../../python_static/include/python3.4m/modsupport.h \
+		../../../python_static/include/python3.4m/pythonrun.h \
+		../../../python_static/include/python3.4m/ceval.h \
+		../../../python_static/include/python3.4m/sysmodule.h \
+		../../../python_static/include/python3.4m/intrcheck.h \
+		../../../python_static/include/python3.4m/import.h \
+		../../../python_static/include/python3.4m/abstract.h \
+		../../../python_static/include/python3.4m/bltinmodule.h \
+		../../../python_static/include/python3.4m/compile.h \
+		../../../python_static/include/python3.4m/code.h \
+		../../../python_static/include/python3.4m/eval.h \
+		../../../python_static/include/python3.4m/pyctype.h \
+		../../../python_static/include/python3.4m/pystrtod.h \
+		../../../python_static/include/python3.4m/pystrcmp.h \
+		../../../python_static/include/python3.4m/dtoa.h \
+		../../../python_static/include/python3.4m/fileutils.h \
+		../../../python_static/include/python3.4m/pyfpe.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o pyqtdeploy_main.o pyqtdeploy_main.cpp
 
-pyqtdeploy_start.o: pyqtdeploy_start.cpp frozen_bootstrap.h \
+pyqtdeploy_start.o: pyqtdeploy_start.cpp ../../../python_static/include/python3.4m/Python.h \
+		../../../python_static/include/python3.4m/patchlevel.h \
+		../../../python_static/include/python3.4m/pyconfig.h \
+		../../../python_static/include/python3.4m/pymacconfig.h \
+		../../../python_static/include/python3.4m/pyport.h \
+		../../../python_static/include/python3.4m/pymacro.h \
+		../../../python_static/include/python3.4m/pyatomic.h \
+		../../../python_static/include/python3.4m/dynamic_annotations.h \
+		../../../python_static/include/python3.4m/pymath.h \
+		../../../python_static/include/python3.4m/pytime.h \
+		../../../python_static/include/python3.4m/object.h \
+		../../../python_static/include/python3.4m/pymem.h \
+		../../../python_static/include/python3.4m/objimpl.h \
+		../../../python_static/include/python3.4m/typeslots.h \
+		../../../python_static/include/python3.4m/pyhash.h \
+		../../../python_static/include/python3.4m/pydebug.h \
+		../../../python_static/include/python3.4m/bytearrayobject.h \
+		../../../python_static/include/python3.4m/bytesobject.h \
+		../../../python_static/include/python3.4m/unicodeobject.h \
+		../../../python_static/include/python3.4m/longobject.h \
+		../../../python_static/include/python3.4m/longintrepr.h \
+		../../../python_static/include/python3.4m/boolobject.h \
+		../../../python_static/include/python3.4m/floatobject.h \
+		../../../python_static/include/python3.4m/complexobject.h \
+		../../../python_static/include/python3.4m/rangeobject.h \
+		../../../python_static/include/python3.4m/memoryobject.h \
+		../../../python_static/include/python3.4m/tupleobject.h \
+		../../../python_static/include/python3.4m/listobject.h \
+		../../../python_static/include/python3.4m/dictobject.h \
+		../../../python_static/include/python3.4m/enumobject.h \
+		../../../python_static/include/python3.4m/setobject.h \
+		../../../python_static/include/python3.4m/methodobject.h \
+		../../../python_static/include/python3.4m/moduleobject.h \
+		../../../python_static/include/python3.4m/funcobject.h \
+		../../../python_static/include/python3.4m/classobject.h \
+		../../../python_static/include/python3.4m/fileobject.h \
+		../../../python_static/include/python3.4m/pycapsule.h \
+		../../../python_static/include/python3.4m/traceback.h \
+		../../../python_static/include/python3.4m/pystate.h \
+		../../../python_static/include/python3.4m/sliceobject.h \
+		../../../python_static/include/python3.4m/cellobject.h \
+		../../../python_static/include/python3.4m/iterobject.h \
+		../../../python_static/include/python3.4m/genobject.h \
+		../../../python_static/include/python3.4m/descrobject.h \
+		../../../python_static/include/python3.4m/warnings.h \
+		../../../python_static/include/python3.4m/weakrefobject.h \
+		../../../python_static/include/python3.4m/structseq.h \
+		../../../python_static/include/python3.4m/namespaceobject.h \
+		../../../python_static/include/python3.4m/codecs.h \
+		../../../python_static/include/python3.4m/pyerrors.h \
+		../../../python_static/include/python3.4m/pyarena.h \
+		../../../python_static/include/python3.4m/modsupport.h \
+		../../../python_static/include/python3.4m/pythonrun.h \
+		../../../python_static/include/python3.4m/ceval.h \
+		../../../python_static/include/python3.4m/sysmodule.h \
+		../../../python_static/include/python3.4m/intrcheck.h \
+		../../../python_static/include/python3.4m/import.h \
+		../../../python_static/include/python3.4m/abstract.h \
+		../../../python_static/include/python3.4m/bltinmodule.h \
+		../../../python_static/include/python3.4m/compile.h \
+		../../../python_static/include/python3.4m/code.h \
+		../../../python_static/include/python3.4m/eval.h \
+		../../../python_static/include/python3.4m/pyctype.h \
+		../../../python_static/include/python3.4m/pystrtod.h \
+		../../../python_static/include/python3.4m/pystrcmp.h \
+		../../../python_static/include/python3.4m/dtoa.h \
+		../../../python_static/include/python3.4m/fileutils.h \
+		../../../python_static/include/python3.4m/pyfpe.h \
+		frozen_bootstrap.h \
 		frozen_main.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o pyqtdeploy_start.o pyqtdeploy_start.cpp
 
-pdytools_module.o: pdytools_module.cpp pyqtdeploy_version.h
+pdytools_module.o: pdytools_module.cpp ../../../python_static/include/python3.4m/Python.h \
+		../../../python_static/include/python3.4m/patchlevel.h \
+		../../../python_static/include/python3.4m/pyconfig.h \
+		../../../python_static/include/python3.4m/pymacconfig.h \
+		../../../python_static/include/python3.4m/pyport.h \
+		../../../python_static/include/python3.4m/pymacro.h \
+		../../../python_static/include/python3.4m/pyatomic.h \
+		../../../python_static/include/python3.4m/dynamic_annotations.h \
+		../../../python_static/include/python3.4m/pymath.h \
+		../../../python_static/include/python3.4m/pytime.h \
+		../../../python_static/include/python3.4m/object.h \
+		../../../python_static/include/python3.4m/pymem.h \
+		../../../python_static/include/python3.4m/objimpl.h \
+		../../../python_static/include/python3.4m/typeslots.h \
+		../../../python_static/include/python3.4m/pyhash.h \
+		../../../python_static/include/python3.4m/pydebug.h \
+		../../../python_static/include/python3.4m/bytearrayobject.h \
+		../../../python_static/include/python3.4m/bytesobject.h \
+		../../../python_static/include/python3.4m/unicodeobject.h \
+		../../../python_static/include/python3.4m/longobject.h \
+		../../../python_static/include/python3.4m/longintrepr.h \
+		../../../python_static/include/python3.4m/boolobject.h \
+		../../../python_static/include/python3.4m/floatobject.h \
+		../../../python_static/include/python3.4m/complexobject.h \
+		../../../python_static/include/python3.4m/rangeobject.h \
+		../../../python_static/include/python3.4m/memoryobject.h \
+		../../../python_static/include/python3.4m/tupleobject.h \
+		../../../python_static/include/python3.4m/listobject.h \
+		../../../python_static/include/python3.4m/dictobject.h \
+		../../../python_static/include/python3.4m/enumobject.h \
+		../../../python_static/include/python3.4m/setobject.h \
+		../../../python_static/include/python3.4m/methodobject.h \
+		../../../python_static/include/python3.4m/moduleobject.h \
+		../../../python_static/include/python3.4m/funcobject.h \
+		../../../python_static/include/python3.4m/classobject.h \
+		../../../python_static/include/python3.4m/fileobject.h \
+		../../../python_static/include/python3.4m/pycapsule.h \
+		../../../python_static/include/python3.4m/traceback.h \
+		../../../python_static/include/python3.4m/pystate.h \
+		../../../python_static/include/python3.4m/sliceobject.h \
+		../../../python_static/include/python3.4m/cellobject.h \
+		../../../python_static/include/python3.4m/iterobject.h \
+		../../../python_static/include/python3.4m/genobject.h \
+		../../../python_static/include/python3.4m/descrobject.h \
+		../../../python_static/include/python3.4m/warnings.h \
+		../../../python_static/include/python3.4m/weakrefobject.h \
+		../../../python_static/include/python3.4m/structseq.h \
+		../../../python_static/include/python3.4m/namespaceobject.h \
+		../../../python_static/include/python3.4m/codecs.h \
+		../../../python_static/include/python3.4m/pyerrors.h \
+		../../../python_static/include/python3.4m/pyarena.h \
+		../../../python_static/include/python3.4m/modsupport.h \
+		../../../python_static/include/python3.4m/pythonrun.h \
+		../../../python_static/include/python3.4m/ceval.h \
+		../../../python_static/include/python3.4m/sysmodule.h \
+		../../../python_static/include/python3.4m/intrcheck.h \
+		../../../python_static/include/python3.4m/import.h \
+		../../../python_static/include/python3.4m/abstract.h \
+		../../../python_static/include/python3.4m/bltinmodule.h \
+		../../../python_static/include/python3.4m/compile.h \
+		../../../python_static/include/python3.4m/code.h \
+		../../../python_static/include/python3.4m/eval.h \
+		../../../python_static/include/python3.4m/pyctype.h \
+		../../../python_static/include/python3.4m/pystrtod.h \
+		../../../python_static/include/python3.4m/pystrcmp.h \
+		../../../python_static/include/python3.4m/dtoa.h \
+		../../../python_static/include/python3.4m/fileutils.h \
+		../../../python_static/include/python3.4m/pyfpe.h \
+		../../../python_static/include/python3.4m/marshal.h \
+		../../../python_static/include/python3.4m/structmember.h \
+		pyqtdeploy_version.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o pdytools_module.o pdytools_module.cpp
 
-selectmodule.o: /src/Python-3.4.3/Modules/selectmodule.c 
-	$(CC) -c $(CFLAGS) $(INCPATH) -o selectmodule.o /src/Python-3.4.3/Modules/selectmodule.c
-
-pyexpat.o: /src/Python-3.4.3/Modules/pyexpat.c /src/Python-3.4.3/Modules/expat/expat.h \
-		/src/Python-3.4.3/Modules/expat/expat_external.h \
-		/src/Python-3.4.3/Modules/expat/pyexpatns.h
-	$(CC) -c $(CFLAGS) $(INCPATH) -o pyexpat.o /src/Python-3.4.3/Modules/pyexpat.c
-
-callbacks.o: /src/Python-3.4.3/Modules/_ctypes/callbacks.c /src/Python-3.4.3/Modules/_ctypes/ctypes.h
-	$(CC) -c $(CFLAGS) $(INCPATH) -o callbacks.o /src/Python-3.4.3/Modules/_ctypes/callbacks.c
-
-sha256module.o: /src/Python-3.4.3/Modules/sha256module.c /src/Python-3.4.3/Modules/hashlib.h
+sha256module.o: /src/Python-3.4.3/Modules/sha256module.c ../../../python_static/include/python3.4m/Python.h \
+		../../../python_static/include/python3.4m/patchlevel.h \
+		../../../python_static/include/python3.4m/pyconfig.h \
+		../../../python_static/include/python3.4m/pymacconfig.h \
+		../../../python_static/include/python3.4m/pyport.h \
+		../../../python_static/include/python3.4m/pymacro.h \
+		../../../python_static/include/python3.4m/pyatomic.h \
+		../../../python_static/include/python3.4m/dynamic_annotations.h \
+		../../../python_static/include/python3.4m/pymath.h \
+		../../../python_static/include/python3.4m/pytime.h \
+		../../../python_static/include/python3.4m/object.h \
+		../../../python_static/include/python3.4m/pymem.h \
+		../../../python_static/include/python3.4m/objimpl.h \
+		../../../python_static/include/python3.4m/typeslots.h \
+		../../../python_static/include/python3.4m/pyhash.h \
+		../../../python_static/include/python3.4m/pydebug.h \
+		../../../python_static/include/python3.4m/bytearrayobject.h \
+		../../../python_static/include/python3.4m/bytesobject.h \
+		../../../python_static/include/python3.4m/unicodeobject.h \
+		../../../python_static/include/python3.4m/longobject.h \
+		../../../python_static/include/python3.4m/longintrepr.h \
+		../../../python_static/include/python3.4m/boolobject.h \
+		../../../python_static/include/python3.4m/floatobject.h \
+		../../../python_static/include/python3.4m/complexobject.h \
+		../../../python_static/include/python3.4m/rangeobject.h \
+		../../../python_static/include/python3.4m/memoryobject.h \
+		../../../python_static/include/python3.4m/tupleobject.h \
+		../../../python_static/include/python3.4m/listobject.h \
+		../../../python_static/include/python3.4m/dictobject.h \
+		../../../python_static/include/python3.4m/enumobject.h \
+		../../../python_static/include/python3.4m/setobject.h \
+		../../../python_static/include/python3.4m/methodobject.h \
+		../../../python_static/include/python3.4m/moduleobject.h \
+		../../../python_static/include/python3.4m/funcobject.h \
+		../../../python_static/include/python3.4m/classobject.h \
+		../../../python_static/include/python3.4m/fileobject.h \
+		../../../python_static/include/python3.4m/pycapsule.h \
+		../../../python_static/include/python3.4m/traceback.h \
+		../../../python_static/include/python3.4m/pystate.h \
+		../../../python_static/include/python3.4m/sliceobject.h \
+		../../../python_static/include/python3.4m/cellobject.h \
+		../../../python_static/include/python3.4m/iterobject.h \
+		../../../python_static/include/python3.4m/genobject.h \
+		../../../python_static/include/python3.4m/descrobject.h \
+		../../../python_static/include/python3.4m/warnings.h \
+		../../../python_static/include/python3.4m/weakrefobject.h \
+		../../../python_static/include/python3.4m/structseq.h \
+		../../../python_static/include/python3.4m/namespaceobject.h \
+		../../../python_static/include/python3.4m/codecs.h \
+		../../../python_static/include/python3.4m/pyerrors.h \
+		../../../python_static/include/python3.4m/pyarena.h \
+		../../../python_static/include/python3.4m/modsupport.h \
+		../../../python_static/include/python3.4m/pythonrun.h \
+		../../../python_static/include/python3.4m/ceval.h \
+		../../../python_static/include/python3.4m/sysmodule.h \
+		../../../python_static/include/python3.4m/intrcheck.h \
+		../../../python_static/include/python3.4m/import.h \
+		../../../python_static/include/python3.4m/abstract.h \
+		../../../python_static/include/python3.4m/bltinmodule.h \
+		../../../python_static/include/python3.4m/compile.h \
+		../../../python_static/include/python3.4m/code.h \
+		../../../python_static/include/python3.4m/eval.h \
+		../../../python_static/include/python3.4m/pyctype.h \
+		../../../python_static/include/python3.4m/pystrtod.h \
+		../../../python_static/include/python3.4m/pystrcmp.h \
+		../../../python_static/include/python3.4m/dtoa.h \
+		../../../python_static/include/python3.4m/fileutils.h \
+		../../../python_static/include/python3.4m/pyfpe.h \
+		../../../python_static/include/python3.4m/structmember.h \
+		/src/Python-3.4.3/Modules/hashlib.h \
+		../../../python_static/include/python3.4m/pythread.h
 	$(CC) -c $(CFLAGS) $(INCPATH) -o sha256module.o /src/Python-3.4.3/Modules/sha256module.c
 
-sha512module.o: /src/Python-3.4.3/Modules/sha512module.c /src/Python-3.4.3/Modules/hashlib.h
-	$(CC) -c $(CFLAGS) $(INCPATH) -o sha512module.o /src/Python-3.4.3/Modules/sha512module.c
+pyexpat.o: /src/Python-3.4.3/Modules/pyexpat.c ../../../python_static/include/python3.4m/Python.h \
+		../../../python_static/include/python3.4m/patchlevel.h \
+		../../../python_static/include/python3.4m/pyconfig.h \
+		../../../python_static/include/python3.4m/pymacconfig.h \
+		../../../python_static/include/python3.4m/pyport.h \
+		../../../python_static/include/python3.4m/pymacro.h \
+		../../../python_static/include/python3.4m/pyatomic.h \
+		../../../python_static/include/python3.4m/dynamic_annotations.h \
+		../../../python_static/include/python3.4m/pymath.h \
+		../../../python_static/include/python3.4m/pytime.h \
+		../../../python_static/include/python3.4m/object.h \
+		../../../python_static/include/python3.4m/pymem.h \
+		../../../python_static/include/python3.4m/objimpl.h \
+		../../../python_static/include/python3.4m/typeslots.h \
+		../../../python_static/include/python3.4m/pyhash.h \
+		../../../python_static/include/python3.4m/pydebug.h \
+		../../../python_static/include/python3.4m/bytearrayobject.h \
+		../../../python_static/include/python3.4m/bytesobject.h \
+		../../../python_static/include/python3.4m/unicodeobject.h \
+		../../../python_static/include/python3.4m/longobject.h \
+		../../../python_static/include/python3.4m/longintrepr.h \
+		../../../python_static/include/python3.4m/boolobject.h \
+		../../../python_static/include/python3.4m/floatobject.h \
+		../../../python_static/include/python3.4m/complexobject.h \
+		../../../python_static/include/python3.4m/rangeobject.h \
+		../../../python_static/include/python3.4m/memoryobject.h \
+		../../../python_static/include/python3.4m/tupleobject.h \
+		../../../python_static/include/python3.4m/listobject.h \
+		../../../python_static/include/python3.4m/dictobject.h \
+		../../../python_static/include/python3.4m/enumobject.h \
+		../../../python_static/include/python3.4m/setobject.h \
+		../../../python_static/include/python3.4m/methodobject.h \
+		../../../python_static/include/python3.4m/moduleobject.h \
+		../../../python_static/include/python3.4m/funcobject.h \
+		../../../python_static/include/python3.4m/classobject.h \
+		../../../python_static/include/python3.4m/fileobject.h \
+		../../../python_static/include/python3.4m/pycapsule.h \
+		../../../python_static/include/python3.4m/traceback.h \
+		../../../python_static/include/python3.4m/pystate.h \
+		../../../python_static/include/python3.4m/sliceobject.h \
+		../../../python_static/include/python3.4m/cellobject.h \
+		../../../python_static/include/python3.4m/iterobject.h \
+		../../../python_static/include/python3.4m/genobject.h \
+		../../../python_static/include/python3.4m/descrobject.h \
+		../../../python_static/include/python3.4m/warnings.h \
+		../../../python_static/include/python3.4m/weakrefobject.h \
+		../../../python_static/include/python3.4m/structseq.h \
+		../../../python_static/include/python3.4m/namespaceobject.h \
+		../../../python_static/include/python3.4m/codecs.h \
+		../../../python_static/include/python3.4m/pyerrors.h \
+		../../../python_static/include/python3.4m/pyarena.h \
+		../../../python_static/include/python3.4m/modsupport.h \
+		../../../python_static/include/python3.4m/pythonrun.h \
+		../../../python_static/include/python3.4m/ceval.h \
+		../../../python_static/include/python3.4m/sysmodule.h \
+		../../../python_static/include/python3.4m/intrcheck.h \
+		../../../python_static/include/python3.4m/import.h \
+		../../../python_static/include/python3.4m/abstract.h \
+		../../../python_static/include/python3.4m/bltinmodule.h \
+		../../../python_static/include/python3.4m/compile.h \
+		../../../python_static/include/python3.4m/code.h \
+		../../../python_static/include/python3.4m/eval.h \
+		../../../python_static/include/python3.4m/pyctype.h \
+		../../../python_static/include/python3.4m/pystrtod.h \
+		../../../python_static/include/python3.4m/pystrcmp.h \
+		../../../python_static/include/python3.4m/dtoa.h \
+		../../../python_static/include/python3.4m/fileutils.h \
+		../../../python_static/include/python3.4m/pyfpe.h \
+		../../../python_static/include/python3.4m/frameobject.h \
+		/src/Python-3.4.3/Modules/expat/expat.h \
+		/src/Python-3.4.3/Modules/expat/expat_external.h \
+		/src/Python-3.4.3/Modules/expat/pyexpatns.h \
+		../../../python_static/include/python3.4m/pyexpat.h
+	$(CC) -c $(CFLAGS) $(INCPATH) -o pyexpat.o /src/Python-3.4.3/Modules/pyexpat.c
 
-cfield.o: /src/Python-3.4.3/Modules/_ctypes/cfield.c /src/Python-3.4.3/Modules/_ctypes/ctypes.h
-	$(CC) -c $(CFLAGS) $(INCPATH) -o cfield.o /src/Python-3.4.3/Modules/_ctypes/cfield.c
-
-mathmodule.o: /src/Python-3.4.3/Modules/mathmodule.c /src/Python-3.4.3/Modules/_math.h
+mathmodule.o: /src/Python-3.4.3/Modules/mathmodule.c ../../../python_static/include/python3.4m/Python.h \
+		../../../python_static/include/python3.4m/patchlevel.h \
+		../../../python_static/include/python3.4m/pyconfig.h \
+		../../../python_static/include/python3.4m/pymacconfig.h \
+		../../../python_static/include/python3.4m/pyport.h \
+		../../../python_static/include/python3.4m/pymacro.h \
+		../../../python_static/include/python3.4m/pyatomic.h \
+		../../../python_static/include/python3.4m/dynamic_annotations.h \
+		../../../python_static/include/python3.4m/pymath.h \
+		../../../python_static/include/python3.4m/pytime.h \
+		../../../python_static/include/python3.4m/object.h \
+		../../../python_static/include/python3.4m/pymem.h \
+		../../../python_static/include/python3.4m/objimpl.h \
+		../../../python_static/include/python3.4m/typeslots.h \
+		../../../python_static/include/python3.4m/pyhash.h \
+		../../../python_static/include/python3.4m/pydebug.h \
+		../../../python_static/include/python3.4m/bytearrayobject.h \
+		../../../python_static/include/python3.4m/bytesobject.h \
+		../../../python_static/include/python3.4m/unicodeobject.h \
+		../../../python_static/include/python3.4m/longobject.h \
+		../../../python_static/include/python3.4m/longintrepr.h \
+		../../../python_static/include/python3.4m/boolobject.h \
+		../../../python_static/include/python3.4m/floatobject.h \
+		../../../python_static/include/python3.4m/complexobject.h \
+		../../../python_static/include/python3.4m/rangeobject.h \
+		../../../python_static/include/python3.4m/memoryobject.h \
+		../../../python_static/include/python3.4m/tupleobject.h \
+		../../../python_static/include/python3.4m/listobject.h \
+		../../../python_static/include/python3.4m/dictobject.h \
+		../../../python_static/include/python3.4m/enumobject.h \
+		../../../python_static/include/python3.4m/setobject.h \
+		../../../python_static/include/python3.4m/methodobject.h \
+		../../../python_static/include/python3.4m/moduleobject.h \
+		../../../python_static/include/python3.4m/funcobject.h \
+		../../../python_static/include/python3.4m/classobject.h \
+		../../../python_static/include/python3.4m/fileobject.h \
+		../../../python_static/include/python3.4m/pycapsule.h \
+		../../../python_static/include/python3.4m/traceback.h \
+		../../../python_static/include/python3.4m/pystate.h \
+		../../../python_static/include/python3.4m/sliceobject.h \
+		../../../python_static/include/python3.4m/cellobject.h \
+		../../../python_static/include/python3.4m/iterobject.h \
+		../../../python_static/include/python3.4m/genobject.h \
+		../../../python_static/include/python3.4m/descrobject.h \
+		../../../python_static/include/python3.4m/warnings.h \
+		../../../python_static/include/python3.4m/weakrefobject.h \
+		../../../python_static/include/python3.4m/structseq.h \
+		../../../python_static/include/python3.4m/namespaceobject.h \
+		../../../python_static/include/python3.4m/codecs.h \
+		../../../python_static/include/python3.4m/pyerrors.h \
+		../../../python_static/include/python3.4m/pyarena.h \
+		../../../python_static/include/python3.4m/modsupport.h \
+		../../../python_static/include/python3.4m/pythonrun.h \
+		../../../python_static/include/python3.4m/ceval.h \
+		../../../python_static/include/python3.4m/sysmodule.h \
+		../../../python_static/include/python3.4m/intrcheck.h \
+		../../../python_static/include/python3.4m/import.h \
+		../../../python_static/include/python3.4m/abstract.h \
+		../../../python_static/include/python3.4m/bltinmodule.h \
+		../../../python_static/include/python3.4m/compile.h \
+		../../../python_static/include/python3.4m/code.h \
+		../../../python_static/include/python3.4m/eval.h \
+		../../../python_static/include/python3.4m/pyctype.h \
+		../../../python_static/include/python3.4m/pystrtod.h \
+		../../../python_static/include/python3.4m/pystrcmp.h \
+		../../../python_static/include/python3.4m/dtoa.h \
+		../../../python_static/include/python3.4m/fileutils.h \
+		../../../python_static/include/python3.4m/pyfpe.h \
+		/src/Python-3.4.3/Modules/_math.h
 	$(CC) -c $(CFLAGS) $(INCPATH) -o mathmodule.o /src/Python-3.4.3/Modules/mathmodule.c
 
-timemodule.o: /src/Python-3.4.3/Modules/timemodule.c 
-	$(CC) -c $(CFLAGS) $(INCPATH) -o timemodule.o /src/Python-3.4.3/Modules/timemodule.c
-
-multiprocessing.o: /src/Python-3.4.3/Modules/_multiprocessing/multiprocessing.c /src/Python-3.4.3/Modules/_multiprocessing/multiprocessing.h
-	$(CC) -c $(CFLAGS) $(INCPATH) -o multiprocessing.o /src/Python-3.4.3/Modules/_multiprocessing/multiprocessing.c
-
-callproc.o: /src/Python-3.4.3/Modules/_ctypes/callproc.c /src/Python-3.4.3/Modules/_ctypes/ctypes_dlfcn.h \
-		/src/Python-3.4.3/Modules/_ctypes/ctypes.h
-	$(CC) -c $(CFLAGS) $(INCPATH) -o callproc.o /src/Python-3.4.3/Modules/_ctypes/callproc.c
-
-semaphore.o: /src/Python-3.4.3/Modules/_multiprocessing/semaphore.c /src/Python-3.4.3/Modules/_multiprocessing/multiprocessing.h
-	$(CC) -c $(CFLAGS) $(INCPATH) -o semaphore.o /src/Python-3.4.3/Modules/_multiprocessing/semaphore.c
-
-_math.o: /src/Python-3.4.3/Modules/_math.c /src/Python-3.4.3/Modules/_math.h
+_math.o: /src/Python-3.4.3/Modules/_math.c ../../../python_static/include/python3.4m/Python.h \
+		../../../python_static/include/python3.4m/patchlevel.h \
+		../../../python_static/include/python3.4m/pyconfig.h \
+		../../../python_static/include/python3.4m/pymacconfig.h \
+		../../../python_static/include/python3.4m/pyport.h \
+		../../../python_static/include/python3.4m/pymacro.h \
+		../../../python_static/include/python3.4m/pyatomic.h \
+		../../../python_static/include/python3.4m/dynamic_annotations.h \
+		../../../python_static/include/python3.4m/pymath.h \
+		../../../python_static/include/python3.4m/pytime.h \
+		../../../python_static/include/python3.4m/object.h \
+		../../../python_static/include/python3.4m/pymem.h \
+		../../../python_static/include/python3.4m/objimpl.h \
+		../../../python_static/include/python3.4m/typeslots.h \
+		../../../python_static/include/python3.4m/pyhash.h \
+		../../../python_static/include/python3.4m/pydebug.h \
+		../../../python_static/include/python3.4m/bytearrayobject.h \
+		../../../python_static/include/python3.4m/bytesobject.h \
+		../../../python_static/include/python3.4m/unicodeobject.h \
+		../../../python_static/include/python3.4m/longobject.h \
+		../../../python_static/include/python3.4m/longintrepr.h \
+		../../../python_static/include/python3.4m/boolobject.h \
+		../../../python_static/include/python3.4m/floatobject.h \
+		../../../python_static/include/python3.4m/complexobject.h \
+		../../../python_static/include/python3.4m/rangeobject.h \
+		../../../python_static/include/python3.4m/memoryobject.h \
+		../../../python_static/include/python3.4m/tupleobject.h \
+		../../../python_static/include/python3.4m/listobject.h \
+		../../../python_static/include/python3.4m/dictobject.h \
+		../../../python_static/include/python3.4m/enumobject.h \
+		../../../python_static/include/python3.4m/setobject.h \
+		../../../python_static/include/python3.4m/methodobject.h \
+		../../../python_static/include/python3.4m/moduleobject.h \
+		../../../python_static/include/python3.4m/funcobject.h \
+		../../../python_static/include/python3.4m/classobject.h \
+		../../../python_static/include/python3.4m/fileobject.h \
+		../../../python_static/include/python3.4m/pycapsule.h \
+		../../../python_static/include/python3.4m/traceback.h \
+		../../../python_static/include/python3.4m/pystate.h \
+		../../../python_static/include/python3.4m/sliceobject.h \
+		../../../python_static/include/python3.4m/cellobject.h \
+		../../../python_static/include/python3.4m/iterobject.h \
+		../../../python_static/include/python3.4m/genobject.h \
+		../../../python_static/include/python3.4m/descrobject.h \
+		../../../python_static/include/python3.4m/warnings.h \
+		../../../python_static/include/python3.4m/weakrefobject.h \
+		../../../python_static/include/python3.4m/structseq.h \
+		../../../python_static/include/python3.4m/namespaceobject.h \
+		../../../python_static/include/python3.4m/codecs.h \
+		../../../python_static/include/python3.4m/pyerrors.h \
+		../../../python_static/include/python3.4m/pyarena.h \
+		../../../python_static/include/python3.4m/modsupport.h \
+		../../../python_static/include/python3.4m/pythonrun.h \
+		../../../python_static/include/python3.4m/ceval.h \
+		../../../python_static/include/python3.4m/sysmodule.h \
+		../../../python_static/include/python3.4m/intrcheck.h \
+		../../../python_static/include/python3.4m/import.h \
+		../../../python_static/include/python3.4m/abstract.h \
+		../../../python_static/include/python3.4m/bltinmodule.h \
+		../../../python_static/include/python3.4m/compile.h \
+		../../../python_static/include/python3.4m/code.h \
+		../../../python_static/include/python3.4m/eval.h \
+		../../../python_static/include/python3.4m/pyctype.h \
+		../../../python_static/include/python3.4m/pystrtod.h \
+		../../../python_static/include/python3.4m/pystrcmp.h \
+		../../../python_static/include/python3.4m/dtoa.h \
+		../../../python_static/include/python3.4m/fileutils.h \
+		../../../python_static/include/python3.4m/pyfpe.h \
+		/src/Python-3.4.3/Modules/_math.h
 	$(CC) -c $(CFLAGS) $(INCPATH) -o _math.o /src/Python-3.4.3/Modules/_math.c
 
-_json.o: /src/Python-3.4.3/Modules/_json.c 
-	$(CC) -c $(CFLAGS) $(INCPATH) -o _json.o /src/Python-3.4.3/Modules/_json.c
-
-arraymodule.o: /src/Python-3.4.3/Modules/arraymodule.c 
-	$(CC) -c $(CFLAGS) $(INCPATH) -o arraymodule.o /src/Python-3.4.3/Modules/arraymodule.c
-
-_randommodule.o: /src/Python-3.4.3/Modules/_randommodule.c 
-	$(CC) -c $(CFLAGS) $(INCPATH) -o _randommodule.o /src/Python-3.4.3/Modules/_randommodule.c
-
-binascii.o: /src/Python-3.4.3/Modules/binascii.c /src/Python-3.4.3/Modules/clinic/binascii.c.h
-	$(CC) -c $(CFLAGS) $(INCPATH) -o binascii.o /src/Python-3.4.3/Modules/binascii.c
-
-_pickle.o: /src/Python-3.4.3/Modules/_pickle.c /src/Python-3.4.3/Modules/clinic/_pickle.c.h
-	$(CC) -c $(CFLAGS) $(INCPATH) -o _pickle.o /src/Python-3.4.3/Modules/_pickle.c
-
-_ssl.o: /src/Python-3.4.3/Modules/_ssl.c /src/Python-3.4.3/Modules/socketmodule.h \
-		/src/Python-3.4.3/Modules/_ssl_data.h
-	$(CC) -c $(CFLAGS) $(INCPATH) -o _ssl.o /src/Python-3.4.3/Modules/_ssl.c
-
-_datetimemodule.o: /src/Python-3.4.3/Modules/_datetimemodule.c 
-	$(CC) -c $(CFLAGS) $(INCPATH) -o _datetimemodule.o /src/Python-3.4.3/Modules/_datetimemodule.c
-
-stgdict.o: /src/Python-3.4.3/Modules/_ctypes/stgdict.c /src/Python-3.4.3/Modules/_ctypes/ctypes.h
-	$(CC) -c $(CFLAGS) $(INCPATH) -o stgdict.o /src/Python-3.4.3/Modules/_ctypes/stgdict.c
+cfield.o: /src/Python-3.4.3/Modules/_ctypes/cfield.c ../../../python_static/include/python3.4m/Python.h \
+		../../../python_static/include/python3.4m/patchlevel.h \
+		../../../python_static/include/python3.4m/pyconfig.h \
+		../../../python_static/include/python3.4m/pymacconfig.h \
+		../../../python_static/include/python3.4m/pyport.h \
+		../../../python_static/include/python3.4m/pymacro.h \
+		../../../python_static/include/python3.4m/pyatomic.h \
+		../../../python_static/include/python3.4m/dynamic_annotations.h \
+		../../../python_static/include/python3.4m/pymath.h \
+		../../../python_static/include/python3.4m/pytime.h \
+		../../../python_static/include/python3.4m/object.h \
+		../../../python_static/include/python3.4m/pymem.h \
+		../../../python_static/include/python3.4m/objimpl.h \
+		../../../python_static/include/python3.4m/typeslots.h \
+		../../../python_static/include/python3.4m/pyhash.h \
+		../../../python_static/include/python3.4m/pydebug.h \
+		../../../python_static/include/python3.4m/bytearrayobject.h \
+		../../../python_static/include/python3.4m/bytesobject.h \
+		../../../python_static/include/python3.4m/unicodeobject.h \
+		../../../python_static/include/python3.4m/longobject.h \
+		../../../python_static/include/python3.4m/longintrepr.h \
+		../../../python_static/include/python3.4m/boolobject.h \
+		../../../python_static/include/python3.4m/floatobject.h \
+		../../../python_static/include/python3.4m/complexobject.h \
+		../../../python_static/include/python3.4m/rangeobject.h \
+		../../../python_static/include/python3.4m/memoryobject.h \
+		../../../python_static/include/python3.4m/tupleobject.h \
+		../../../python_static/include/python3.4m/listobject.h \
+		../../../python_static/include/python3.4m/dictobject.h \
+		../../../python_static/include/python3.4m/enumobject.h \
+		../../../python_static/include/python3.4m/setobject.h \
+		../../../python_static/include/python3.4m/methodobject.h \
+		../../../python_static/include/python3.4m/moduleobject.h \
+		../../../python_static/include/python3.4m/funcobject.h \
+		../../../python_static/include/python3.4m/classobject.h \
+		../../../python_static/include/python3.4m/fileobject.h \
+		../../../python_static/include/python3.4m/pycapsule.h \
+		../../../python_static/include/python3.4m/traceback.h \
+		../../../python_static/include/python3.4m/pystate.h \
+		../../../python_static/include/python3.4m/sliceobject.h \
+		../../../python_static/include/python3.4m/cellobject.h \
+		../../../python_static/include/python3.4m/iterobject.h \
+		../../../python_static/include/python3.4m/genobject.h \
+		../../../python_static/include/python3.4m/descrobject.h \
+		../../../python_static/include/python3.4m/warnings.h \
+		../../../python_static/include/python3.4m/weakrefobject.h \
+		../../../python_static/include/python3.4m/structseq.h \
+		../../../python_static/include/python3.4m/namespaceobject.h \
+		../../../python_static/include/python3.4m/codecs.h \
+		../../../python_static/include/python3.4m/pyerrors.h \
+		../../../python_static/include/python3.4m/pyarena.h \
+		../../../python_static/include/python3.4m/modsupport.h \
+		../../../python_static/include/python3.4m/pythonrun.h \
+		../../../python_static/include/python3.4m/ceval.h \
+		../../../python_static/include/python3.4m/sysmodule.h \
+		../../../python_static/include/python3.4m/intrcheck.h \
+		../../../python_static/include/python3.4m/import.h \
+		../../../python_static/include/python3.4m/abstract.h \
+		../../../python_static/include/python3.4m/bltinmodule.h \
+		../../../python_static/include/python3.4m/compile.h \
+		../../../python_static/include/python3.4m/code.h \
+		../../../python_static/include/python3.4m/eval.h \
+		../../../python_static/include/python3.4m/pyctype.h \
+		../../../python_static/include/python3.4m/pystrtod.h \
+		../../../python_static/include/python3.4m/pystrcmp.h \
+		../../../python_static/include/python3.4m/dtoa.h \
+		../../../python_static/include/python3.4m/fileutils.h \
+		../../../python_static/include/python3.4m/pyfpe.h \
+		/src/Python-3.4.3/Modules/_ctypes/ctypes.h
+	$(CC) -c $(CFLAGS) $(INCPATH) -o cfield.o /src/Python-3.4.3/Modules/_ctypes/cfield.c
 
 xmltok.o: /src/Python-3.4.3/Modules/expat/xmltok.c /src/Python-3.4.3/Modules/expat/winconfig.h \
 		/src/Python-3.4.3/Modules/expat/macconfig.h \
 		/src/Python-3.4.3/Modules/expat/amigaconfig.h \
 		/src/Python-3.4.3/Modules/expat/watcomconfig.h \
 		/src/Python-3.4.3/Modules/expat/expat_config.h \
+		../../../python_static/include/python3.4m/pyconfig.h \
 		/src/Python-3.4.3/Modules/expat/expat_external.h \
 		/src/Python-3.4.3/Modules/expat/pyexpatns.h \
 		/src/Python-3.4.3/Modules/expat/internal.h \
@@ -879,14 +1579,657 @@ xmltok.o: /src/Python-3.4.3/Modules/expat/xmltok.c /src/Python-3.4.3/Modules/exp
 		/src/Python-3.4.3/Modules/expat/xmltok_ns.c
 	$(CC) -c $(CFLAGS) $(INCPATH) -o xmltok.o /src/Python-3.4.3/Modules/expat/xmltok.c
 
-_heapqmodule.o: /src/Python-3.4.3/Modules/_heapqmodule.c 
+timemodule.o: /src/Python-3.4.3/Modules/timemodule.c ../../../python_static/include/python3.4m/Python.h \
+		../../../python_static/include/python3.4m/patchlevel.h \
+		../../../python_static/include/python3.4m/pyconfig.h \
+		../../../python_static/include/python3.4m/pymacconfig.h \
+		../../../python_static/include/python3.4m/pyport.h \
+		../../../python_static/include/python3.4m/pymacro.h \
+		../../../python_static/include/python3.4m/pyatomic.h \
+		../../../python_static/include/python3.4m/dynamic_annotations.h \
+		../../../python_static/include/python3.4m/pymath.h \
+		../../../python_static/include/python3.4m/pytime.h \
+		../../../python_static/include/python3.4m/object.h \
+		../../../python_static/include/python3.4m/pymem.h \
+		../../../python_static/include/python3.4m/objimpl.h \
+		../../../python_static/include/python3.4m/typeslots.h \
+		../../../python_static/include/python3.4m/pyhash.h \
+		../../../python_static/include/python3.4m/pydebug.h \
+		../../../python_static/include/python3.4m/bytearrayobject.h \
+		../../../python_static/include/python3.4m/bytesobject.h \
+		../../../python_static/include/python3.4m/unicodeobject.h \
+		../../../python_static/include/python3.4m/longobject.h \
+		../../../python_static/include/python3.4m/longintrepr.h \
+		../../../python_static/include/python3.4m/boolobject.h \
+		../../../python_static/include/python3.4m/floatobject.h \
+		../../../python_static/include/python3.4m/complexobject.h \
+		../../../python_static/include/python3.4m/rangeobject.h \
+		../../../python_static/include/python3.4m/memoryobject.h \
+		../../../python_static/include/python3.4m/tupleobject.h \
+		../../../python_static/include/python3.4m/listobject.h \
+		../../../python_static/include/python3.4m/dictobject.h \
+		../../../python_static/include/python3.4m/enumobject.h \
+		../../../python_static/include/python3.4m/setobject.h \
+		../../../python_static/include/python3.4m/methodobject.h \
+		../../../python_static/include/python3.4m/moduleobject.h \
+		../../../python_static/include/python3.4m/funcobject.h \
+		../../../python_static/include/python3.4m/classobject.h \
+		../../../python_static/include/python3.4m/fileobject.h \
+		../../../python_static/include/python3.4m/pycapsule.h \
+		../../../python_static/include/python3.4m/traceback.h \
+		../../../python_static/include/python3.4m/pystate.h \
+		../../../python_static/include/python3.4m/sliceobject.h \
+		../../../python_static/include/python3.4m/cellobject.h \
+		../../../python_static/include/python3.4m/iterobject.h \
+		../../../python_static/include/python3.4m/genobject.h \
+		../../../python_static/include/python3.4m/descrobject.h \
+		../../../python_static/include/python3.4m/warnings.h \
+		../../../python_static/include/python3.4m/weakrefobject.h \
+		../../../python_static/include/python3.4m/structseq.h \
+		../../../python_static/include/python3.4m/namespaceobject.h \
+		../../../python_static/include/python3.4m/codecs.h \
+		../../../python_static/include/python3.4m/pyerrors.h \
+		../../../python_static/include/python3.4m/pyarena.h \
+		../../../python_static/include/python3.4m/modsupport.h \
+		../../../python_static/include/python3.4m/pythonrun.h \
+		../../../python_static/include/python3.4m/ceval.h \
+		../../../python_static/include/python3.4m/sysmodule.h \
+		../../../python_static/include/python3.4m/intrcheck.h \
+		../../../python_static/include/python3.4m/import.h \
+		../../../python_static/include/python3.4m/abstract.h \
+		../../../python_static/include/python3.4m/bltinmodule.h \
+		../../../python_static/include/python3.4m/compile.h \
+		../../../python_static/include/python3.4m/code.h \
+		../../../python_static/include/python3.4m/eval.h \
+		../../../python_static/include/python3.4m/pyctype.h \
+		../../../python_static/include/python3.4m/pystrtod.h \
+		../../../python_static/include/python3.4m/pystrcmp.h \
+		../../../python_static/include/python3.4m/dtoa.h \
+		../../../python_static/include/python3.4m/fileutils.h \
+		../../../python_static/include/python3.4m/pyfpe.h \
+		../../../python_static/include/python3.4m/pythread.h
+	$(CC) -c $(CFLAGS) $(INCPATH) -o timemodule.o /src/Python-3.4.3/Modules/timemodule.c
+
+callbacks.o: /src/Python-3.4.3/Modules/_ctypes/callbacks.c ../../../python_static/include/python3.4m/Python.h \
+		../../../python_static/include/python3.4m/patchlevel.h \
+		../../../python_static/include/python3.4m/pyconfig.h \
+		../../../python_static/include/python3.4m/pymacconfig.h \
+		../../../python_static/include/python3.4m/pyport.h \
+		../../../python_static/include/python3.4m/pymacro.h \
+		../../../python_static/include/python3.4m/pyatomic.h \
+		../../../python_static/include/python3.4m/dynamic_annotations.h \
+		../../../python_static/include/python3.4m/pymath.h \
+		../../../python_static/include/python3.4m/pytime.h \
+		../../../python_static/include/python3.4m/object.h \
+		../../../python_static/include/python3.4m/pymem.h \
+		../../../python_static/include/python3.4m/objimpl.h \
+		../../../python_static/include/python3.4m/typeslots.h \
+		../../../python_static/include/python3.4m/pyhash.h \
+		../../../python_static/include/python3.4m/pydebug.h \
+		../../../python_static/include/python3.4m/bytearrayobject.h \
+		../../../python_static/include/python3.4m/bytesobject.h \
+		../../../python_static/include/python3.4m/unicodeobject.h \
+		../../../python_static/include/python3.4m/longobject.h \
+		../../../python_static/include/python3.4m/longintrepr.h \
+		../../../python_static/include/python3.4m/boolobject.h \
+		../../../python_static/include/python3.4m/floatobject.h \
+		../../../python_static/include/python3.4m/complexobject.h \
+		../../../python_static/include/python3.4m/rangeobject.h \
+		../../../python_static/include/python3.4m/memoryobject.h \
+		../../../python_static/include/python3.4m/tupleobject.h \
+		../../../python_static/include/python3.4m/listobject.h \
+		../../../python_static/include/python3.4m/dictobject.h \
+		../../../python_static/include/python3.4m/enumobject.h \
+		../../../python_static/include/python3.4m/setobject.h \
+		../../../python_static/include/python3.4m/methodobject.h \
+		../../../python_static/include/python3.4m/moduleobject.h \
+		../../../python_static/include/python3.4m/funcobject.h \
+		../../../python_static/include/python3.4m/classobject.h \
+		../../../python_static/include/python3.4m/fileobject.h \
+		../../../python_static/include/python3.4m/pycapsule.h \
+		../../../python_static/include/python3.4m/traceback.h \
+		../../../python_static/include/python3.4m/pystate.h \
+		../../../python_static/include/python3.4m/sliceobject.h \
+		../../../python_static/include/python3.4m/cellobject.h \
+		../../../python_static/include/python3.4m/iterobject.h \
+		../../../python_static/include/python3.4m/genobject.h \
+		../../../python_static/include/python3.4m/descrobject.h \
+		../../../python_static/include/python3.4m/warnings.h \
+		../../../python_static/include/python3.4m/weakrefobject.h \
+		../../../python_static/include/python3.4m/structseq.h \
+		../../../python_static/include/python3.4m/namespaceobject.h \
+		../../../python_static/include/python3.4m/codecs.h \
+		../../../python_static/include/python3.4m/pyerrors.h \
+		../../../python_static/include/python3.4m/pyarena.h \
+		../../../python_static/include/python3.4m/modsupport.h \
+		../../../python_static/include/python3.4m/pythonrun.h \
+		../../../python_static/include/python3.4m/ceval.h \
+		../../../python_static/include/python3.4m/sysmodule.h \
+		../../../python_static/include/python3.4m/intrcheck.h \
+		../../../python_static/include/python3.4m/import.h \
+		../../../python_static/include/python3.4m/abstract.h \
+		../../../python_static/include/python3.4m/bltinmodule.h \
+		../../../python_static/include/python3.4m/compile.h \
+		../../../python_static/include/python3.4m/code.h \
+		../../../python_static/include/python3.4m/eval.h \
+		../../../python_static/include/python3.4m/pyctype.h \
+		../../../python_static/include/python3.4m/pystrtod.h \
+		../../../python_static/include/python3.4m/pystrcmp.h \
+		../../../python_static/include/python3.4m/dtoa.h \
+		../../../python_static/include/python3.4m/fileutils.h \
+		../../../python_static/include/python3.4m/pyfpe.h \
+		../../../python_static/include/python3.4m/frameobject.h \
+		/src/Python-3.4.3/Modules/_ctypes/ctypes.h
+	$(CC) -c $(CFLAGS) $(INCPATH) -o callbacks.o /src/Python-3.4.3/Modules/_ctypes/callbacks.c
+
+stgdict.o: /src/Python-3.4.3/Modules/_ctypes/stgdict.c ../../../python_static/include/python3.4m/Python.h \
+		../../../python_static/include/python3.4m/patchlevel.h \
+		../../../python_static/include/python3.4m/pyconfig.h \
+		../../../python_static/include/python3.4m/pymacconfig.h \
+		../../../python_static/include/python3.4m/pyport.h \
+		../../../python_static/include/python3.4m/pymacro.h \
+		../../../python_static/include/python3.4m/pyatomic.h \
+		../../../python_static/include/python3.4m/dynamic_annotations.h \
+		../../../python_static/include/python3.4m/pymath.h \
+		../../../python_static/include/python3.4m/pytime.h \
+		../../../python_static/include/python3.4m/object.h \
+		../../../python_static/include/python3.4m/pymem.h \
+		../../../python_static/include/python3.4m/objimpl.h \
+		../../../python_static/include/python3.4m/typeslots.h \
+		../../../python_static/include/python3.4m/pyhash.h \
+		../../../python_static/include/python3.4m/pydebug.h \
+		../../../python_static/include/python3.4m/bytearrayobject.h \
+		../../../python_static/include/python3.4m/bytesobject.h \
+		../../../python_static/include/python3.4m/unicodeobject.h \
+		../../../python_static/include/python3.4m/longobject.h \
+		../../../python_static/include/python3.4m/longintrepr.h \
+		../../../python_static/include/python3.4m/boolobject.h \
+		../../../python_static/include/python3.4m/floatobject.h \
+		../../../python_static/include/python3.4m/complexobject.h \
+		../../../python_static/include/python3.4m/rangeobject.h \
+		../../../python_static/include/python3.4m/memoryobject.h \
+		../../../python_static/include/python3.4m/tupleobject.h \
+		../../../python_static/include/python3.4m/listobject.h \
+		../../../python_static/include/python3.4m/dictobject.h \
+		../../../python_static/include/python3.4m/enumobject.h \
+		../../../python_static/include/python3.4m/setobject.h \
+		../../../python_static/include/python3.4m/methodobject.h \
+		../../../python_static/include/python3.4m/moduleobject.h \
+		../../../python_static/include/python3.4m/funcobject.h \
+		../../../python_static/include/python3.4m/classobject.h \
+		../../../python_static/include/python3.4m/fileobject.h \
+		../../../python_static/include/python3.4m/pycapsule.h \
+		../../../python_static/include/python3.4m/traceback.h \
+		../../../python_static/include/python3.4m/pystate.h \
+		../../../python_static/include/python3.4m/sliceobject.h \
+		../../../python_static/include/python3.4m/cellobject.h \
+		../../../python_static/include/python3.4m/iterobject.h \
+		../../../python_static/include/python3.4m/genobject.h \
+		../../../python_static/include/python3.4m/descrobject.h \
+		../../../python_static/include/python3.4m/warnings.h \
+		../../../python_static/include/python3.4m/weakrefobject.h \
+		../../../python_static/include/python3.4m/structseq.h \
+		../../../python_static/include/python3.4m/namespaceobject.h \
+		../../../python_static/include/python3.4m/codecs.h \
+		../../../python_static/include/python3.4m/pyerrors.h \
+		../../../python_static/include/python3.4m/pyarena.h \
+		../../../python_static/include/python3.4m/modsupport.h \
+		../../../python_static/include/python3.4m/pythonrun.h \
+		../../../python_static/include/python3.4m/ceval.h \
+		../../../python_static/include/python3.4m/sysmodule.h \
+		../../../python_static/include/python3.4m/intrcheck.h \
+		../../../python_static/include/python3.4m/import.h \
+		../../../python_static/include/python3.4m/abstract.h \
+		../../../python_static/include/python3.4m/bltinmodule.h \
+		../../../python_static/include/python3.4m/compile.h \
+		../../../python_static/include/python3.4m/code.h \
+		../../../python_static/include/python3.4m/eval.h \
+		../../../python_static/include/python3.4m/pyctype.h \
+		../../../python_static/include/python3.4m/pystrtod.h \
+		../../../python_static/include/python3.4m/pystrcmp.h \
+		../../../python_static/include/python3.4m/dtoa.h \
+		../../../python_static/include/python3.4m/fileutils.h \
+		../../../python_static/include/python3.4m/pyfpe.h \
+		/src/Python-3.4.3/Modules/_ctypes/ctypes.h
+	$(CC) -c $(CFLAGS) $(INCPATH) -o stgdict.o /src/Python-3.4.3/Modules/_ctypes/stgdict.c
+
+callproc.o: /src/Python-3.4.3/Modules/_ctypes/callproc.c ../../../python_static/include/python3.4m/Python.h \
+		../../../python_static/include/python3.4m/patchlevel.h \
+		../../../python_static/include/python3.4m/pyconfig.h \
+		../../../python_static/include/python3.4m/pymacconfig.h \
+		../../../python_static/include/python3.4m/pyport.h \
+		../../../python_static/include/python3.4m/pymacro.h \
+		../../../python_static/include/python3.4m/pyatomic.h \
+		../../../python_static/include/python3.4m/dynamic_annotations.h \
+		../../../python_static/include/python3.4m/pymath.h \
+		../../../python_static/include/python3.4m/pytime.h \
+		../../../python_static/include/python3.4m/object.h \
+		../../../python_static/include/python3.4m/pymem.h \
+		../../../python_static/include/python3.4m/objimpl.h \
+		../../../python_static/include/python3.4m/typeslots.h \
+		../../../python_static/include/python3.4m/pyhash.h \
+		../../../python_static/include/python3.4m/pydebug.h \
+		../../../python_static/include/python3.4m/bytearrayobject.h \
+		../../../python_static/include/python3.4m/bytesobject.h \
+		../../../python_static/include/python3.4m/unicodeobject.h \
+		../../../python_static/include/python3.4m/longobject.h \
+		../../../python_static/include/python3.4m/longintrepr.h \
+		../../../python_static/include/python3.4m/boolobject.h \
+		../../../python_static/include/python3.4m/floatobject.h \
+		../../../python_static/include/python3.4m/complexobject.h \
+		../../../python_static/include/python3.4m/rangeobject.h \
+		../../../python_static/include/python3.4m/memoryobject.h \
+		../../../python_static/include/python3.4m/tupleobject.h \
+		../../../python_static/include/python3.4m/listobject.h \
+		../../../python_static/include/python3.4m/dictobject.h \
+		../../../python_static/include/python3.4m/enumobject.h \
+		../../../python_static/include/python3.4m/setobject.h \
+		../../../python_static/include/python3.4m/methodobject.h \
+		../../../python_static/include/python3.4m/moduleobject.h \
+		../../../python_static/include/python3.4m/funcobject.h \
+		../../../python_static/include/python3.4m/classobject.h \
+		../../../python_static/include/python3.4m/fileobject.h \
+		../../../python_static/include/python3.4m/pycapsule.h \
+		../../../python_static/include/python3.4m/traceback.h \
+		../../../python_static/include/python3.4m/pystate.h \
+		../../../python_static/include/python3.4m/sliceobject.h \
+		../../../python_static/include/python3.4m/cellobject.h \
+		../../../python_static/include/python3.4m/iterobject.h \
+		../../../python_static/include/python3.4m/genobject.h \
+		../../../python_static/include/python3.4m/descrobject.h \
+		../../../python_static/include/python3.4m/warnings.h \
+		../../../python_static/include/python3.4m/weakrefobject.h \
+		../../../python_static/include/python3.4m/structseq.h \
+		../../../python_static/include/python3.4m/namespaceobject.h \
+		../../../python_static/include/python3.4m/codecs.h \
+		../../../python_static/include/python3.4m/pyerrors.h \
+		../../../python_static/include/python3.4m/pyarena.h \
+		../../../python_static/include/python3.4m/modsupport.h \
+		../../../python_static/include/python3.4m/pythonrun.h \
+		../../../python_static/include/python3.4m/ceval.h \
+		../../../python_static/include/python3.4m/sysmodule.h \
+		../../../python_static/include/python3.4m/intrcheck.h \
+		../../../python_static/include/python3.4m/import.h \
+		../../../python_static/include/python3.4m/abstract.h \
+		../../../python_static/include/python3.4m/bltinmodule.h \
+		../../../python_static/include/python3.4m/compile.h \
+		../../../python_static/include/python3.4m/code.h \
+		../../../python_static/include/python3.4m/eval.h \
+		../../../python_static/include/python3.4m/pyctype.h \
+		../../../python_static/include/python3.4m/pystrtod.h \
+		../../../python_static/include/python3.4m/pystrcmp.h \
+		../../../python_static/include/python3.4m/dtoa.h \
+		../../../python_static/include/python3.4m/fileutils.h \
+		../../../python_static/include/python3.4m/pyfpe.h \
+		../../../python_static/include/python3.4m/structmember.h \
+		/src/Python-3.4.3/Modules/_ctypes/ctypes_dlfcn.h \
+		/src/Python-3.4.3/Modules/_ctypes/ctypes.h
+	$(CC) -c $(CFLAGS) $(INCPATH) -o callproc.o /src/Python-3.4.3/Modules/_ctypes/callproc.c
+
+_ssl.o: /src/Python-3.4.3/Modules/_ssl.c ../../../python_static/include/python3.4m/Python.h \
+		../../../python_static/include/python3.4m/patchlevel.h \
+		../../../python_static/include/python3.4m/pyconfig.h \
+		../../../python_static/include/python3.4m/pymacconfig.h \
+		../../../python_static/include/python3.4m/pyport.h \
+		../../../python_static/include/python3.4m/pymacro.h \
+		../../../python_static/include/python3.4m/pyatomic.h \
+		../../../python_static/include/python3.4m/dynamic_annotations.h \
+		../../../python_static/include/python3.4m/pymath.h \
+		../../../python_static/include/python3.4m/pytime.h \
+		../../../python_static/include/python3.4m/object.h \
+		../../../python_static/include/python3.4m/pymem.h \
+		../../../python_static/include/python3.4m/objimpl.h \
+		../../../python_static/include/python3.4m/typeslots.h \
+		../../../python_static/include/python3.4m/pyhash.h \
+		../../../python_static/include/python3.4m/pydebug.h \
+		../../../python_static/include/python3.4m/bytearrayobject.h \
+		../../../python_static/include/python3.4m/bytesobject.h \
+		../../../python_static/include/python3.4m/unicodeobject.h \
+		../../../python_static/include/python3.4m/longobject.h \
+		../../../python_static/include/python3.4m/longintrepr.h \
+		../../../python_static/include/python3.4m/boolobject.h \
+		../../../python_static/include/python3.4m/floatobject.h \
+		../../../python_static/include/python3.4m/complexobject.h \
+		../../../python_static/include/python3.4m/rangeobject.h \
+		../../../python_static/include/python3.4m/memoryobject.h \
+		../../../python_static/include/python3.4m/tupleobject.h \
+		../../../python_static/include/python3.4m/listobject.h \
+		../../../python_static/include/python3.4m/dictobject.h \
+		../../../python_static/include/python3.4m/enumobject.h \
+		../../../python_static/include/python3.4m/setobject.h \
+		../../../python_static/include/python3.4m/methodobject.h \
+		../../../python_static/include/python3.4m/moduleobject.h \
+		../../../python_static/include/python3.4m/funcobject.h \
+		../../../python_static/include/python3.4m/classobject.h \
+		../../../python_static/include/python3.4m/fileobject.h \
+		../../../python_static/include/python3.4m/pycapsule.h \
+		../../../python_static/include/python3.4m/traceback.h \
+		../../../python_static/include/python3.4m/pystate.h \
+		../../../python_static/include/python3.4m/sliceobject.h \
+		../../../python_static/include/python3.4m/cellobject.h \
+		../../../python_static/include/python3.4m/iterobject.h \
+		../../../python_static/include/python3.4m/genobject.h \
+		../../../python_static/include/python3.4m/descrobject.h \
+		../../../python_static/include/python3.4m/warnings.h \
+		../../../python_static/include/python3.4m/weakrefobject.h \
+		../../../python_static/include/python3.4m/structseq.h \
+		../../../python_static/include/python3.4m/namespaceobject.h \
+		../../../python_static/include/python3.4m/codecs.h \
+		../../../python_static/include/python3.4m/pyerrors.h \
+		../../../python_static/include/python3.4m/pyarena.h \
+		../../../python_static/include/python3.4m/modsupport.h \
+		../../../python_static/include/python3.4m/pythonrun.h \
+		../../../python_static/include/python3.4m/ceval.h \
+		../../../python_static/include/python3.4m/sysmodule.h \
+		../../../python_static/include/python3.4m/intrcheck.h \
+		../../../python_static/include/python3.4m/import.h \
+		../../../python_static/include/python3.4m/abstract.h \
+		../../../python_static/include/python3.4m/bltinmodule.h \
+		../../../python_static/include/python3.4m/compile.h \
+		../../../python_static/include/python3.4m/code.h \
+		../../../python_static/include/python3.4m/eval.h \
+		../../../python_static/include/python3.4m/pyctype.h \
+		../../../python_static/include/python3.4m/pystrtod.h \
+		../../../python_static/include/python3.4m/pystrcmp.h \
+		../../../python_static/include/python3.4m/dtoa.h \
+		../../../python_static/include/python3.4m/fileutils.h \
+		../../../python_static/include/python3.4m/pyfpe.h \
+		../../../python_static/include/python3.4m/pythread.h \
+		/src/Python-3.4.3/Modules/socketmodule.h \
+		/src/Python-3.4.3/Modules/_ssl_data.h
+	$(CC) -c $(CFLAGS) $(INCPATH) -o _ssl.o /src/Python-3.4.3/Modules/_ssl.c
+
+multiprocessing.o: /src/Python-3.4.3/Modules/_multiprocessing/multiprocessing.c /src/Python-3.4.3/Modules/_multiprocessing/multiprocessing.h \
+		../../../python_static/include/python3.4m/Python.h \
+		../../../python_static/include/python3.4m/patchlevel.h \
+		../../../python_static/include/python3.4m/pyconfig.h \
+		../../../python_static/include/python3.4m/pymacconfig.h \
+		../../../python_static/include/python3.4m/pyport.h \
+		../../../python_static/include/python3.4m/pymacro.h \
+		../../../python_static/include/python3.4m/pyatomic.h \
+		../../../python_static/include/python3.4m/dynamic_annotations.h \
+		../../../python_static/include/python3.4m/pymath.h \
+		../../../python_static/include/python3.4m/pytime.h \
+		../../../python_static/include/python3.4m/object.h \
+		../../../python_static/include/python3.4m/pymem.h \
+		../../../python_static/include/python3.4m/objimpl.h \
+		../../../python_static/include/python3.4m/typeslots.h \
+		../../../python_static/include/python3.4m/pyhash.h \
+		../../../python_static/include/python3.4m/pydebug.h \
+		../../../python_static/include/python3.4m/bytearrayobject.h \
+		../../../python_static/include/python3.4m/bytesobject.h \
+		../../../python_static/include/python3.4m/unicodeobject.h \
+		../../../python_static/include/python3.4m/longobject.h \
+		../../../python_static/include/python3.4m/longintrepr.h \
+		../../../python_static/include/python3.4m/boolobject.h \
+		../../../python_static/include/python3.4m/floatobject.h \
+		../../../python_static/include/python3.4m/complexobject.h \
+		../../../python_static/include/python3.4m/rangeobject.h \
+		../../../python_static/include/python3.4m/memoryobject.h \
+		../../../python_static/include/python3.4m/tupleobject.h \
+		../../../python_static/include/python3.4m/listobject.h \
+		../../../python_static/include/python3.4m/dictobject.h \
+		../../../python_static/include/python3.4m/enumobject.h \
+		../../../python_static/include/python3.4m/setobject.h \
+		../../../python_static/include/python3.4m/methodobject.h \
+		../../../python_static/include/python3.4m/moduleobject.h \
+		../../../python_static/include/python3.4m/funcobject.h \
+		../../../python_static/include/python3.4m/classobject.h \
+		../../../python_static/include/python3.4m/fileobject.h \
+		../../../python_static/include/python3.4m/pycapsule.h \
+		../../../python_static/include/python3.4m/traceback.h \
+		../../../python_static/include/python3.4m/pystate.h \
+		../../../python_static/include/python3.4m/sliceobject.h \
+		../../../python_static/include/python3.4m/cellobject.h \
+		../../../python_static/include/python3.4m/iterobject.h \
+		../../../python_static/include/python3.4m/genobject.h \
+		../../../python_static/include/python3.4m/descrobject.h \
+		../../../python_static/include/python3.4m/warnings.h \
+		../../../python_static/include/python3.4m/weakrefobject.h \
+		../../../python_static/include/python3.4m/structseq.h \
+		../../../python_static/include/python3.4m/namespaceobject.h \
+		../../../python_static/include/python3.4m/codecs.h \
+		../../../python_static/include/python3.4m/pyerrors.h \
+		../../../python_static/include/python3.4m/pyarena.h \
+		../../../python_static/include/python3.4m/modsupport.h \
+		../../../python_static/include/python3.4m/pythonrun.h \
+		../../../python_static/include/python3.4m/ceval.h \
+		../../../python_static/include/python3.4m/sysmodule.h \
+		../../../python_static/include/python3.4m/intrcheck.h \
+		../../../python_static/include/python3.4m/import.h \
+		../../../python_static/include/python3.4m/abstract.h \
+		../../../python_static/include/python3.4m/bltinmodule.h \
+		../../../python_static/include/python3.4m/compile.h \
+		../../../python_static/include/python3.4m/code.h \
+		../../../python_static/include/python3.4m/eval.h \
+		../../../python_static/include/python3.4m/pyctype.h \
+		../../../python_static/include/python3.4m/pystrtod.h \
+		../../../python_static/include/python3.4m/pystrcmp.h \
+		../../../python_static/include/python3.4m/dtoa.h \
+		../../../python_static/include/python3.4m/fileutils.h \
+		../../../python_static/include/python3.4m/pyfpe.h \
+		../../../python_static/include/python3.4m/structmember.h \
+		../../../python_static/include/python3.4m/pythread.h
+	$(CC) -c $(CFLAGS) $(INCPATH) -o multiprocessing.o /src/Python-3.4.3/Modules/_multiprocessing/multiprocessing.c
+
+arraymodule.o: /src/Python-3.4.3/Modules/arraymodule.c ../../../python_static/include/python3.4m/Python.h \
+		../../../python_static/include/python3.4m/patchlevel.h \
+		../../../python_static/include/python3.4m/pyconfig.h \
+		../../../python_static/include/python3.4m/pymacconfig.h \
+		../../../python_static/include/python3.4m/pyport.h \
+		../../../python_static/include/python3.4m/pymacro.h \
+		../../../python_static/include/python3.4m/pyatomic.h \
+		../../../python_static/include/python3.4m/dynamic_annotations.h \
+		../../../python_static/include/python3.4m/pymath.h \
+		../../../python_static/include/python3.4m/pytime.h \
+		../../../python_static/include/python3.4m/object.h \
+		../../../python_static/include/python3.4m/pymem.h \
+		../../../python_static/include/python3.4m/objimpl.h \
+		../../../python_static/include/python3.4m/typeslots.h \
+		../../../python_static/include/python3.4m/pyhash.h \
+		../../../python_static/include/python3.4m/pydebug.h \
+		../../../python_static/include/python3.4m/bytearrayobject.h \
+		../../../python_static/include/python3.4m/bytesobject.h \
+		../../../python_static/include/python3.4m/unicodeobject.h \
+		../../../python_static/include/python3.4m/longobject.h \
+		../../../python_static/include/python3.4m/longintrepr.h \
+		../../../python_static/include/python3.4m/boolobject.h \
+		../../../python_static/include/python3.4m/floatobject.h \
+		../../../python_static/include/python3.4m/complexobject.h \
+		../../../python_static/include/python3.4m/rangeobject.h \
+		../../../python_static/include/python3.4m/memoryobject.h \
+		../../../python_static/include/python3.4m/tupleobject.h \
+		../../../python_static/include/python3.4m/listobject.h \
+		../../../python_static/include/python3.4m/dictobject.h \
+		../../../python_static/include/python3.4m/enumobject.h \
+		../../../python_static/include/python3.4m/setobject.h \
+		../../../python_static/include/python3.4m/methodobject.h \
+		../../../python_static/include/python3.4m/moduleobject.h \
+		../../../python_static/include/python3.4m/funcobject.h \
+		../../../python_static/include/python3.4m/classobject.h \
+		../../../python_static/include/python3.4m/fileobject.h \
+		../../../python_static/include/python3.4m/pycapsule.h \
+		../../../python_static/include/python3.4m/traceback.h \
+		../../../python_static/include/python3.4m/pystate.h \
+		../../../python_static/include/python3.4m/sliceobject.h \
+		../../../python_static/include/python3.4m/cellobject.h \
+		../../../python_static/include/python3.4m/iterobject.h \
+		../../../python_static/include/python3.4m/genobject.h \
+		../../../python_static/include/python3.4m/descrobject.h \
+		../../../python_static/include/python3.4m/warnings.h \
+		../../../python_static/include/python3.4m/weakrefobject.h \
+		../../../python_static/include/python3.4m/structseq.h \
+		../../../python_static/include/python3.4m/namespaceobject.h \
+		../../../python_static/include/python3.4m/codecs.h \
+		../../../python_static/include/python3.4m/pyerrors.h \
+		../../../python_static/include/python3.4m/pyarena.h \
+		../../../python_static/include/python3.4m/modsupport.h \
+		../../../python_static/include/python3.4m/pythonrun.h \
+		../../../python_static/include/python3.4m/ceval.h \
+		../../../python_static/include/python3.4m/sysmodule.h \
+		../../../python_static/include/python3.4m/intrcheck.h \
+		../../../python_static/include/python3.4m/import.h \
+		../../../python_static/include/python3.4m/abstract.h \
+		../../../python_static/include/python3.4m/bltinmodule.h \
+		../../../python_static/include/python3.4m/compile.h \
+		../../../python_static/include/python3.4m/code.h \
+		../../../python_static/include/python3.4m/eval.h \
+		../../../python_static/include/python3.4m/pyctype.h \
+		../../../python_static/include/python3.4m/pystrtod.h \
+		../../../python_static/include/python3.4m/pystrcmp.h \
+		../../../python_static/include/python3.4m/dtoa.h \
+		../../../python_static/include/python3.4m/fileutils.h \
+		../../../python_static/include/python3.4m/pyfpe.h \
+		../../../python_static/include/python3.4m/structmember.h
+	$(CC) -c $(CFLAGS) $(INCPATH) -o arraymodule.o /src/Python-3.4.3/Modules/arraymodule.c
+
+_heapqmodule.o: /src/Python-3.4.3/Modules/_heapqmodule.c ../../../python_static/include/python3.4m/Python.h \
+		../../../python_static/include/python3.4m/patchlevel.h \
+		../../../python_static/include/python3.4m/pyconfig.h \
+		../../../python_static/include/python3.4m/pymacconfig.h \
+		../../../python_static/include/python3.4m/pyport.h \
+		../../../python_static/include/python3.4m/pymacro.h \
+		../../../python_static/include/python3.4m/pyatomic.h \
+		../../../python_static/include/python3.4m/dynamic_annotations.h \
+		../../../python_static/include/python3.4m/pymath.h \
+		../../../python_static/include/python3.4m/pytime.h \
+		../../../python_static/include/python3.4m/object.h \
+		../../../python_static/include/python3.4m/pymem.h \
+		../../../python_static/include/python3.4m/objimpl.h \
+		../../../python_static/include/python3.4m/typeslots.h \
+		../../../python_static/include/python3.4m/pyhash.h \
+		../../../python_static/include/python3.4m/pydebug.h \
+		../../../python_static/include/python3.4m/bytearrayobject.h \
+		../../../python_static/include/python3.4m/bytesobject.h \
+		../../../python_static/include/python3.4m/unicodeobject.h \
+		../../../python_static/include/python3.4m/longobject.h \
+		../../../python_static/include/python3.4m/longintrepr.h \
+		../../../python_static/include/python3.4m/boolobject.h \
+		../../../python_static/include/python3.4m/floatobject.h \
+		../../../python_static/include/python3.4m/complexobject.h \
+		../../../python_static/include/python3.4m/rangeobject.h \
+		../../../python_static/include/python3.4m/memoryobject.h \
+		../../../python_static/include/python3.4m/tupleobject.h \
+		../../../python_static/include/python3.4m/listobject.h \
+		../../../python_static/include/python3.4m/dictobject.h \
+		../../../python_static/include/python3.4m/enumobject.h \
+		../../../python_static/include/python3.4m/setobject.h \
+		../../../python_static/include/python3.4m/methodobject.h \
+		../../../python_static/include/python3.4m/moduleobject.h \
+		../../../python_static/include/python3.4m/funcobject.h \
+		../../../python_static/include/python3.4m/classobject.h \
+		../../../python_static/include/python3.4m/fileobject.h \
+		../../../python_static/include/python3.4m/pycapsule.h \
+		../../../python_static/include/python3.4m/traceback.h \
+		../../../python_static/include/python3.4m/pystate.h \
+		../../../python_static/include/python3.4m/sliceobject.h \
+		../../../python_static/include/python3.4m/cellobject.h \
+		../../../python_static/include/python3.4m/iterobject.h \
+		../../../python_static/include/python3.4m/genobject.h \
+		../../../python_static/include/python3.4m/descrobject.h \
+		../../../python_static/include/python3.4m/warnings.h \
+		../../../python_static/include/python3.4m/weakrefobject.h \
+		../../../python_static/include/python3.4m/structseq.h \
+		../../../python_static/include/python3.4m/namespaceobject.h \
+		../../../python_static/include/python3.4m/codecs.h \
+		../../../python_static/include/python3.4m/pyerrors.h \
+		../../../python_static/include/python3.4m/pyarena.h \
+		../../../python_static/include/python3.4m/modsupport.h \
+		../../../python_static/include/python3.4m/pythonrun.h \
+		../../../python_static/include/python3.4m/ceval.h \
+		../../../python_static/include/python3.4m/sysmodule.h \
+		../../../python_static/include/python3.4m/intrcheck.h \
+		../../../python_static/include/python3.4m/import.h \
+		../../../python_static/include/python3.4m/abstract.h \
+		../../../python_static/include/python3.4m/bltinmodule.h \
+		../../../python_static/include/python3.4m/compile.h \
+		../../../python_static/include/python3.4m/code.h \
+		../../../python_static/include/python3.4m/eval.h \
+		../../../python_static/include/python3.4m/pyctype.h \
+		../../../python_static/include/python3.4m/pystrtod.h \
+		../../../python_static/include/python3.4m/pystrcmp.h \
+		../../../python_static/include/python3.4m/dtoa.h \
+		../../../python_static/include/python3.4m/fileutils.h \
+		../../../python_static/include/python3.4m/pyfpe.h
 	$(CC) -c $(CFLAGS) $(INCPATH) -o _heapqmodule.o /src/Python-3.4.3/Modules/_heapqmodule.c
+
+mmapmodule.o: /src/Python-3.4.3/Modules/mmapmodule.c ../../../python_static/include/python3.4m/Python.h \
+		../../../python_static/include/python3.4m/patchlevel.h \
+		../../../python_static/include/python3.4m/pyconfig.h \
+		../../../python_static/include/python3.4m/pymacconfig.h \
+		../../../python_static/include/python3.4m/pyport.h \
+		../../../python_static/include/python3.4m/pymacro.h \
+		../../../python_static/include/python3.4m/pyatomic.h \
+		../../../python_static/include/python3.4m/dynamic_annotations.h \
+		../../../python_static/include/python3.4m/pymath.h \
+		../../../python_static/include/python3.4m/pytime.h \
+		../../../python_static/include/python3.4m/object.h \
+		../../../python_static/include/python3.4m/pymem.h \
+		../../../python_static/include/python3.4m/objimpl.h \
+		../../../python_static/include/python3.4m/typeslots.h \
+		../../../python_static/include/python3.4m/pyhash.h \
+		../../../python_static/include/python3.4m/pydebug.h \
+		../../../python_static/include/python3.4m/bytearrayobject.h \
+		../../../python_static/include/python3.4m/bytesobject.h \
+		../../../python_static/include/python3.4m/unicodeobject.h \
+		../../../python_static/include/python3.4m/longobject.h \
+		../../../python_static/include/python3.4m/longintrepr.h \
+		../../../python_static/include/python3.4m/boolobject.h \
+		../../../python_static/include/python3.4m/floatobject.h \
+		../../../python_static/include/python3.4m/complexobject.h \
+		../../../python_static/include/python3.4m/rangeobject.h \
+		../../../python_static/include/python3.4m/memoryobject.h \
+		../../../python_static/include/python3.4m/tupleobject.h \
+		../../../python_static/include/python3.4m/listobject.h \
+		../../../python_static/include/python3.4m/dictobject.h \
+		../../../python_static/include/python3.4m/enumobject.h \
+		../../../python_static/include/python3.4m/setobject.h \
+		../../../python_static/include/python3.4m/methodobject.h \
+		../../../python_static/include/python3.4m/moduleobject.h \
+		../../../python_static/include/python3.4m/funcobject.h \
+		../../../python_static/include/python3.4m/classobject.h \
+		../../../python_static/include/python3.4m/fileobject.h \
+		../../../python_static/include/python3.4m/pycapsule.h \
+		../../../python_static/include/python3.4m/traceback.h \
+		../../../python_static/include/python3.4m/pystate.h \
+		../../../python_static/include/python3.4m/sliceobject.h \
+		../../../python_static/include/python3.4m/cellobject.h \
+		../../../python_static/include/python3.4m/iterobject.h \
+		../../../python_static/include/python3.4m/genobject.h \
+		../../../python_static/include/python3.4m/descrobject.h \
+		../../../python_static/include/python3.4m/warnings.h \
+		../../../python_static/include/python3.4m/weakrefobject.h \
+		../../../python_static/include/python3.4m/structseq.h \
+		../../../python_static/include/python3.4m/namespaceobject.h \
+		../../../python_static/include/python3.4m/codecs.h \
+		../../../python_static/include/python3.4m/pyerrors.h \
+		../../../python_static/include/python3.4m/pyarena.h \
+		../../../python_static/include/python3.4m/modsupport.h \
+		../../../python_static/include/python3.4m/pythonrun.h \
+		../../../python_static/include/python3.4m/ceval.h \
+		../../../python_static/include/python3.4m/sysmodule.h \
+		../../../python_static/include/python3.4m/intrcheck.h \
+		../../../python_static/include/python3.4m/import.h \
+		../../../python_static/include/python3.4m/abstract.h \
+		../../../python_static/include/python3.4m/bltinmodule.h \
+		../../../python_static/include/python3.4m/compile.h \
+		../../../python_static/include/python3.4m/code.h \
+		../../../python_static/include/python3.4m/eval.h \
+		../../../python_static/include/python3.4m/pyctype.h \
+		../../../python_static/include/python3.4m/pystrtod.h \
+		../../../python_static/include/python3.4m/pystrcmp.h \
+		../../../python_static/include/python3.4m/dtoa.h \
+		../../../python_static/include/python3.4m/fileutils.h \
+		../../../python_static/include/python3.4m/pyfpe.h \
+		../../../python_static/include/python3.4m/structmember.h
+	$(CC) -c $(CFLAGS) $(INCPATH) -o mmapmodule.o /src/Python-3.4.3/Modules/mmapmodule.c
 
 xmlparse.o: /src/Python-3.4.3/Modules/expat/xmlparse.c /src/Python-3.4.3/Modules/expat/winconfig.h \
 		/src/Python-3.4.3/Modules/expat/macconfig.h \
 		/src/Python-3.4.3/Modules/expat/amigaconfig.h \
 		/src/Python-3.4.3/Modules/expat/watcomconfig.h \
 		/src/Python-3.4.3/Modules/expat/expat_config.h \
+		../../../python_static/include/python3.4m/pyconfig.h \
 		/src/Python-3.4.3/Modules/expat/ascii.h \
 		/src/Python-3.4.3/Modules/expat/expat.h \
 		/src/Python-3.4.3/Modules/expat/expat_external.h \
@@ -896,14 +2239,297 @@ xmlparse.o: /src/Python-3.4.3/Modules/expat/xmlparse.c /src/Python-3.4.3/Modules
 		/src/Python-3.4.3/Modules/expat/xmlrole.h
 	$(CC) -c $(CFLAGS) $(INCPATH) -o xmlparse.o /src/Python-3.4.3/Modules/expat/xmlparse.c
 
-_bisectmodule.o: /src/Python-3.4.3/Modules/_bisectmodule.c 
+_bisectmodule.o: /src/Python-3.4.3/Modules/_bisectmodule.c ../../../python_static/include/python3.4m/Python.h \
+		../../../python_static/include/python3.4m/patchlevel.h \
+		../../../python_static/include/python3.4m/pyconfig.h \
+		../../../python_static/include/python3.4m/pymacconfig.h \
+		../../../python_static/include/python3.4m/pyport.h \
+		../../../python_static/include/python3.4m/pymacro.h \
+		../../../python_static/include/python3.4m/pyatomic.h \
+		../../../python_static/include/python3.4m/dynamic_annotations.h \
+		../../../python_static/include/python3.4m/pymath.h \
+		../../../python_static/include/python3.4m/pytime.h \
+		../../../python_static/include/python3.4m/object.h \
+		../../../python_static/include/python3.4m/pymem.h \
+		../../../python_static/include/python3.4m/objimpl.h \
+		../../../python_static/include/python3.4m/typeslots.h \
+		../../../python_static/include/python3.4m/pyhash.h \
+		../../../python_static/include/python3.4m/pydebug.h \
+		../../../python_static/include/python3.4m/bytearrayobject.h \
+		../../../python_static/include/python3.4m/bytesobject.h \
+		../../../python_static/include/python3.4m/unicodeobject.h \
+		../../../python_static/include/python3.4m/longobject.h \
+		../../../python_static/include/python3.4m/longintrepr.h \
+		../../../python_static/include/python3.4m/boolobject.h \
+		../../../python_static/include/python3.4m/floatobject.h \
+		../../../python_static/include/python3.4m/complexobject.h \
+		../../../python_static/include/python3.4m/rangeobject.h \
+		../../../python_static/include/python3.4m/memoryobject.h \
+		../../../python_static/include/python3.4m/tupleobject.h \
+		../../../python_static/include/python3.4m/listobject.h \
+		../../../python_static/include/python3.4m/dictobject.h \
+		../../../python_static/include/python3.4m/enumobject.h \
+		../../../python_static/include/python3.4m/setobject.h \
+		../../../python_static/include/python3.4m/methodobject.h \
+		../../../python_static/include/python3.4m/moduleobject.h \
+		../../../python_static/include/python3.4m/funcobject.h \
+		../../../python_static/include/python3.4m/classobject.h \
+		../../../python_static/include/python3.4m/fileobject.h \
+		../../../python_static/include/python3.4m/pycapsule.h \
+		../../../python_static/include/python3.4m/traceback.h \
+		../../../python_static/include/python3.4m/pystate.h \
+		../../../python_static/include/python3.4m/sliceobject.h \
+		../../../python_static/include/python3.4m/cellobject.h \
+		../../../python_static/include/python3.4m/iterobject.h \
+		../../../python_static/include/python3.4m/genobject.h \
+		../../../python_static/include/python3.4m/descrobject.h \
+		../../../python_static/include/python3.4m/warnings.h \
+		../../../python_static/include/python3.4m/weakrefobject.h \
+		../../../python_static/include/python3.4m/structseq.h \
+		../../../python_static/include/python3.4m/namespaceobject.h \
+		../../../python_static/include/python3.4m/codecs.h \
+		../../../python_static/include/python3.4m/pyerrors.h \
+		../../../python_static/include/python3.4m/pyarena.h \
+		../../../python_static/include/python3.4m/modsupport.h \
+		../../../python_static/include/python3.4m/pythonrun.h \
+		../../../python_static/include/python3.4m/ceval.h \
+		../../../python_static/include/python3.4m/sysmodule.h \
+		../../../python_static/include/python3.4m/intrcheck.h \
+		../../../python_static/include/python3.4m/import.h \
+		../../../python_static/include/python3.4m/abstract.h \
+		../../../python_static/include/python3.4m/bltinmodule.h \
+		../../../python_static/include/python3.4m/compile.h \
+		../../../python_static/include/python3.4m/code.h \
+		../../../python_static/include/python3.4m/eval.h \
+		../../../python_static/include/python3.4m/pyctype.h \
+		../../../python_static/include/python3.4m/pystrtod.h \
+		../../../python_static/include/python3.4m/pystrcmp.h \
+		../../../python_static/include/python3.4m/dtoa.h \
+		../../../python_static/include/python3.4m/fileutils.h \
+		../../../python_static/include/python3.4m/pyfpe.h
 	$(CC) -c $(CFLAGS) $(INCPATH) -o _bisectmodule.o /src/Python-3.4.3/Modules/_bisectmodule.c
+
+sha1module.o: /src/Python-3.4.3/Modules/sha1module.c ../../../python_static/include/python3.4m/Python.h \
+		../../../python_static/include/python3.4m/patchlevel.h \
+		../../../python_static/include/python3.4m/pyconfig.h \
+		../../../python_static/include/python3.4m/pymacconfig.h \
+		../../../python_static/include/python3.4m/pyport.h \
+		../../../python_static/include/python3.4m/pymacro.h \
+		../../../python_static/include/python3.4m/pyatomic.h \
+		../../../python_static/include/python3.4m/dynamic_annotations.h \
+		../../../python_static/include/python3.4m/pymath.h \
+		../../../python_static/include/python3.4m/pytime.h \
+		../../../python_static/include/python3.4m/object.h \
+		../../../python_static/include/python3.4m/pymem.h \
+		../../../python_static/include/python3.4m/objimpl.h \
+		../../../python_static/include/python3.4m/typeslots.h \
+		../../../python_static/include/python3.4m/pyhash.h \
+		../../../python_static/include/python3.4m/pydebug.h \
+		../../../python_static/include/python3.4m/bytearrayobject.h \
+		../../../python_static/include/python3.4m/bytesobject.h \
+		../../../python_static/include/python3.4m/unicodeobject.h \
+		../../../python_static/include/python3.4m/longobject.h \
+		../../../python_static/include/python3.4m/longintrepr.h \
+		../../../python_static/include/python3.4m/boolobject.h \
+		../../../python_static/include/python3.4m/floatobject.h \
+		../../../python_static/include/python3.4m/complexobject.h \
+		../../../python_static/include/python3.4m/rangeobject.h \
+		../../../python_static/include/python3.4m/memoryobject.h \
+		../../../python_static/include/python3.4m/tupleobject.h \
+		../../../python_static/include/python3.4m/listobject.h \
+		../../../python_static/include/python3.4m/dictobject.h \
+		../../../python_static/include/python3.4m/enumobject.h \
+		../../../python_static/include/python3.4m/setobject.h \
+		../../../python_static/include/python3.4m/methodobject.h \
+		../../../python_static/include/python3.4m/moduleobject.h \
+		../../../python_static/include/python3.4m/funcobject.h \
+		../../../python_static/include/python3.4m/classobject.h \
+		../../../python_static/include/python3.4m/fileobject.h \
+		../../../python_static/include/python3.4m/pycapsule.h \
+		../../../python_static/include/python3.4m/traceback.h \
+		../../../python_static/include/python3.4m/pystate.h \
+		../../../python_static/include/python3.4m/sliceobject.h \
+		../../../python_static/include/python3.4m/cellobject.h \
+		../../../python_static/include/python3.4m/iterobject.h \
+		../../../python_static/include/python3.4m/genobject.h \
+		../../../python_static/include/python3.4m/descrobject.h \
+		../../../python_static/include/python3.4m/warnings.h \
+		../../../python_static/include/python3.4m/weakrefobject.h \
+		../../../python_static/include/python3.4m/structseq.h \
+		../../../python_static/include/python3.4m/namespaceobject.h \
+		../../../python_static/include/python3.4m/codecs.h \
+		../../../python_static/include/python3.4m/pyerrors.h \
+		../../../python_static/include/python3.4m/pyarena.h \
+		../../../python_static/include/python3.4m/modsupport.h \
+		../../../python_static/include/python3.4m/pythonrun.h \
+		../../../python_static/include/python3.4m/ceval.h \
+		../../../python_static/include/python3.4m/sysmodule.h \
+		../../../python_static/include/python3.4m/intrcheck.h \
+		../../../python_static/include/python3.4m/import.h \
+		../../../python_static/include/python3.4m/abstract.h \
+		../../../python_static/include/python3.4m/bltinmodule.h \
+		../../../python_static/include/python3.4m/compile.h \
+		../../../python_static/include/python3.4m/code.h \
+		../../../python_static/include/python3.4m/eval.h \
+		../../../python_static/include/python3.4m/pyctype.h \
+		../../../python_static/include/python3.4m/pystrtod.h \
+		../../../python_static/include/python3.4m/pystrcmp.h \
+		../../../python_static/include/python3.4m/dtoa.h \
+		../../../python_static/include/python3.4m/fileutils.h \
+		../../../python_static/include/python3.4m/pyfpe.h \
+		/src/Python-3.4.3/Modules/hashlib.h \
+		../../../python_static/include/python3.4m/pythread.h
+	$(CC) -c $(CFLAGS) $(INCPATH) -o sha1module.o /src/Python-3.4.3/Modules/sha1module.c
+
+selectmodule.o: /src/Python-3.4.3/Modules/selectmodule.c ../../../python_static/include/python3.4m/Python.h \
+		../../../python_static/include/python3.4m/patchlevel.h \
+		../../../python_static/include/python3.4m/pyconfig.h \
+		../../../python_static/include/python3.4m/pymacconfig.h \
+		../../../python_static/include/python3.4m/pyport.h \
+		../../../python_static/include/python3.4m/pymacro.h \
+		../../../python_static/include/python3.4m/pyatomic.h \
+		../../../python_static/include/python3.4m/dynamic_annotations.h \
+		../../../python_static/include/python3.4m/pymath.h \
+		../../../python_static/include/python3.4m/pytime.h \
+		../../../python_static/include/python3.4m/object.h \
+		../../../python_static/include/python3.4m/pymem.h \
+		../../../python_static/include/python3.4m/objimpl.h \
+		../../../python_static/include/python3.4m/typeslots.h \
+		../../../python_static/include/python3.4m/pyhash.h \
+		../../../python_static/include/python3.4m/pydebug.h \
+		../../../python_static/include/python3.4m/bytearrayobject.h \
+		../../../python_static/include/python3.4m/bytesobject.h \
+		../../../python_static/include/python3.4m/unicodeobject.h \
+		../../../python_static/include/python3.4m/longobject.h \
+		../../../python_static/include/python3.4m/longintrepr.h \
+		../../../python_static/include/python3.4m/boolobject.h \
+		../../../python_static/include/python3.4m/floatobject.h \
+		../../../python_static/include/python3.4m/complexobject.h \
+		../../../python_static/include/python3.4m/rangeobject.h \
+		../../../python_static/include/python3.4m/memoryobject.h \
+		../../../python_static/include/python3.4m/tupleobject.h \
+		../../../python_static/include/python3.4m/listobject.h \
+		../../../python_static/include/python3.4m/dictobject.h \
+		../../../python_static/include/python3.4m/enumobject.h \
+		../../../python_static/include/python3.4m/setobject.h \
+		../../../python_static/include/python3.4m/methodobject.h \
+		../../../python_static/include/python3.4m/moduleobject.h \
+		../../../python_static/include/python3.4m/funcobject.h \
+		../../../python_static/include/python3.4m/classobject.h \
+		../../../python_static/include/python3.4m/fileobject.h \
+		../../../python_static/include/python3.4m/pycapsule.h \
+		../../../python_static/include/python3.4m/traceback.h \
+		../../../python_static/include/python3.4m/pystate.h \
+		../../../python_static/include/python3.4m/sliceobject.h \
+		../../../python_static/include/python3.4m/cellobject.h \
+		../../../python_static/include/python3.4m/iterobject.h \
+		../../../python_static/include/python3.4m/genobject.h \
+		../../../python_static/include/python3.4m/descrobject.h \
+		../../../python_static/include/python3.4m/warnings.h \
+		../../../python_static/include/python3.4m/weakrefobject.h \
+		../../../python_static/include/python3.4m/structseq.h \
+		../../../python_static/include/python3.4m/namespaceobject.h \
+		../../../python_static/include/python3.4m/codecs.h \
+		../../../python_static/include/python3.4m/pyerrors.h \
+		../../../python_static/include/python3.4m/pyarena.h \
+		../../../python_static/include/python3.4m/modsupport.h \
+		../../../python_static/include/python3.4m/pythonrun.h \
+		../../../python_static/include/python3.4m/ceval.h \
+		../../../python_static/include/python3.4m/sysmodule.h \
+		../../../python_static/include/python3.4m/intrcheck.h \
+		../../../python_static/include/python3.4m/import.h \
+		../../../python_static/include/python3.4m/abstract.h \
+		../../../python_static/include/python3.4m/bltinmodule.h \
+		../../../python_static/include/python3.4m/compile.h \
+		../../../python_static/include/python3.4m/code.h \
+		../../../python_static/include/python3.4m/eval.h \
+		../../../python_static/include/python3.4m/pyctype.h \
+		../../../python_static/include/python3.4m/pystrtod.h \
+		../../../python_static/include/python3.4m/pystrcmp.h \
+		../../../python_static/include/python3.4m/dtoa.h \
+		../../../python_static/include/python3.4m/fileutils.h \
+		../../../python_static/include/python3.4m/pyfpe.h \
+		../../../python_static/include/python3.4m/structmember.h
+	$(CC) -c $(CFLAGS) $(INCPATH) -o selectmodule.o /src/Python-3.4.3/Modules/selectmodule.c
+
+_json.o: /src/Python-3.4.3/Modules/_json.c ../../../python_static/include/python3.4m/Python.h \
+		../../../python_static/include/python3.4m/patchlevel.h \
+		../../../python_static/include/python3.4m/pyconfig.h \
+		../../../python_static/include/python3.4m/pymacconfig.h \
+		../../../python_static/include/python3.4m/pyport.h \
+		../../../python_static/include/python3.4m/pymacro.h \
+		../../../python_static/include/python3.4m/pyatomic.h \
+		../../../python_static/include/python3.4m/dynamic_annotations.h \
+		../../../python_static/include/python3.4m/pymath.h \
+		../../../python_static/include/python3.4m/pytime.h \
+		../../../python_static/include/python3.4m/object.h \
+		../../../python_static/include/python3.4m/pymem.h \
+		../../../python_static/include/python3.4m/objimpl.h \
+		../../../python_static/include/python3.4m/typeslots.h \
+		../../../python_static/include/python3.4m/pyhash.h \
+		../../../python_static/include/python3.4m/pydebug.h \
+		../../../python_static/include/python3.4m/bytearrayobject.h \
+		../../../python_static/include/python3.4m/bytesobject.h \
+		../../../python_static/include/python3.4m/unicodeobject.h \
+		../../../python_static/include/python3.4m/longobject.h \
+		../../../python_static/include/python3.4m/longintrepr.h \
+		../../../python_static/include/python3.4m/boolobject.h \
+		../../../python_static/include/python3.4m/floatobject.h \
+		../../../python_static/include/python3.4m/complexobject.h \
+		../../../python_static/include/python3.4m/rangeobject.h \
+		../../../python_static/include/python3.4m/memoryobject.h \
+		../../../python_static/include/python3.4m/tupleobject.h \
+		../../../python_static/include/python3.4m/listobject.h \
+		../../../python_static/include/python3.4m/dictobject.h \
+		../../../python_static/include/python3.4m/enumobject.h \
+		../../../python_static/include/python3.4m/setobject.h \
+		../../../python_static/include/python3.4m/methodobject.h \
+		../../../python_static/include/python3.4m/moduleobject.h \
+		../../../python_static/include/python3.4m/funcobject.h \
+		../../../python_static/include/python3.4m/classobject.h \
+		../../../python_static/include/python3.4m/fileobject.h \
+		../../../python_static/include/python3.4m/pycapsule.h \
+		../../../python_static/include/python3.4m/traceback.h \
+		../../../python_static/include/python3.4m/pystate.h \
+		../../../python_static/include/python3.4m/sliceobject.h \
+		../../../python_static/include/python3.4m/cellobject.h \
+		../../../python_static/include/python3.4m/iterobject.h \
+		../../../python_static/include/python3.4m/genobject.h \
+		../../../python_static/include/python3.4m/descrobject.h \
+		../../../python_static/include/python3.4m/warnings.h \
+		../../../python_static/include/python3.4m/weakrefobject.h \
+		../../../python_static/include/python3.4m/structseq.h \
+		../../../python_static/include/python3.4m/namespaceobject.h \
+		../../../python_static/include/python3.4m/codecs.h \
+		../../../python_static/include/python3.4m/pyerrors.h \
+		../../../python_static/include/python3.4m/pyarena.h \
+		../../../python_static/include/python3.4m/modsupport.h \
+		../../../python_static/include/python3.4m/pythonrun.h \
+		../../../python_static/include/python3.4m/ceval.h \
+		../../../python_static/include/python3.4m/sysmodule.h \
+		../../../python_static/include/python3.4m/intrcheck.h \
+		../../../python_static/include/python3.4m/import.h \
+		../../../python_static/include/python3.4m/abstract.h \
+		../../../python_static/include/python3.4m/bltinmodule.h \
+		../../../python_static/include/python3.4m/compile.h \
+		../../../python_static/include/python3.4m/code.h \
+		../../../python_static/include/python3.4m/eval.h \
+		../../../python_static/include/python3.4m/pyctype.h \
+		../../../python_static/include/python3.4m/pystrtod.h \
+		../../../python_static/include/python3.4m/pystrcmp.h \
+		../../../python_static/include/python3.4m/dtoa.h \
+		../../../python_static/include/python3.4m/fileutils.h \
+		../../../python_static/include/python3.4m/pyfpe.h \
+		../../../python_static/include/python3.4m/structmember.h \
+		../../../python_static/include/python3.4m/accu.h
+	$(CC) -c $(CFLAGS) $(INCPATH) -o _json.o /src/Python-3.4.3/Modules/_json.c
 
 xmlrole.o: /src/Python-3.4.3/Modules/expat/xmlrole.c /src/Python-3.4.3/Modules/expat/winconfig.h \
 		/src/Python-3.4.3/Modules/expat/macconfig.h \
 		/src/Python-3.4.3/Modules/expat/amigaconfig.h \
 		/src/Python-3.4.3/Modules/expat/watcomconfig.h \
 		/src/Python-3.4.3/Modules/expat/expat_config.h \
+		../../../python_static/include/python3.4m/pyconfig.h \
 		/src/Python-3.4.3/Modules/expat/expat_external.h \
 		/src/Python-3.4.3/Modules/expat/pyexpatns.h \
 		/src/Python-3.4.3/Modules/expat/internal.h \
@@ -912,29 +2538,867 @@ xmlrole.o: /src/Python-3.4.3/Modules/expat/xmlrole.c /src/Python-3.4.3/Modules/e
 		/src/Python-3.4.3/Modules/expat/ascii.h
 	$(CC) -c $(CFLAGS) $(INCPATH) -o xmlrole.o /src/Python-3.4.3/Modules/expat/xmlrole.c
 
-_ctypes.o: /src/Python-3.4.3/Modules/_ctypes/_ctypes.c /src/Python-3.4.3/Modules/_ctypes/ctypes_dlfcn.h \
+semaphore.o: /src/Python-3.4.3/Modules/_multiprocessing/semaphore.c /src/Python-3.4.3/Modules/_multiprocessing/multiprocessing.h \
+		../../../python_static/include/python3.4m/Python.h \
+		../../../python_static/include/python3.4m/patchlevel.h \
+		../../../python_static/include/python3.4m/pyconfig.h \
+		../../../python_static/include/python3.4m/pymacconfig.h \
+		../../../python_static/include/python3.4m/pyport.h \
+		../../../python_static/include/python3.4m/pymacro.h \
+		../../../python_static/include/python3.4m/pyatomic.h \
+		../../../python_static/include/python3.4m/dynamic_annotations.h \
+		../../../python_static/include/python3.4m/pymath.h \
+		../../../python_static/include/python3.4m/pytime.h \
+		../../../python_static/include/python3.4m/object.h \
+		../../../python_static/include/python3.4m/pymem.h \
+		../../../python_static/include/python3.4m/objimpl.h \
+		../../../python_static/include/python3.4m/typeslots.h \
+		../../../python_static/include/python3.4m/pyhash.h \
+		../../../python_static/include/python3.4m/pydebug.h \
+		../../../python_static/include/python3.4m/bytearrayobject.h \
+		../../../python_static/include/python3.4m/bytesobject.h \
+		../../../python_static/include/python3.4m/unicodeobject.h \
+		../../../python_static/include/python3.4m/longobject.h \
+		../../../python_static/include/python3.4m/longintrepr.h \
+		../../../python_static/include/python3.4m/boolobject.h \
+		../../../python_static/include/python3.4m/floatobject.h \
+		../../../python_static/include/python3.4m/complexobject.h \
+		../../../python_static/include/python3.4m/rangeobject.h \
+		../../../python_static/include/python3.4m/memoryobject.h \
+		../../../python_static/include/python3.4m/tupleobject.h \
+		../../../python_static/include/python3.4m/listobject.h \
+		../../../python_static/include/python3.4m/dictobject.h \
+		../../../python_static/include/python3.4m/enumobject.h \
+		../../../python_static/include/python3.4m/setobject.h \
+		../../../python_static/include/python3.4m/methodobject.h \
+		../../../python_static/include/python3.4m/moduleobject.h \
+		../../../python_static/include/python3.4m/funcobject.h \
+		../../../python_static/include/python3.4m/classobject.h \
+		../../../python_static/include/python3.4m/fileobject.h \
+		../../../python_static/include/python3.4m/pycapsule.h \
+		../../../python_static/include/python3.4m/traceback.h \
+		../../../python_static/include/python3.4m/pystate.h \
+		../../../python_static/include/python3.4m/sliceobject.h \
+		../../../python_static/include/python3.4m/cellobject.h \
+		../../../python_static/include/python3.4m/iterobject.h \
+		../../../python_static/include/python3.4m/genobject.h \
+		../../../python_static/include/python3.4m/descrobject.h \
+		../../../python_static/include/python3.4m/warnings.h \
+		../../../python_static/include/python3.4m/weakrefobject.h \
+		../../../python_static/include/python3.4m/structseq.h \
+		../../../python_static/include/python3.4m/namespaceobject.h \
+		../../../python_static/include/python3.4m/codecs.h \
+		../../../python_static/include/python3.4m/pyerrors.h \
+		../../../python_static/include/python3.4m/pyarena.h \
+		../../../python_static/include/python3.4m/modsupport.h \
+		../../../python_static/include/python3.4m/pythonrun.h \
+		../../../python_static/include/python3.4m/ceval.h \
+		../../../python_static/include/python3.4m/sysmodule.h \
+		../../../python_static/include/python3.4m/intrcheck.h \
+		../../../python_static/include/python3.4m/import.h \
+		../../../python_static/include/python3.4m/abstract.h \
+		../../../python_static/include/python3.4m/bltinmodule.h \
+		../../../python_static/include/python3.4m/compile.h \
+		../../../python_static/include/python3.4m/code.h \
+		../../../python_static/include/python3.4m/eval.h \
+		../../../python_static/include/python3.4m/pyctype.h \
+		../../../python_static/include/python3.4m/pystrtod.h \
+		../../../python_static/include/python3.4m/pystrcmp.h \
+		../../../python_static/include/python3.4m/dtoa.h \
+		../../../python_static/include/python3.4m/fileutils.h \
+		../../../python_static/include/python3.4m/pyfpe.h \
+		../../../python_static/include/python3.4m/structmember.h \
+		../../../python_static/include/python3.4m/pythread.h
+	$(CC) -c $(CFLAGS) $(INCPATH) -o semaphore.o /src/Python-3.4.3/Modules/_multiprocessing/semaphore.c
+
+_randommodule.o: /src/Python-3.4.3/Modules/_randommodule.c ../../../python_static/include/python3.4m/Python.h \
+		../../../python_static/include/python3.4m/patchlevel.h \
+		../../../python_static/include/python3.4m/pyconfig.h \
+		../../../python_static/include/python3.4m/pymacconfig.h \
+		../../../python_static/include/python3.4m/pyport.h \
+		../../../python_static/include/python3.4m/pymacro.h \
+		../../../python_static/include/python3.4m/pyatomic.h \
+		../../../python_static/include/python3.4m/dynamic_annotations.h \
+		../../../python_static/include/python3.4m/pymath.h \
+		../../../python_static/include/python3.4m/pytime.h \
+		../../../python_static/include/python3.4m/object.h \
+		../../../python_static/include/python3.4m/pymem.h \
+		../../../python_static/include/python3.4m/objimpl.h \
+		../../../python_static/include/python3.4m/typeslots.h \
+		../../../python_static/include/python3.4m/pyhash.h \
+		../../../python_static/include/python3.4m/pydebug.h \
+		../../../python_static/include/python3.4m/bytearrayobject.h \
+		../../../python_static/include/python3.4m/bytesobject.h \
+		../../../python_static/include/python3.4m/unicodeobject.h \
+		../../../python_static/include/python3.4m/longobject.h \
+		../../../python_static/include/python3.4m/longintrepr.h \
+		../../../python_static/include/python3.4m/boolobject.h \
+		../../../python_static/include/python3.4m/floatobject.h \
+		../../../python_static/include/python3.4m/complexobject.h \
+		../../../python_static/include/python3.4m/rangeobject.h \
+		../../../python_static/include/python3.4m/memoryobject.h \
+		../../../python_static/include/python3.4m/tupleobject.h \
+		../../../python_static/include/python3.4m/listobject.h \
+		../../../python_static/include/python3.4m/dictobject.h \
+		../../../python_static/include/python3.4m/enumobject.h \
+		../../../python_static/include/python3.4m/setobject.h \
+		../../../python_static/include/python3.4m/methodobject.h \
+		../../../python_static/include/python3.4m/moduleobject.h \
+		../../../python_static/include/python3.4m/funcobject.h \
+		../../../python_static/include/python3.4m/classobject.h \
+		../../../python_static/include/python3.4m/fileobject.h \
+		../../../python_static/include/python3.4m/pycapsule.h \
+		../../../python_static/include/python3.4m/traceback.h \
+		../../../python_static/include/python3.4m/pystate.h \
+		../../../python_static/include/python3.4m/sliceobject.h \
+		../../../python_static/include/python3.4m/cellobject.h \
+		../../../python_static/include/python3.4m/iterobject.h \
+		../../../python_static/include/python3.4m/genobject.h \
+		../../../python_static/include/python3.4m/descrobject.h \
+		../../../python_static/include/python3.4m/warnings.h \
+		../../../python_static/include/python3.4m/weakrefobject.h \
+		../../../python_static/include/python3.4m/structseq.h \
+		../../../python_static/include/python3.4m/namespaceobject.h \
+		../../../python_static/include/python3.4m/codecs.h \
+		../../../python_static/include/python3.4m/pyerrors.h \
+		../../../python_static/include/python3.4m/pyarena.h \
+		../../../python_static/include/python3.4m/modsupport.h \
+		../../../python_static/include/python3.4m/pythonrun.h \
+		../../../python_static/include/python3.4m/ceval.h \
+		../../../python_static/include/python3.4m/sysmodule.h \
+		../../../python_static/include/python3.4m/intrcheck.h \
+		../../../python_static/include/python3.4m/import.h \
+		../../../python_static/include/python3.4m/abstract.h \
+		../../../python_static/include/python3.4m/bltinmodule.h \
+		../../../python_static/include/python3.4m/compile.h \
+		../../../python_static/include/python3.4m/code.h \
+		../../../python_static/include/python3.4m/eval.h \
+		../../../python_static/include/python3.4m/pyctype.h \
+		../../../python_static/include/python3.4m/pystrtod.h \
+		../../../python_static/include/python3.4m/pystrcmp.h \
+		../../../python_static/include/python3.4m/dtoa.h \
+		../../../python_static/include/python3.4m/fileutils.h \
+		../../../python_static/include/python3.4m/pyfpe.h
+	$(CC) -c $(CFLAGS) $(INCPATH) -o _randommodule.o /src/Python-3.4.3/Modules/_randommodule.c
+
+binascii.o: /src/Python-3.4.3/Modules/binascii.c ../../../python_static/include/python3.4m/Python.h \
+		../../../python_static/include/python3.4m/patchlevel.h \
+		../../../python_static/include/python3.4m/pyconfig.h \
+		../../../python_static/include/python3.4m/pymacconfig.h \
+		../../../python_static/include/python3.4m/pyport.h \
+		../../../python_static/include/python3.4m/pymacro.h \
+		../../../python_static/include/python3.4m/pyatomic.h \
+		../../../python_static/include/python3.4m/dynamic_annotations.h \
+		../../../python_static/include/python3.4m/pymath.h \
+		../../../python_static/include/python3.4m/pytime.h \
+		../../../python_static/include/python3.4m/object.h \
+		../../../python_static/include/python3.4m/pymem.h \
+		../../../python_static/include/python3.4m/objimpl.h \
+		../../../python_static/include/python3.4m/typeslots.h \
+		../../../python_static/include/python3.4m/pyhash.h \
+		../../../python_static/include/python3.4m/pydebug.h \
+		../../../python_static/include/python3.4m/bytearrayobject.h \
+		../../../python_static/include/python3.4m/bytesobject.h \
+		../../../python_static/include/python3.4m/unicodeobject.h \
+		../../../python_static/include/python3.4m/longobject.h \
+		../../../python_static/include/python3.4m/longintrepr.h \
+		../../../python_static/include/python3.4m/boolobject.h \
+		../../../python_static/include/python3.4m/floatobject.h \
+		../../../python_static/include/python3.4m/complexobject.h \
+		../../../python_static/include/python3.4m/rangeobject.h \
+		../../../python_static/include/python3.4m/memoryobject.h \
+		../../../python_static/include/python3.4m/tupleobject.h \
+		../../../python_static/include/python3.4m/listobject.h \
+		../../../python_static/include/python3.4m/dictobject.h \
+		../../../python_static/include/python3.4m/enumobject.h \
+		../../../python_static/include/python3.4m/setobject.h \
+		../../../python_static/include/python3.4m/methodobject.h \
+		../../../python_static/include/python3.4m/moduleobject.h \
+		../../../python_static/include/python3.4m/funcobject.h \
+		../../../python_static/include/python3.4m/classobject.h \
+		../../../python_static/include/python3.4m/fileobject.h \
+		../../../python_static/include/python3.4m/pycapsule.h \
+		../../../python_static/include/python3.4m/traceback.h \
+		../../../python_static/include/python3.4m/pystate.h \
+		../../../python_static/include/python3.4m/sliceobject.h \
+		../../../python_static/include/python3.4m/cellobject.h \
+		../../../python_static/include/python3.4m/iterobject.h \
+		../../../python_static/include/python3.4m/genobject.h \
+		../../../python_static/include/python3.4m/descrobject.h \
+		../../../python_static/include/python3.4m/warnings.h \
+		../../../python_static/include/python3.4m/weakrefobject.h \
+		../../../python_static/include/python3.4m/structseq.h \
+		../../../python_static/include/python3.4m/namespaceobject.h \
+		../../../python_static/include/python3.4m/codecs.h \
+		../../../python_static/include/python3.4m/pyerrors.h \
+		../../../python_static/include/python3.4m/pyarena.h \
+		../../../python_static/include/python3.4m/modsupport.h \
+		../../../python_static/include/python3.4m/pythonrun.h \
+		../../../python_static/include/python3.4m/ceval.h \
+		../../../python_static/include/python3.4m/sysmodule.h \
+		../../../python_static/include/python3.4m/intrcheck.h \
+		../../../python_static/include/python3.4m/import.h \
+		../../../python_static/include/python3.4m/abstract.h \
+		../../../python_static/include/python3.4m/bltinmodule.h \
+		../../../python_static/include/python3.4m/compile.h \
+		../../../python_static/include/python3.4m/code.h \
+		../../../python_static/include/python3.4m/eval.h \
+		../../../python_static/include/python3.4m/pyctype.h \
+		../../../python_static/include/python3.4m/pystrtod.h \
+		../../../python_static/include/python3.4m/pystrcmp.h \
+		../../../python_static/include/python3.4m/dtoa.h \
+		../../../python_static/include/python3.4m/fileutils.h \
+		../../../python_static/include/python3.4m/pyfpe.h \
+		/src/Python-3.4.3/Modules/clinic/binascii.c.h
+	$(CC) -c $(CFLAGS) $(INCPATH) -o binascii.o /src/Python-3.4.3/Modules/binascii.c
+
+_datetimemodule.o: /src/Python-3.4.3/Modules/_datetimemodule.c ../../../python_static/include/python3.4m/Python.h \
+		../../../python_static/include/python3.4m/patchlevel.h \
+		../../../python_static/include/python3.4m/pyconfig.h \
+		../../../python_static/include/python3.4m/pymacconfig.h \
+		../../../python_static/include/python3.4m/pyport.h \
+		../../../python_static/include/python3.4m/pymacro.h \
+		../../../python_static/include/python3.4m/pyatomic.h \
+		../../../python_static/include/python3.4m/dynamic_annotations.h \
+		../../../python_static/include/python3.4m/pymath.h \
+		../../../python_static/include/python3.4m/pytime.h \
+		../../../python_static/include/python3.4m/object.h \
+		../../../python_static/include/python3.4m/pymem.h \
+		../../../python_static/include/python3.4m/objimpl.h \
+		../../../python_static/include/python3.4m/typeslots.h \
+		../../../python_static/include/python3.4m/pyhash.h \
+		../../../python_static/include/python3.4m/pydebug.h \
+		../../../python_static/include/python3.4m/bytearrayobject.h \
+		../../../python_static/include/python3.4m/bytesobject.h \
+		../../../python_static/include/python3.4m/unicodeobject.h \
+		../../../python_static/include/python3.4m/longobject.h \
+		../../../python_static/include/python3.4m/longintrepr.h \
+		../../../python_static/include/python3.4m/boolobject.h \
+		../../../python_static/include/python3.4m/floatobject.h \
+		../../../python_static/include/python3.4m/complexobject.h \
+		../../../python_static/include/python3.4m/rangeobject.h \
+		../../../python_static/include/python3.4m/memoryobject.h \
+		../../../python_static/include/python3.4m/tupleobject.h \
+		../../../python_static/include/python3.4m/listobject.h \
+		../../../python_static/include/python3.4m/dictobject.h \
+		../../../python_static/include/python3.4m/enumobject.h \
+		../../../python_static/include/python3.4m/setobject.h \
+		../../../python_static/include/python3.4m/methodobject.h \
+		../../../python_static/include/python3.4m/moduleobject.h \
+		../../../python_static/include/python3.4m/funcobject.h \
+		../../../python_static/include/python3.4m/classobject.h \
+		../../../python_static/include/python3.4m/fileobject.h \
+		../../../python_static/include/python3.4m/pycapsule.h \
+		../../../python_static/include/python3.4m/traceback.h \
+		../../../python_static/include/python3.4m/pystate.h \
+		../../../python_static/include/python3.4m/sliceobject.h \
+		../../../python_static/include/python3.4m/cellobject.h \
+		../../../python_static/include/python3.4m/iterobject.h \
+		../../../python_static/include/python3.4m/genobject.h \
+		../../../python_static/include/python3.4m/descrobject.h \
+		../../../python_static/include/python3.4m/warnings.h \
+		../../../python_static/include/python3.4m/weakrefobject.h \
+		../../../python_static/include/python3.4m/structseq.h \
+		../../../python_static/include/python3.4m/namespaceobject.h \
+		../../../python_static/include/python3.4m/codecs.h \
+		../../../python_static/include/python3.4m/pyerrors.h \
+		../../../python_static/include/python3.4m/pyarena.h \
+		../../../python_static/include/python3.4m/modsupport.h \
+		../../../python_static/include/python3.4m/pythonrun.h \
+		../../../python_static/include/python3.4m/ceval.h \
+		../../../python_static/include/python3.4m/sysmodule.h \
+		../../../python_static/include/python3.4m/intrcheck.h \
+		../../../python_static/include/python3.4m/import.h \
+		../../../python_static/include/python3.4m/abstract.h \
+		../../../python_static/include/python3.4m/bltinmodule.h \
+		../../../python_static/include/python3.4m/compile.h \
+		../../../python_static/include/python3.4m/code.h \
+		../../../python_static/include/python3.4m/eval.h \
+		../../../python_static/include/python3.4m/pyctype.h \
+		../../../python_static/include/python3.4m/pystrtod.h \
+		../../../python_static/include/python3.4m/pystrcmp.h \
+		../../../python_static/include/python3.4m/dtoa.h \
+		../../../python_static/include/python3.4m/fileutils.h \
+		../../../python_static/include/python3.4m/pyfpe.h \
+		../../../python_static/include/python3.4m/structmember.h \
+		../../../python_static/include/python3.4m/datetime.h
+	$(CC) -c $(CFLAGS) $(INCPATH) -o _datetimemodule.o /src/Python-3.4.3/Modules/_datetimemodule.c
+
+sha512module.o: /src/Python-3.4.3/Modules/sha512module.c ../../../python_static/include/python3.4m/Python.h \
+		../../../python_static/include/python3.4m/patchlevel.h \
+		../../../python_static/include/python3.4m/pyconfig.h \
+		../../../python_static/include/python3.4m/pymacconfig.h \
+		../../../python_static/include/python3.4m/pyport.h \
+		../../../python_static/include/python3.4m/pymacro.h \
+		../../../python_static/include/python3.4m/pyatomic.h \
+		../../../python_static/include/python3.4m/dynamic_annotations.h \
+		../../../python_static/include/python3.4m/pymath.h \
+		../../../python_static/include/python3.4m/pytime.h \
+		../../../python_static/include/python3.4m/object.h \
+		../../../python_static/include/python3.4m/pymem.h \
+		../../../python_static/include/python3.4m/objimpl.h \
+		../../../python_static/include/python3.4m/typeslots.h \
+		../../../python_static/include/python3.4m/pyhash.h \
+		../../../python_static/include/python3.4m/pydebug.h \
+		../../../python_static/include/python3.4m/bytearrayobject.h \
+		../../../python_static/include/python3.4m/bytesobject.h \
+		../../../python_static/include/python3.4m/unicodeobject.h \
+		../../../python_static/include/python3.4m/longobject.h \
+		../../../python_static/include/python3.4m/longintrepr.h \
+		../../../python_static/include/python3.4m/boolobject.h \
+		../../../python_static/include/python3.4m/floatobject.h \
+		../../../python_static/include/python3.4m/complexobject.h \
+		../../../python_static/include/python3.4m/rangeobject.h \
+		../../../python_static/include/python3.4m/memoryobject.h \
+		../../../python_static/include/python3.4m/tupleobject.h \
+		../../../python_static/include/python3.4m/listobject.h \
+		../../../python_static/include/python3.4m/dictobject.h \
+		../../../python_static/include/python3.4m/enumobject.h \
+		../../../python_static/include/python3.4m/setobject.h \
+		../../../python_static/include/python3.4m/methodobject.h \
+		../../../python_static/include/python3.4m/moduleobject.h \
+		../../../python_static/include/python3.4m/funcobject.h \
+		../../../python_static/include/python3.4m/classobject.h \
+		../../../python_static/include/python3.4m/fileobject.h \
+		../../../python_static/include/python3.4m/pycapsule.h \
+		../../../python_static/include/python3.4m/traceback.h \
+		../../../python_static/include/python3.4m/pystate.h \
+		../../../python_static/include/python3.4m/sliceobject.h \
+		../../../python_static/include/python3.4m/cellobject.h \
+		../../../python_static/include/python3.4m/iterobject.h \
+		../../../python_static/include/python3.4m/genobject.h \
+		../../../python_static/include/python3.4m/descrobject.h \
+		../../../python_static/include/python3.4m/warnings.h \
+		../../../python_static/include/python3.4m/weakrefobject.h \
+		../../../python_static/include/python3.4m/structseq.h \
+		../../../python_static/include/python3.4m/namespaceobject.h \
+		../../../python_static/include/python3.4m/codecs.h \
+		../../../python_static/include/python3.4m/pyerrors.h \
+		../../../python_static/include/python3.4m/pyarena.h \
+		../../../python_static/include/python3.4m/modsupport.h \
+		../../../python_static/include/python3.4m/pythonrun.h \
+		../../../python_static/include/python3.4m/ceval.h \
+		../../../python_static/include/python3.4m/sysmodule.h \
+		../../../python_static/include/python3.4m/intrcheck.h \
+		../../../python_static/include/python3.4m/import.h \
+		../../../python_static/include/python3.4m/abstract.h \
+		../../../python_static/include/python3.4m/bltinmodule.h \
+		../../../python_static/include/python3.4m/compile.h \
+		../../../python_static/include/python3.4m/code.h \
+		../../../python_static/include/python3.4m/eval.h \
+		../../../python_static/include/python3.4m/pyctype.h \
+		../../../python_static/include/python3.4m/pystrtod.h \
+		../../../python_static/include/python3.4m/pystrcmp.h \
+		../../../python_static/include/python3.4m/dtoa.h \
+		../../../python_static/include/python3.4m/fileutils.h \
+		../../../python_static/include/python3.4m/pyfpe.h \
+		../../../python_static/include/python3.4m/structmember.h \
+		/src/Python-3.4.3/Modules/hashlib.h \
+		../../../python_static/include/python3.4m/pythread.h
+	$(CC) -c $(CFLAGS) $(INCPATH) -o sha512module.o /src/Python-3.4.3/Modules/sha512module.c
+
+md5module.o: /src/Python-3.4.3/Modules/md5module.c ../../../python_static/include/python3.4m/Python.h \
+		../../../python_static/include/python3.4m/patchlevel.h \
+		../../../python_static/include/python3.4m/pyconfig.h \
+		../../../python_static/include/python3.4m/pymacconfig.h \
+		../../../python_static/include/python3.4m/pyport.h \
+		../../../python_static/include/python3.4m/pymacro.h \
+		../../../python_static/include/python3.4m/pyatomic.h \
+		../../../python_static/include/python3.4m/dynamic_annotations.h \
+		../../../python_static/include/python3.4m/pymath.h \
+		../../../python_static/include/python3.4m/pytime.h \
+		../../../python_static/include/python3.4m/object.h \
+		../../../python_static/include/python3.4m/pymem.h \
+		../../../python_static/include/python3.4m/objimpl.h \
+		../../../python_static/include/python3.4m/typeslots.h \
+		../../../python_static/include/python3.4m/pyhash.h \
+		../../../python_static/include/python3.4m/pydebug.h \
+		../../../python_static/include/python3.4m/bytearrayobject.h \
+		../../../python_static/include/python3.4m/bytesobject.h \
+		../../../python_static/include/python3.4m/unicodeobject.h \
+		../../../python_static/include/python3.4m/longobject.h \
+		../../../python_static/include/python3.4m/longintrepr.h \
+		../../../python_static/include/python3.4m/boolobject.h \
+		../../../python_static/include/python3.4m/floatobject.h \
+		../../../python_static/include/python3.4m/complexobject.h \
+		../../../python_static/include/python3.4m/rangeobject.h \
+		../../../python_static/include/python3.4m/memoryobject.h \
+		../../../python_static/include/python3.4m/tupleobject.h \
+		../../../python_static/include/python3.4m/listobject.h \
+		../../../python_static/include/python3.4m/dictobject.h \
+		../../../python_static/include/python3.4m/enumobject.h \
+		../../../python_static/include/python3.4m/setobject.h \
+		../../../python_static/include/python3.4m/methodobject.h \
+		../../../python_static/include/python3.4m/moduleobject.h \
+		../../../python_static/include/python3.4m/funcobject.h \
+		../../../python_static/include/python3.4m/classobject.h \
+		../../../python_static/include/python3.4m/fileobject.h \
+		../../../python_static/include/python3.4m/pycapsule.h \
+		../../../python_static/include/python3.4m/traceback.h \
+		../../../python_static/include/python3.4m/pystate.h \
+		../../../python_static/include/python3.4m/sliceobject.h \
+		../../../python_static/include/python3.4m/cellobject.h \
+		../../../python_static/include/python3.4m/iterobject.h \
+		../../../python_static/include/python3.4m/genobject.h \
+		../../../python_static/include/python3.4m/descrobject.h \
+		../../../python_static/include/python3.4m/warnings.h \
+		../../../python_static/include/python3.4m/weakrefobject.h \
+		../../../python_static/include/python3.4m/structseq.h \
+		../../../python_static/include/python3.4m/namespaceobject.h \
+		../../../python_static/include/python3.4m/codecs.h \
+		../../../python_static/include/python3.4m/pyerrors.h \
+		../../../python_static/include/python3.4m/pyarena.h \
+		../../../python_static/include/python3.4m/modsupport.h \
+		../../../python_static/include/python3.4m/pythonrun.h \
+		../../../python_static/include/python3.4m/ceval.h \
+		../../../python_static/include/python3.4m/sysmodule.h \
+		../../../python_static/include/python3.4m/intrcheck.h \
+		../../../python_static/include/python3.4m/import.h \
+		../../../python_static/include/python3.4m/abstract.h \
+		../../../python_static/include/python3.4m/bltinmodule.h \
+		../../../python_static/include/python3.4m/compile.h \
+		../../../python_static/include/python3.4m/code.h \
+		../../../python_static/include/python3.4m/eval.h \
+		../../../python_static/include/python3.4m/pyctype.h \
+		../../../python_static/include/python3.4m/pystrtod.h \
+		../../../python_static/include/python3.4m/pystrcmp.h \
+		../../../python_static/include/python3.4m/dtoa.h \
+		../../../python_static/include/python3.4m/fileutils.h \
+		../../../python_static/include/python3.4m/pyfpe.h \
+		/src/Python-3.4.3/Modules/hashlib.h \
+		../../../python_static/include/python3.4m/pythread.h
+	$(CC) -c $(CFLAGS) $(INCPATH) -o md5module.o /src/Python-3.4.3/Modules/md5module.c
+
+_pickle.o: /src/Python-3.4.3/Modules/_pickle.c ../../../python_static/include/python3.4m/Python.h \
+		../../../python_static/include/python3.4m/patchlevel.h \
+		../../../python_static/include/python3.4m/pyconfig.h \
+		../../../python_static/include/python3.4m/pymacconfig.h \
+		../../../python_static/include/python3.4m/pyport.h \
+		../../../python_static/include/python3.4m/pymacro.h \
+		../../../python_static/include/python3.4m/pyatomic.h \
+		../../../python_static/include/python3.4m/dynamic_annotations.h \
+		../../../python_static/include/python3.4m/pymath.h \
+		../../../python_static/include/python3.4m/pytime.h \
+		../../../python_static/include/python3.4m/object.h \
+		../../../python_static/include/python3.4m/pymem.h \
+		../../../python_static/include/python3.4m/objimpl.h \
+		../../../python_static/include/python3.4m/typeslots.h \
+		../../../python_static/include/python3.4m/pyhash.h \
+		../../../python_static/include/python3.4m/pydebug.h \
+		../../../python_static/include/python3.4m/bytearrayobject.h \
+		../../../python_static/include/python3.4m/bytesobject.h \
+		../../../python_static/include/python3.4m/unicodeobject.h \
+		../../../python_static/include/python3.4m/longobject.h \
+		../../../python_static/include/python3.4m/longintrepr.h \
+		../../../python_static/include/python3.4m/boolobject.h \
+		../../../python_static/include/python3.4m/floatobject.h \
+		../../../python_static/include/python3.4m/complexobject.h \
+		../../../python_static/include/python3.4m/rangeobject.h \
+		../../../python_static/include/python3.4m/memoryobject.h \
+		../../../python_static/include/python3.4m/tupleobject.h \
+		../../../python_static/include/python3.4m/listobject.h \
+		../../../python_static/include/python3.4m/dictobject.h \
+		../../../python_static/include/python3.4m/enumobject.h \
+		../../../python_static/include/python3.4m/setobject.h \
+		../../../python_static/include/python3.4m/methodobject.h \
+		../../../python_static/include/python3.4m/moduleobject.h \
+		../../../python_static/include/python3.4m/funcobject.h \
+		../../../python_static/include/python3.4m/classobject.h \
+		../../../python_static/include/python3.4m/fileobject.h \
+		../../../python_static/include/python3.4m/pycapsule.h \
+		../../../python_static/include/python3.4m/traceback.h \
+		../../../python_static/include/python3.4m/pystate.h \
+		../../../python_static/include/python3.4m/sliceobject.h \
+		../../../python_static/include/python3.4m/cellobject.h \
+		../../../python_static/include/python3.4m/iterobject.h \
+		../../../python_static/include/python3.4m/genobject.h \
+		../../../python_static/include/python3.4m/descrobject.h \
+		../../../python_static/include/python3.4m/warnings.h \
+		../../../python_static/include/python3.4m/weakrefobject.h \
+		../../../python_static/include/python3.4m/structseq.h \
+		../../../python_static/include/python3.4m/namespaceobject.h \
+		../../../python_static/include/python3.4m/codecs.h \
+		../../../python_static/include/python3.4m/pyerrors.h \
+		../../../python_static/include/python3.4m/pyarena.h \
+		../../../python_static/include/python3.4m/modsupport.h \
+		../../../python_static/include/python3.4m/pythonrun.h \
+		../../../python_static/include/python3.4m/ceval.h \
+		../../../python_static/include/python3.4m/sysmodule.h \
+		../../../python_static/include/python3.4m/intrcheck.h \
+		../../../python_static/include/python3.4m/import.h \
+		../../../python_static/include/python3.4m/abstract.h \
+		../../../python_static/include/python3.4m/bltinmodule.h \
+		../../../python_static/include/python3.4m/compile.h \
+		../../../python_static/include/python3.4m/code.h \
+		../../../python_static/include/python3.4m/eval.h \
+		../../../python_static/include/python3.4m/pyctype.h \
+		../../../python_static/include/python3.4m/pystrtod.h \
+		../../../python_static/include/python3.4m/pystrcmp.h \
+		../../../python_static/include/python3.4m/dtoa.h \
+		../../../python_static/include/python3.4m/fileutils.h \
+		../../../python_static/include/python3.4m/pyfpe.h \
+		../../../python_static/include/python3.4m/structmember.h \
+		/src/Python-3.4.3/Modules/clinic/_pickle.c.h
+	$(CC) -c $(CFLAGS) $(INCPATH) -o _pickle.o /src/Python-3.4.3/Modules/_pickle.c
+
+_ctypes.o: /src/Python-3.4.3/Modules/_ctypes/_ctypes.c ../../../python_static/include/python3.4m/Python.h \
+		../../../python_static/include/python3.4m/patchlevel.h \
+		../../../python_static/include/python3.4m/pyconfig.h \
+		../../../python_static/include/python3.4m/pymacconfig.h \
+		../../../python_static/include/python3.4m/pyport.h \
+		../../../python_static/include/python3.4m/pymacro.h \
+		../../../python_static/include/python3.4m/pyatomic.h \
+		../../../python_static/include/python3.4m/dynamic_annotations.h \
+		../../../python_static/include/python3.4m/pymath.h \
+		../../../python_static/include/python3.4m/pytime.h \
+		../../../python_static/include/python3.4m/object.h \
+		../../../python_static/include/python3.4m/pymem.h \
+		../../../python_static/include/python3.4m/objimpl.h \
+		../../../python_static/include/python3.4m/typeslots.h \
+		../../../python_static/include/python3.4m/pyhash.h \
+		../../../python_static/include/python3.4m/pydebug.h \
+		../../../python_static/include/python3.4m/bytearrayobject.h \
+		../../../python_static/include/python3.4m/bytesobject.h \
+		../../../python_static/include/python3.4m/unicodeobject.h \
+		../../../python_static/include/python3.4m/longobject.h \
+		../../../python_static/include/python3.4m/longintrepr.h \
+		../../../python_static/include/python3.4m/boolobject.h \
+		../../../python_static/include/python3.4m/floatobject.h \
+		../../../python_static/include/python3.4m/complexobject.h \
+		../../../python_static/include/python3.4m/rangeobject.h \
+		../../../python_static/include/python3.4m/memoryobject.h \
+		../../../python_static/include/python3.4m/tupleobject.h \
+		../../../python_static/include/python3.4m/listobject.h \
+		../../../python_static/include/python3.4m/dictobject.h \
+		../../../python_static/include/python3.4m/enumobject.h \
+		../../../python_static/include/python3.4m/setobject.h \
+		../../../python_static/include/python3.4m/methodobject.h \
+		../../../python_static/include/python3.4m/moduleobject.h \
+		../../../python_static/include/python3.4m/funcobject.h \
+		../../../python_static/include/python3.4m/classobject.h \
+		../../../python_static/include/python3.4m/fileobject.h \
+		../../../python_static/include/python3.4m/pycapsule.h \
+		../../../python_static/include/python3.4m/traceback.h \
+		../../../python_static/include/python3.4m/pystate.h \
+		../../../python_static/include/python3.4m/sliceobject.h \
+		../../../python_static/include/python3.4m/cellobject.h \
+		../../../python_static/include/python3.4m/iterobject.h \
+		../../../python_static/include/python3.4m/genobject.h \
+		../../../python_static/include/python3.4m/descrobject.h \
+		../../../python_static/include/python3.4m/warnings.h \
+		../../../python_static/include/python3.4m/weakrefobject.h \
+		../../../python_static/include/python3.4m/structseq.h \
+		../../../python_static/include/python3.4m/namespaceobject.h \
+		../../../python_static/include/python3.4m/codecs.h \
+		../../../python_static/include/python3.4m/pyerrors.h \
+		../../../python_static/include/python3.4m/pyarena.h \
+		../../../python_static/include/python3.4m/modsupport.h \
+		../../../python_static/include/python3.4m/pythonrun.h \
+		../../../python_static/include/python3.4m/ceval.h \
+		../../../python_static/include/python3.4m/sysmodule.h \
+		../../../python_static/include/python3.4m/intrcheck.h \
+		../../../python_static/include/python3.4m/import.h \
+		../../../python_static/include/python3.4m/abstract.h \
+		../../../python_static/include/python3.4m/bltinmodule.h \
+		../../../python_static/include/python3.4m/compile.h \
+		../../../python_static/include/python3.4m/code.h \
+		../../../python_static/include/python3.4m/eval.h \
+		../../../python_static/include/python3.4m/pyctype.h \
+		../../../python_static/include/python3.4m/pystrtod.h \
+		../../../python_static/include/python3.4m/pystrcmp.h \
+		../../../python_static/include/python3.4m/dtoa.h \
+		../../../python_static/include/python3.4m/fileutils.h \
+		../../../python_static/include/python3.4m/pyfpe.h \
+		../../../python_static/include/python3.4m/structmember.h \
+		/src/Python-3.4.3/Modules/_ctypes/ctypes_dlfcn.h \
 		/src/Python-3.4.3/Modules/_ctypes/ctypes.h
 	$(CC) -c $(CFLAGS) $(INCPATH) -o _ctypes.o /src/Python-3.4.3/Modules/_ctypes/_ctypes.c
 
-mmapmodule.o: /src/Python-3.4.3/Modules/mmapmodule.c 
-	$(CC) -c $(CFLAGS) $(INCPATH) -o mmapmodule.o /src/Python-3.4.3/Modules/mmapmodule.c
-
-sha1module.o: /src/Python-3.4.3/Modules/sha1module.c /src/Python-3.4.3/Modules/hashlib.h
-	$(CC) -c $(CFLAGS) $(INCPATH) -o sha1module.o /src/Python-3.4.3/Modules/sha1module.c
-
-socketmodule.o: /src/Python-3.4.3/Modules/socketmodule.c /src/Python-3.4.3/Modules/socketmodule.h \
+socketmodule.o: /src/Python-3.4.3/Modules/socketmodule.c ../../../python_static/include/python3.4m/Python.h \
+		../../../python_static/include/python3.4m/patchlevel.h \
+		../../../python_static/include/python3.4m/pyconfig.h \
+		../../../python_static/include/python3.4m/pymacconfig.h \
+		../../../python_static/include/python3.4m/pyport.h \
+		../../../python_static/include/python3.4m/pymacro.h \
+		../../../python_static/include/python3.4m/pyatomic.h \
+		../../../python_static/include/python3.4m/dynamic_annotations.h \
+		../../../python_static/include/python3.4m/pymath.h \
+		../../../python_static/include/python3.4m/pytime.h \
+		../../../python_static/include/python3.4m/object.h \
+		../../../python_static/include/python3.4m/pymem.h \
+		../../../python_static/include/python3.4m/objimpl.h \
+		../../../python_static/include/python3.4m/typeslots.h \
+		../../../python_static/include/python3.4m/pyhash.h \
+		../../../python_static/include/python3.4m/pydebug.h \
+		../../../python_static/include/python3.4m/bytearrayobject.h \
+		../../../python_static/include/python3.4m/bytesobject.h \
+		../../../python_static/include/python3.4m/unicodeobject.h \
+		../../../python_static/include/python3.4m/longobject.h \
+		../../../python_static/include/python3.4m/longintrepr.h \
+		../../../python_static/include/python3.4m/boolobject.h \
+		../../../python_static/include/python3.4m/floatobject.h \
+		../../../python_static/include/python3.4m/complexobject.h \
+		../../../python_static/include/python3.4m/rangeobject.h \
+		../../../python_static/include/python3.4m/memoryobject.h \
+		../../../python_static/include/python3.4m/tupleobject.h \
+		../../../python_static/include/python3.4m/listobject.h \
+		../../../python_static/include/python3.4m/dictobject.h \
+		../../../python_static/include/python3.4m/enumobject.h \
+		../../../python_static/include/python3.4m/setobject.h \
+		../../../python_static/include/python3.4m/methodobject.h \
+		../../../python_static/include/python3.4m/moduleobject.h \
+		../../../python_static/include/python3.4m/funcobject.h \
+		../../../python_static/include/python3.4m/classobject.h \
+		../../../python_static/include/python3.4m/fileobject.h \
+		../../../python_static/include/python3.4m/pycapsule.h \
+		../../../python_static/include/python3.4m/traceback.h \
+		../../../python_static/include/python3.4m/pystate.h \
+		../../../python_static/include/python3.4m/sliceobject.h \
+		../../../python_static/include/python3.4m/cellobject.h \
+		../../../python_static/include/python3.4m/iterobject.h \
+		../../../python_static/include/python3.4m/genobject.h \
+		../../../python_static/include/python3.4m/descrobject.h \
+		../../../python_static/include/python3.4m/warnings.h \
+		../../../python_static/include/python3.4m/weakrefobject.h \
+		../../../python_static/include/python3.4m/structseq.h \
+		../../../python_static/include/python3.4m/namespaceobject.h \
+		../../../python_static/include/python3.4m/codecs.h \
+		../../../python_static/include/python3.4m/pyerrors.h \
+		../../../python_static/include/python3.4m/pyarena.h \
+		../../../python_static/include/python3.4m/modsupport.h \
+		../../../python_static/include/python3.4m/pythonrun.h \
+		../../../python_static/include/python3.4m/ceval.h \
+		../../../python_static/include/python3.4m/sysmodule.h \
+		../../../python_static/include/python3.4m/intrcheck.h \
+		../../../python_static/include/python3.4m/import.h \
+		../../../python_static/include/python3.4m/abstract.h \
+		../../../python_static/include/python3.4m/bltinmodule.h \
+		../../../python_static/include/python3.4m/compile.h \
+		../../../python_static/include/python3.4m/code.h \
+		../../../python_static/include/python3.4m/eval.h \
+		../../../python_static/include/python3.4m/pyctype.h \
+		../../../python_static/include/python3.4m/pystrtod.h \
+		../../../python_static/include/python3.4m/pystrcmp.h \
+		../../../python_static/include/python3.4m/dtoa.h \
+		../../../python_static/include/python3.4m/fileutils.h \
+		../../../python_static/include/python3.4m/pyfpe.h \
+		../../../python_static/include/python3.4m/structmember.h \
+		../../../python_static/include/python3.4m/pythread.h \
+		/src/Python-3.4.3/Modules/socketmodule.h \
 		/src/Python-3.4.3/Modules/addrinfo.h \
 		/src/Python-3.4.3/Modules/getaddrinfo.c \
 		/src/Python-3.4.3/Modules/getnameinfo.c
 	$(CC) -c $(CFLAGS) $(INCPATH) -o socketmodule.o /src/Python-3.4.3/Modules/socketmodule.c
 
-md5module.o: /src/Python-3.4.3/Modules/md5module.c /src/Python-3.4.3/Modules/hashlib.h
-	$(CC) -c $(CFLAGS) $(INCPATH) -o md5module.o /src/Python-3.4.3/Modules/md5module.c
-
-_posixsubprocess.o: /src/Python-3.4.3/Modules/_posixsubprocess.c 
+_posixsubprocess.o: /src/Python-3.4.3/Modules/_posixsubprocess.c ../../../python_static/include/python3.4m/Python.h \
+		../../../python_static/include/python3.4m/patchlevel.h \
+		../../../python_static/include/python3.4m/pyconfig.h \
+		../../../python_static/include/python3.4m/pymacconfig.h \
+		../../../python_static/include/python3.4m/pyport.h \
+		../../../python_static/include/python3.4m/pymacro.h \
+		../../../python_static/include/python3.4m/pyatomic.h \
+		../../../python_static/include/python3.4m/dynamic_annotations.h \
+		../../../python_static/include/python3.4m/pymath.h \
+		../../../python_static/include/python3.4m/pytime.h \
+		../../../python_static/include/python3.4m/object.h \
+		../../../python_static/include/python3.4m/pymem.h \
+		../../../python_static/include/python3.4m/objimpl.h \
+		../../../python_static/include/python3.4m/typeslots.h \
+		../../../python_static/include/python3.4m/pyhash.h \
+		../../../python_static/include/python3.4m/pydebug.h \
+		../../../python_static/include/python3.4m/bytearrayobject.h \
+		../../../python_static/include/python3.4m/bytesobject.h \
+		../../../python_static/include/python3.4m/unicodeobject.h \
+		../../../python_static/include/python3.4m/longobject.h \
+		../../../python_static/include/python3.4m/longintrepr.h \
+		../../../python_static/include/python3.4m/boolobject.h \
+		../../../python_static/include/python3.4m/floatobject.h \
+		../../../python_static/include/python3.4m/complexobject.h \
+		../../../python_static/include/python3.4m/rangeobject.h \
+		../../../python_static/include/python3.4m/memoryobject.h \
+		../../../python_static/include/python3.4m/tupleobject.h \
+		../../../python_static/include/python3.4m/listobject.h \
+		../../../python_static/include/python3.4m/dictobject.h \
+		../../../python_static/include/python3.4m/enumobject.h \
+		../../../python_static/include/python3.4m/setobject.h \
+		../../../python_static/include/python3.4m/methodobject.h \
+		../../../python_static/include/python3.4m/moduleobject.h \
+		../../../python_static/include/python3.4m/funcobject.h \
+		../../../python_static/include/python3.4m/classobject.h \
+		../../../python_static/include/python3.4m/fileobject.h \
+		../../../python_static/include/python3.4m/pycapsule.h \
+		../../../python_static/include/python3.4m/traceback.h \
+		../../../python_static/include/python3.4m/pystate.h \
+		../../../python_static/include/python3.4m/sliceobject.h \
+		../../../python_static/include/python3.4m/cellobject.h \
+		../../../python_static/include/python3.4m/iterobject.h \
+		../../../python_static/include/python3.4m/genobject.h \
+		../../../python_static/include/python3.4m/descrobject.h \
+		../../../python_static/include/python3.4m/warnings.h \
+		../../../python_static/include/python3.4m/weakrefobject.h \
+		../../../python_static/include/python3.4m/structseq.h \
+		../../../python_static/include/python3.4m/namespaceobject.h \
+		../../../python_static/include/python3.4m/codecs.h \
+		../../../python_static/include/python3.4m/pyerrors.h \
+		../../../python_static/include/python3.4m/pyarena.h \
+		../../../python_static/include/python3.4m/modsupport.h \
+		../../../python_static/include/python3.4m/pythonrun.h \
+		../../../python_static/include/python3.4m/ceval.h \
+		../../../python_static/include/python3.4m/sysmodule.h \
+		../../../python_static/include/python3.4m/intrcheck.h \
+		../../../python_static/include/python3.4m/import.h \
+		../../../python_static/include/python3.4m/abstract.h \
+		../../../python_static/include/python3.4m/bltinmodule.h \
+		../../../python_static/include/python3.4m/compile.h \
+		../../../python_static/include/python3.4m/code.h \
+		../../../python_static/include/python3.4m/eval.h \
+		../../../python_static/include/python3.4m/pyctype.h \
+		../../../python_static/include/python3.4m/pystrtod.h \
+		../../../python_static/include/python3.4m/pystrcmp.h \
+		../../../python_static/include/python3.4m/dtoa.h \
+		../../../python_static/include/python3.4m/fileutils.h \
+		../../../python_static/include/python3.4m/pyfpe.h
 	$(CC) -c $(CFLAGS) $(INCPATH) -o _posixsubprocess.o /src/Python-3.4.3/Modules/_posixsubprocess.c
 
-grpmodule.o: /src/Python-3.4.3/Modules/grpmodule.c /src/Python-3.4.3/Modules/posixmodule.h
+readline.o: /src/Python-3.4.3/Modules/readline.c ../../../python_static/include/python3.4m/Python.h \
+		../../../python_static/include/python3.4m/patchlevel.h \
+		../../../python_static/include/python3.4m/pyconfig.h \
+		../../../python_static/include/python3.4m/pymacconfig.h \
+		../../../python_static/include/python3.4m/pyport.h \
+		../../../python_static/include/python3.4m/pymacro.h \
+		../../../python_static/include/python3.4m/pyatomic.h \
+		../../../python_static/include/python3.4m/dynamic_annotations.h \
+		../../../python_static/include/python3.4m/pymath.h \
+		../../../python_static/include/python3.4m/pytime.h \
+		../../../python_static/include/python3.4m/object.h \
+		../../../python_static/include/python3.4m/pymem.h \
+		../../../python_static/include/python3.4m/objimpl.h \
+		../../../python_static/include/python3.4m/typeslots.h \
+		../../../python_static/include/python3.4m/pyhash.h \
+		../../../python_static/include/python3.4m/pydebug.h \
+		../../../python_static/include/python3.4m/bytearrayobject.h \
+		../../../python_static/include/python3.4m/bytesobject.h \
+		../../../python_static/include/python3.4m/unicodeobject.h \
+		../../../python_static/include/python3.4m/longobject.h \
+		../../../python_static/include/python3.4m/longintrepr.h \
+		../../../python_static/include/python3.4m/boolobject.h \
+		../../../python_static/include/python3.4m/floatobject.h \
+		../../../python_static/include/python3.4m/complexobject.h \
+		../../../python_static/include/python3.4m/rangeobject.h \
+		../../../python_static/include/python3.4m/memoryobject.h \
+		../../../python_static/include/python3.4m/tupleobject.h \
+		../../../python_static/include/python3.4m/listobject.h \
+		../../../python_static/include/python3.4m/dictobject.h \
+		../../../python_static/include/python3.4m/enumobject.h \
+		../../../python_static/include/python3.4m/setobject.h \
+		../../../python_static/include/python3.4m/methodobject.h \
+		../../../python_static/include/python3.4m/moduleobject.h \
+		../../../python_static/include/python3.4m/funcobject.h \
+		../../../python_static/include/python3.4m/classobject.h \
+		../../../python_static/include/python3.4m/fileobject.h \
+		../../../python_static/include/python3.4m/pycapsule.h \
+		../../../python_static/include/python3.4m/traceback.h \
+		../../../python_static/include/python3.4m/pystate.h \
+		../../../python_static/include/python3.4m/sliceobject.h \
+		../../../python_static/include/python3.4m/cellobject.h \
+		../../../python_static/include/python3.4m/iterobject.h \
+		../../../python_static/include/python3.4m/genobject.h \
+		../../../python_static/include/python3.4m/descrobject.h \
+		../../../python_static/include/python3.4m/warnings.h \
+		../../../python_static/include/python3.4m/weakrefobject.h \
+		../../../python_static/include/python3.4m/structseq.h \
+		../../../python_static/include/python3.4m/namespaceobject.h \
+		../../../python_static/include/python3.4m/codecs.h \
+		../../../python_static/include/python3.4m/pyerrors.h \
+		../../../python_static/include/python3.4m/pyarena.h \
+		../../../python_static/include/python3.4m/modsupport.h \
+		../../../python_static/include/python3.4m/pythonrun.h \
+		../../../python_static/include/python3.4m/ceval.h \
+		../../../python_static/include/python3.4m/sysmodule.h \
+		../../../python_static/include/python3.4m/intrcheck.h \
+		../../../python_static/include/python3.4m/import.h \
+		../../../python_static/include/python3.4m/abstract.h \
+		../../../python_static/include/python3.4m/bltinmodule.h \
+		../../../python_static/include/python3.4m/compile.h \
+		../../../python_static/include/python3.4m/code.h \
+		../../../python_static/include/python3.4m/eval.h \
+		../../../python_static/include/python3.4m/pyctype.h \
+		../../../python_static/include/python3.4m/pystrtod.h \
+		../../../python_static/include/python3.4m/pystrcmp.h \
+		../../../python_static/include/python3.4m/dtoa.h \
+		../../../python_static/include/python3.4m/fileutils.h \
+		../../../python_static/include/python3.4m/pyfpe.h
+	$(CC) -c $(CFLAGS) $(INCPATH) -o readline.o /src/Python-3.4.3/Modules/readline.c
+
+grpmodule.o: /src/Python-3.4.3/Modules/grpmodule.c ../../../python_static/include/python3.4m/Python.h \
+		../../../python_static/include/python3.4m/patchlevel.h \
+		../../../python_static/include/python3.4m/pyconfig.h \
+		../../../python_static/include/python3.4m/pymacconfig.h \
+		../../../python_static/include/python3.4m/pyport.h \
+		../../../python_static/include/python3.4m/pymacro.h \
+		../../../python_static/include/python3.4m/pyatomic.h \
+		../../../python_static/include/python3.4m/dynamic_annotations.h \
+		../../../python_static/include/python3.4m/pymath.h \
+		../../../python_static/include/python3.4m/pytime.h \
+		../../../python_static/include/python3.4m/object.h \
+		../../../python_static/include/python3.4m/pymem.h \
+		../../../python_static/include/python3.4m/objimpl.h \
+		../../../python_static/include/python3.4m/typeslots.h \
+		../../../python_static/include/python3.4m/pyhash.h \
+		../../../python_static/include/python3.4m/pydebug.h \
+		../../../python_static/include/python3.4m/bytearrayobject.h \
+		../../../python_static/include/python3.4m/bytesobject.h \
+		../../../python_static/include/python3.4m/unicodeobject.h \
+		../../../python_static/include/python3.4m/longobject.h \
+		../../../python_static/include/python3.4m/longintrepr.h \
+		../../../python_static/include/python3.4m/boolobject.h \
+		../../../python_static/include/python3.4m/floatobject.h \
+		../../../python_static/include/python3.4m/complexobject.h \
+		../../../python_static/include/python3.4m/rangeobject.h \
+		../../../python_static/include/python3.4m/memoryobject.h \
+		../../../python_static/include/python3.4m/tupleobject.h \
+		../../../python_static/include/python3.4m/listobject.h \
+		../../../python_static/include/python3.4m/dictobject.h \
+		../../../python_static/include/python3.4m/enumobject.h \
+		../../../python_static/include/python3.4m/setobject.h \
+		../../../python_static/include/python3.4m/methodobject.h \
+		../../../python_static/include/python3.4m/moduleobject.h \
+		../../../python_static/include/python3.4m/funcobject.h \
+		../../../python_static/include/python3.4m/classobject.h \
+		../../../python_static/include/python3.4m/fileobject.h \
+		../../../python_static/include/python3.4m/pycapsule.h \
+		../../../python_static/include/python3.4m/traceback.h \
+		../../../python_static/include/python3.4m/pystate.h \
+		../../../python_static/include/python3.4m/sliceobject.h \
+		../../../python_static/include/python3.4m/cellobject.h \
+		../../../python_static/include/python3.4m/iterobject.h \
+		../../../python_static/include/python3.4m/genobject.h \
+		../../../python_static/include/python3.4m/descrobject.h \
+		../../../python_static/include/python3.4m/warnings.h \
+		../../../python_static/include/python3.4m/weakrefobject.h \
+		../../../python_static/include/python3.4m/structseq.h \
+		../../../python_static/include/python3.4m/namespaceobject.h \
+		../../../python_static/include/python3.4m/codecs.h \
+		../../../python_static/include/python3.4m/pyerrors.h \
+		../../../python_static/include/python3.4m/pyarena.h \
+		../../../python_static/include/python3.4m/modsupport.h \
+		../../../python_static/include/python3.4m/pythonrun.h \
+		../../../python_static/include/python3.4m/ceval.h \
+		../../../python_static/include/python3.4m/sysmodule.h \
+		../../../python_static/include/python3.4m/intrcheck.h \
+		../../../python_static/include/python3.4m/import.h \
+		../../../python_static/include/python3.4m/abstract.h \
+		../../../python_static/include/python3.4m/bltinmodule.h \
+		../../../python_static/include/python3.4m/compile.h \
+		../../../python_static/include/python3.4m/code.h \
+		../../../python_static/include/python3.4m/eval.h \
+		../../../python_static/include/python3.4m/pyctype.h \
+		../../../python_static/include/python3.4m/pystrtod.h \
+		../../../python_static/include/python3.4m/pystrcmp.h \
+		../../../python_static/include/python3.4m/dtoa.h \
+		../../../python_static/include/python3.4m/fileutils.h \
+		../../../python_static/include/python3.4m/pyfpe.h \
+		/src/Python-3.4.3/Modules/posixmodule.h
 	$(CC) -c $(CFLAGS) $(INCPATH) -o grpmodule.o /src/Python-3.4.3/Modules/grpmodule.c
 
 qrc_pyqtdeploy.o: qrc_pyqtdeploy.cpp 
