@@ -40,16 +40,18 @@ ApplicationWindow {
     }
 
     function receive_msg(s) {
+        console.log(s)
         mainView.chatMod.append(s);
     }
 
     function onLoggedIn() {
+        console.log('zzz')
         loader.source = ""
         loader.sourceComponent = waitingComp
         rootApp.width = 800
     }
 
     function channelAdd(ch) {
-        mainView.channelMod.push({channel: ch})
+        //mainView.channelMod.push({channel: ch})
     }
 }

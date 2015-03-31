@@ -95,7 +95,7 @@ Rectangle {
                         }
                     }
                     onClicked: {
-                        logic.login(nickTf.text)
+                        medium.login(nickTf.text)
                     }
                 }
             }

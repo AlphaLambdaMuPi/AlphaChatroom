@@ -16,7 +16,8 @@ from PyQt5.QtQuick import *
 from quamash import QEventLoop
 
 
-from logic import Logic
+#from logic import Logic
+from medium import Medium
 from connect import Connect
 import logsetting
 logger = logging.getLogger('root')
@@ -33,16 +34,17 @@ def app_setup():
     loop = QEventLoop(app)
     asyncio.set_event_loop(loop)
 
-    logic = Logic()
+    #logic = Logic()
+    medium = Medium()
 
     engine = QQmlApplicationEngine()
-    engine.rootContext().setContextProperty('logic', logic)
+    engine.rootContext().setContextProperty('medium', medium)
     
     engine.load(QUrl('main_gui.qml'))
     topLevel = engine.rootObjects()[0]
 
-    logic.setRoot(topLevel)
-    logic.hello()
+    medium.setRoot(topLevel)
+    medium.hello()
 
 
     topLevel.show()

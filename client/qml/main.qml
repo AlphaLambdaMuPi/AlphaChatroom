@@ -111,7 +111,7 @@ Rectangle {
                             anchors.margins: 20
                             text: 'Send'
                             onClicked: {
-                                logic.send(ta.text)
+                                medium.send(ta.text)
                             }
                         }
                     }

@@ -70,7 +70,7 @@ class Connect:
             data = yield from self.reader.readline()
             logger.debug('receive: %s ', data)
             try:
-                self.medium.receive(json.loads(data.decode()))
+                self.medium.receive_msg(json.loads(data.decode()))
             except Exception as e:
                 logger.error('Json decode error: %s', str(e))
             if not len(data) and self.reader.at_eof():

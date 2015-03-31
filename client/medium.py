@@ -2,22 +2,32 @@ import logging
 import asyncio
 import json
 
+from PyQt5.QtCore import QObject, pyqtSlot
+from PyQt5.QtWidgets import *
+from PyQt5.QtQml import *
+from PyQt5.QtQuick import *
+from quamash import QEventLoop
 
 from settings import *
+
+from connect import Connect
 
 from logsetting import *
 logger = logging.getLogger('root')
 
-from connect import Connect
 
-class Medium:
+class Medium(QObject):
 
-    def __init__(self, logic):
+    def __init__(self):
+        super().__init__()
         self.connect = Connect(self)
         self.state = 0
         self.channels = []
-        self.logic = logic
         pass
+
+    def setRoot(self, root):
+        self.root = root
+
 
     def connect_server(self):
         try:
@@ -29,7 +39,7 @@ class Medium:
 
         self.state = 1
 
-    def login(self, nick):
+    def _login(self, nick):
         try:
             self.connect.putq( {'nick': nick} )
         except Exception as e:
@@ -57,7 +67,7 @@ class Medium:
 
     def success_join(self, channel):
         self.channels.append(channel)
-        self.logic.join_channel(channel)
+        self.root.channelAdd(channel)
 
     def send_msg(self, channel_name, mesg):
         if channel_name not in self.channels:
@@ -70,9 +80,30 @@ class Medium:
             'params': ['CHANNEL', channel_name, mesg],
         })
 
-    def receive(self, data):
+    def receive_msg(self, data):
 
-        if data['type'] == 'MSG':
-            self.logic.receive_msg(data['from'], data['msg'])
+        logger.info(data)
+        if data['type'] == 'CALL' and data['params'][1] != 'SYSTEM':
+            logger.info(data)
+            self.root.receive_msg({
+                'type': 'text',
+                'sender': data['params'][1],
+                'mesg': data['params'][0]
+            })
 
+
+    @pyqtSlot()
+    def hello(self):
+        self.connect_server()
+
+    @pyqtSlot(str)
+    def login(self, nick):
+        self._login(nick)
+        self.join_channel('beta') 
+        self.root.onLoggedIn()
+
+    @pyqtSlot(str)
+    def send(self, s):
+        logger.debug(s)
+        self.send_msg('beta', s)
 

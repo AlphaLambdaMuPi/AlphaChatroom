@@ -20,33 +20,9 @@ class Logic(QObject):
         super().__init__()
         self.medium = Medium(self)
 
-    def setRoot(self, root):
-        self.root = root
 
-    @pyqtSlot()
-    def hello(self):
-        self.medium.connect_server()
         
-    @pyqtSlot(str)
-    def login(self, nick):
-        self.medium.login('alpha')
-        self.medium.join_channel('beta') 
-        self.root.onLoggedIn()
-
-    @pyqtSlot(str)
-    def send(self, s):
-        logger.debug(s)
-        self.medium.send_msg('beta', s)
     
-    def receive_msg(self, fr, s):
-        self.root.receive_msg({
-            'type': 'text',
-            'sender': fr,
-            'mesg': s
-        })
-
-    def join_channel(self, s):
-        self.root.channelAdd(s)
 
 
 
