@@ -86,55 +86,6 @@ Rectangle {
                         delegate: chatDelegate
                     }
 
-                    Component {
-                        id: chatDelegate
-                        Row {
-                            width: parent.width
-                            height: childrenRect.height
-                            Rectangle {
-                                id: picRec
-                                //width: childrenRect.width
-                                //height: childrenRect.height
-                                //Image {
-                                    //source: '../img/alpha.png'
-                                    //width: 60
-                                    //height: 60
-                                //}
-                                color: 'blue'
-                                width: 60
-                                height: 60
-                            }
-
-                            Item {
-                                height: childrenRect.height
-                                width: childrenRect.width
-                                RectangularGlow {
-                                    anchors.fill: rec
-                                    anchors.topMargin: 4
-                                    anchors.leftMargin: 4
-                                    glowRadius: 5
-                                    spread: 0.2
-                                    color: "#80000000"
-                                }
-                                Rectangle {
-                                    property int tmargin: 10
-                                    id: rec
-                                    color: 'white'
-                                    height: childrenRect.height + tmargin * 2
-                                    width: childrenRect.width + tmargin * 2
-                                    Text {
-                                        anchors {
-                                            centerIn: parent
-                                        }
-                                        id: mesgText
-                                        text: sender + ": " + mesg
-                                        wrapMode: Text.Wrap
-                                        width: Math.min(parent.parent.parent.width - rec.tmargin * 2 - picRec.width, implicitWidth)
-                                    }
-                                }
-                            }
-                        }
-                    }
                 }
 
                 Rectangle {
@@ -162,6 +113,59 @@ Rectangle {
                             onClicked: {
                                 logic.send(ta.text)
                             }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    Component {
+        id: chatDelegate
+        Row {
+            width: parent.width
+            height: childrenRect.height
+            Rectangle {
+                id: picRec
+                //width: childrenRect.width
+                //height: childrenRect.height
+                //Image {
+                //source: '../img/alpha.png'
+                //width: 60
+                //height: 60
+                //}
+                color: 'blue'
+                width: 60
+                height: 60
+            }
+
+            Item {
+                height: childrenRect.height
+                width: childrenRect.width
+                RectangularGlow {
+                    anchors.fill: rec
+                    anchors.topMargin: 4
+                    anchors.leftMargin: 4
+                    glowRadius: 5
+                    spread: 0.2
+                    color: "#80000000"
+                }
+                Rectangle {
+                    property int tmargin: 10
+                    id: rec
+                    color: 'white'
+                    height: mesgText.paintedHeight + tmargin * 2
+                    width: mesgText.paintedWidth + tmargin * 2
+                    Text {
+                        anchors {
+                            centerIn: parent
+                        }
+                        id: mesgText
+                        text: sender + ": " + mesg
+                        wrapMode: Text.Wrap
+                        width: Math.min(parent.parent.parent.width - rec.tmargin * 2 - picRec.width, paintedWidth)
+                        Component.onCompleted: {
+                            console.log(implicitWidth)
                         }
                     }
                 }
