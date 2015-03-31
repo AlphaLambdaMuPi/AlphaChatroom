@@ -2,6 +2,7 @@ import QtQuick 2.4
 import QtQuick.Controls 1.3
 import QtQuick.Layouts 1.1
 import QtQuick.Controls.Styles 1.3
+import QtGraphicalEffects 1.0
 
 Rectangle {
     height: 600
@@ -16,7 +17,7 @@ Rectangle {
         Rectangle {
             width: 200
             Layout.fillHeight: true
-            color: '#222222'
+            color: '#DDDDDD'
 
             ListView {
                 id: channelView
@@ -25,153 +26,143 @@ Rectangle {
                     id: channelMod
                 }
 
-                delegate: Rectangle {
-                    width: parent.width
-                    height: 100
-                    color: 'transparent'
-                    Text {
-                        anchors.centerIn: parent
-                        font {
-                            pointSize: 20
-                        }
-                        text: name
-                        color: 'white'
-                    }
-                }
-
-                highlight: Rectangle {
-                    color: '#557799'
-                    radius: 10
-                }
-                focus: true
-                
-            }
-
-
-        }
-        Rectangle {
-            width: 200
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            color: '#444444'
-
-            ListView {
-                id: chatView
-                anchors.fill: parent
-                model: ListModel {
-                    id: chatMod
-                }
-
-                delegate: textComponent
-                focus: true
-                
-            }
-
-            Item {
-                width: parent.width
-                height: 200
-                anchors.bottom: parent.bottom
-                TextArea {
-                    id: tar
-                    anchors {
-                        left: parent.left
-                        top: parent.top
-                        bottom: parent.bottom
-                        margins: 15
-                    }
-                    width: parent.width * 0.7
-                }
-                Button {
-                    anchors {
-                        left: tar.right
-                        right: parent.right
-                        top: parent.top
-                        bottom: parent.bottom
-                        margins: 15
-                    }
-                    text: 'send'
-                    onClicked: {
-                        logic.send(tar.text)
-                    }
-                }
-            }
-
-            Component {
-                id: chatDelegate
-
-                Loader {
-                    sourceComponent: type == 'text' ? textComponent : alphaComponent
+                delegate: Item {
                     width: parent.width
                     height: childrenRect.height
+                    Rectangle {
+                        id: textRect
+                        width: parent.width
+                        height: childrenRect.height + 20
+                        color: 'transparent'
+                        Text {
+                            anchors.centerIn: parent
+                            font {
+                                pointSize: 20
+                            }
+                            text: name
+                            color: 'black'
+                        }
+                    }
+                    Rectangle {
+                        id: splitLine
+                        width: parent.width
+                        anchors{
+                            top: textRect.bottom
+                            right: parent.right
+                            rightMargin: 6
+                            left: parent.left
+                            leftMargin: 6
+                        }
+                        height: 2
+                        radius: 2
+                        color: '#777777'
+                    }
                 }
             }
+        }
 
-            Component {
-                id: textComponent
+        Rectangle {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            ColumnLayout {
+                anchors.fill: parent
+                spacing: 0
                 Rectangle {
-                    width: parent.width
-                    height: childrenRect.height + 10
-                    color: 'transparent'
+                    color: '#BBBBBB'
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    Layout.minimumHeight: 200
 
-                    ColumnLayout {
-                        width: parent.width
-                        Item {
-                            Layout.fillWidth: true
+                    ListView {
+                        id: chatView
+                        anchors {
+                            margins: 20
+                            fill: parent
+                        }
+                        spacing: 20
+                        model: ListModel {
+                            id: chatMod
+                        }
+                        delegate: chatDelegate
+                    }
+
+                    Component {
+                        id: chatDelegate
+                        Row {
+                            width: parent.width
                             height: childrenRect.height
-                            anchors.topMargin: 100
-                            //anchors.verticalCenter: parent.verticalCenter
-                            RowLayout {
-                                Layout.fillWidth: true
+                            Rectangle {
+                                id: picRec
+                                //width: childrenRect.width
                                 //height: childrenRect.height
-                                anchors {
-                                    left: parent.left
-                                    leftMargin: 10
-                                    right: parent.right
-                                    rightMargin: 10
-                                }
+                                //Image {
+                                    //source: '../img/alpha.png'
+                                    //width: 60
+                                    //height: 60
+                                //}
+                                color: 'blue'
+                                width: 60
+                                height: 60
+                            }
 
+                            Item {
+                                height: childrenRect.height
+                                width: childrenRect.width
+                                RectangularGlow {
+                                    anchors.fill: rec
+                                    anchors.topMargin: 4
+                                    anchors.leftMargin: 4
+                                    glowRadius: 5
+                                    spread: 0.2
+                                    color: "#80000000"
+                                }
                                 Rectangle {
-                                    id: imgRect
-                                    width: 90
-                                    height: 90
-                                    anchors.verticalCenter: parent.verticalCenter
+                                    property int tmargin: 10
+                                    id: rec
                                     color: 'white'
-                                    Image {
-                                        width: 80
-                                        height: 80
-                                        anchors.centerIn: parent
-
-                                        source: '../img/alpha.png'
-                                    }
-                                    //border {
-                                        //width: 10
-                                        //color: '#5588CC'
-                                    //}
-                                    radius: 10
-                                }
-
-                                Rectangle {
-                                    Layout.minimumHeight: 100
-                                    radius: 10
-                                    anchors {
-                                        right: parent.right
-                                        left: imgRect.right
-                                        leftMargin: 10
-                                        rightMargin: 10
-                                    }
+                                    height: childrenRect.height + tmargin * 2
+                                    width: childrenRect.width + tmargin * 2
                                     Text {
                                         anchors {
-                                            margins: 10
-                                            fill: parent
+                                            centerIn: parent
                                         }
-                                        text: '<b>' + sender + ': </b> ' + mesg
+                                        id: mesgText
+                                        text: sender + ": " + mesg
+                                        wrapMode: Text.Wrap
+                                        width: Math.min(parent.parent.parent.width - rec.tmargin * 2 - picRec.width, implicitWidth)
                                     }
                                 }
                             }
                         }
                     }
-                    Component.onCompleted: {
-                        console.log(1231231);
+                }
+
+                Rectangle {
+                    color: '#EEEEEE'
+                    Layout.preferredHeight: 200
+                    Layout.fillWidth: true
+
+                    RowLayout {
+                        spacing: 20
+                        anchors {
+                            fill: parent
+                            margins: 20
+                        }
+                        TextArea {
+                            id: ta
+                            Layout.fillHeight: true
+                            Layout.preferredWidth: parent.width * 0.75
+                            anchors.margins: 20
+                        }
+                        Button {
+                            Layout.fillHeight: true
+                            Layout.fillWidth: true
+                            anchors.margins: 20
+                            text: 'Send'
+                            onClicked: {
+                                logic.send(ta.text)
+                            }
+                        }
                     }
                 }
             }
