@@ -1,8 +1,0 @@
-<!DOCTYPE RCC>
-<RCC version="1.0">
-    <qresource prefix="/">
-        <file>qml/test.qml</file>
-        <file>qml/test2.qml</file>
-        <file>test2.qml</file>
-    </qresource>
-</RCC>

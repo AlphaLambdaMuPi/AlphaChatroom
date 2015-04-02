@@ -82,9 +82,9 @@ class Medium(QObject):
 
     def receive_msg(self, data):
 
-        logger.info(data)
+        logger.info("receive_msg gets :" + str(data))
         if data['type'] == 'CALL' and data['params'][1] != 'SYSTEM':
-            logger.info(data)
+            logger.info("Get call:" + str(data))
             self.root.receive_msg({
                 'type': 'text',
                 'sender': data['params'][1],

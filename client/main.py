@@ -40,7 +40,7 @@ def app_setup():
     engine = QQmlApplicationEngine()
     engine.rootContext().setContextProperty('medium', medium)
     
-    engine.load(QUrl('main_gui.qml'))
+    engine.load(QUrl('qml/init.qml'))
     topLevel = engine.rootObjects()[0]
 
     medium.setRoot(topLevel)
@@ -56,4 +56,5 @@ def main():
     app_setup()
 
 
-main()
+if __name__ == '__main__':
+    main()
