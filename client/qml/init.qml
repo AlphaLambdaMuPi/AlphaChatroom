@@ -16,9 +16,9 @@ ApplicationWindow {
             onRunningChanged: {
                 if (!__tmp123ani.running) {
                     loader.sourceComponent = undefined
-                    loader.source = 'qml/main.qml'
+                    loader.source = 'main.qml'
                     console.log(loader.item.width)
-                    mainView.channelMod.append({name: 'beta'})
+                    mainView.channelMod.append({channel: 'beta'})
                 }
             }
         }
@@ -28,7 +28,7 @@ ApplicationWindow {
         anchors.fill: parent
         visible: true
         id: loader
-        source: 'qml/login.qml'
+        source: 'login.qml'
         //sourceComponent: ss
     }
 
@@ -39,19 +39,19 @@ ApplicationWindow {
         }
     }
 
+
     function receive_msg(s) {
         console.log(s)
         mainView.chatMod.append(s);
     }
 
     function onLoggedIn() {
-        console.log('zzz')
         loader.source = ""
         loader.sourceComponent = waitingComp
         rootApp.width = 800
     }
 
     function channelAdd(ch) {
-        //mainView.channelMod.push({channel: ch})
+        mainView.channelMod.append({channel: ch})
     }
 }

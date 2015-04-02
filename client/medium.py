@@ -67,6 +67,7 @@ class Medium(QObject):
 
     def success_join(self, channel):
         self.channels.append(channel)
+        print(channel, type(channel))
         self.root.channelAdd(channel)
 
     def send_msg(self, channel_name, mesg):
@@ -91,6 +92,25 @@ class Medium(QObject):
                 'mesg': data['params'][0]
             })
 
+    def receive(self, data):
+        if data['type'] == 'CALL':
+            func = getattr(self, data['func'])
+            if not callable(func):
+                logger.error('The function %s is not callable', data['func'])
+            try:
+                res = func(*data['params'])
+            except Exception as e:
+                logger.error('Call function %s Error: %s', data['func'], e)
+                
+    def get_message(self, msg, fr, channel):
+        self.root.receive_msg({
+            'type': 'text',
+            'sender': fr,
+            'mesg': msg,
+        })
+
+
+
 
     @pyqtSlot()
     def hello(self):
@@ -101,6 +121,11 @@ class Medium(QObject):
         self._login(nick)
         self.join_channel('beta') 
         self.root.onLoggedIn()
+
+    @pyqtSlot(str)
+    def join(self, channel):
+        logger.info('qml request join')
+        self.join_channel(channel)
 
     @pyqtSlot(str)
     def send(self, s):

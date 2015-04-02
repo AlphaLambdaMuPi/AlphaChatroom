@@ -3,6 +3,7 @@ import QtQuick.Controls 1.3
 import QtQuick.Layouts 1.1
 import QtQuick.Controls.Styles 1.3
 import QtGraphicalEffects 1.0
+import QtQuick.Dialogs 1.2
 
 Rectangle {
     height: 600
@@ -21,7 +22,12 @@ Rectangle {
 
             ListView {
                 id: channelView
-                anchors.fill: parent
+                //anchors.fill: parent
+                width: parent.width
+                height: childrenRect.height
+                anchors {
+                    top: parent.top
+                }
                 model: ListModel {
                     id: channelMod
                 }
@@ -39,7 +45,7 @@ Rectangle {
                             font {
                                 pointSize: 20
                             }
-                            text: name
+                            text: channel
                             color: 'black'
                         }
                     }
@@ -58,6 +64,41 @@ Rectangle {
                         color: '#777777'
                     }
                 }
+            }
+            
+            Rectangle {
+                id: textRect
+                width: parent.width
+                anchors {
+                    top: channelView.bottom
+                }
+                height: 60
+                color: 'transparent'
+                Image {
+                    source: '../img/add.png'
+                    sourceSize.height: 80
+                    anchors.centerIn: parent
+                }
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        addChannelDialog.open()
+                    }
+                }
+            }
+        }
+
+        Dialog {
+            standardButtons: StandardButton.Ok | StandardButton.Cancel
+            id: addChannelDialog
+            TextField {
+                id: addChannelText
+                text: '0.0'
+                anchors.centerIn: parent
+                width: parent.width - 20
+            }
+            onAccepted: {
+                medium.join(addChannelText.text)
             }
         }
 

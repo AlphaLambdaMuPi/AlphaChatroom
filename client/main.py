@@ -19,6 +19,8 @@ from quamash import QEventLoop
 #from logic import Logic
 from medium import Medium
 from connect import Connect
+#import resource
+
 import logsetting
 logger = logging.getLogger('root')
 

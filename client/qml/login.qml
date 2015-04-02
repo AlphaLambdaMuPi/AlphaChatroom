@@ -2,6 +2,7 @@ import QtQuick 2.4
 import QtQuick.Controls 1.3
 import QtQuick.Layouts 1.1
 import QtQuick.Controls.Styles 1.3
+import QtQuick.Dialogs 1.2
 
 Rectangle {
     height: 600
@@ -52,12 +53,29 @@ Rectangle {
                     return a * 0.7;
                 }                
                 Image {
+                    id: avatar
                     anchors.margins: 20
                     anchors.fill: parent
                     source: '../img/alpha.png'
                 }
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        fileDialog.visible = true
+                    }
+                }
             }
             
+        }
+
+        FileDialog {
+            id: fileDialog
+            title: 'Choose your avatar'
+            //modality: Qt.NonModal
+            onAccepted: {
+                console.log(typeof fileDialog.fileUrl)
+                avatar.source = fileDialog.fileUrl
+            }
         }
 
         Rectangle {
