@@ -8,7 +8,7 @@ import QtQuick.Dialogs 1.2
 Rectangle {
     height: 600
     width: 800
-    property alias channelMod: channelMod
+    property alias channelMod: cl.channelMod
     property alias chatMod: chatMod
 
     RowLayout {
@@ -19,74 +19,11 @@ Rectangle {
             width: 200
             Layout.fillHeight: true
             color: '#DDDDDD'
-
-            ListView {
-                id: channelView
-                //anchors.fill: parent
-                width: parent.width
-                height: childrenRect.height
-                anchors {
-                    top: parent.top
-                }
-                model: ListModel {
-                    id: channelMod
-                }
-
-                delegate: Item {
-                    width: parent.width
-                    height: childrenRect.height
-                    Rectangle {
-                        id: textRect
-                        width: parent.width
-                        height: childrenRect.height + 20
-                        color: 'transparent'
-                        Text {
-                            anchors.centerIn: parent
-                            font {
-                                pointSize: 20
-                            }
-                            text: channel
-                            color: 'black'
-                        }
-                    }
-                    Rectangle {
-                        id: splitLine
-                        width: parent.width
-                        anchors{
-                            top: textRect.bottom
-                            right: parent.right
-                            rightMargin: 6
-                            left: parent.left
-                            leftMargin: 6
-                        }
-                        height: 2
-                        radius: 2
-                        color: '#777777'
-                    }
-                }
-            }
-            
-            Rectangle {
-                id: textRect
-                width: parent.width
-                anchors {
-                    top: channelView.bottom
-                }
-                height: 60
-                color: 'transparent'
-                Image {
-                    source: '../img/add.png'
-                    sourceSize.height: 80
-                    anchors.centerIn: parent
-                }
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        addChannelDialog.open()
-                    }
-                }
+            ChannelList {
+                id: cl
             }
         }
+
 
         Dialog {
             standardButtons: StandardButton.Ok | StandardButton.Cancel
@@ -98,7 +35,7 @@ Rectangle {
                 width: parent.width - 20
             }
             onAccepted: {
-                medium.join(addChannelText.text)
+                medium.Qjoin(addChannelText.text)
             }
         }
 
@@ -134,28 +71,7 @@ Rectangle {
                     Layout.preferredHeight: 200
                     Layout.fillWidth: true
 
-                    RowLayout {
-                        spacing: 20
-                        anchors {
-                            fill: parent
-                            margins: 20
-                        }
-                        TextArea {
-                            id: ta
-                            Layout.fillHeight: true
-                            Layout.preferredWidth: parent.width * 0.75
-                            anchors.margins: 20
-                        }
-                        Button {
-                            Layout.fillHeight: true
-                            Layout.fillWidth: true
-                            anchors.margins: 20
-                            text: 'Send'
-                            onClicked: {
-                                medium.send(ta.text)
-                            }
-                        }
-                    }
+                    UserInput {}
                 }
             }
         }

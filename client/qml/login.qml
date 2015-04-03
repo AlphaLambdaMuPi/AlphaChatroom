@@ -56,7 +56,19 @@ Rectangle {
                     id: avatar
                     anchors.margins: 20
                     anchors.fill: parent
-                    source: '../img/alpha.png'
+
+                    source: 'image://avatarImage/1'
+                    cache: false
+
+                    function reload() {
+                        source = ''
+                        source = 'image://avatarImage/1'
+                    }
+
+                    Connections {
+                        target: medium
+                        onAvatarChanged: avatar.reload()
+                    }
                 }
                 MouseArea {
                     anchors.fill: parent
@@ -73,8 +85,7 @@ Rectangle {
             title: 'Choose your avatar'
             //modality: Qt.NonModal
             onAccepted: {
-                console.log(typeof fileDialog.fileUrl)
-                avatar.source = fileDialog.fileUrl
+                medium.Qavatar(fileDialog.fileUrl)
             }
         }
 
@@ -113,7 +124,7 @@ Rectangle {
                         }
                     }
                     onClicked: {
-                        medium.login(nickTf.text)
+                        medium.Qlogin(nickTf.text)
                     }
                 }
             }

@@ -15,10 +15,7 @@ ApplicationWindow {
             easing.type: Easing.InOutCubic
             onRunningChanged: {
                 if (!__tmp123ani.running) {
-                    loader.sourceComponent = undefined
-                    loader.source = 'main.qml'
-                    console.log(loader.item.width)
-                    mainView.channelMod.append({channel: 'beta'})
+                    loginFinish()
                 }
             }
         }
@@ -39,7 +36,7 @@ ApplicationWindow {
         }
     }
 
-
+    property string activeChannel: ''
     function receive_msg(s) {
         console.log(s)
         mainView.chatMod.append(s);
@@ -52,6 +49,17 @@ ApplicationWindow {
     }
 
     function channelAdd(ch) {
+        console.log(loader.source)
         mainView.channelMod.append({channel: ch})
+    }
+
+    function loginFinish() {
+        loader.sourceComponent = undefined
+        loader.source = 'main.qml'
+        medium.Qjoin('Lobby')
+    }
+
+    function setActiveChannel(ch) {
+        activeChannel = ch
     }
 }

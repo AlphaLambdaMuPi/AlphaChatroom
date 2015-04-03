@@ -19,12 +19,11 @@ from quamash import QEventLoop
 #from logic import Logic
 from medium import Medium
 from connect import Connect
+from image import ImageProvider
 #import resource
 
 import logsetting
 logger = logging.getLogger('root')
-
-
 
 def app_setup():
     '''
@@ -41,11 +40,13 @@ def app_setup():
 
     engine = QQmlApplicationEngine()
     engine.rootContext().setContextProperty('medium', medium)
+    imgp = ImageProvider()
+    engine.addImageProvider('avatarImage', imgp)
     
     engine.load(QUrl('qml/init.qml'))
     topLevel = engine.rootObjects()[0]
 
-    medium.setRoot(topLevel)
+    medium.setEngine(engine)
     medium.hello()
 
 
