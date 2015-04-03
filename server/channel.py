@@ -14,7 +14,7 @@ class Channel:
 
     def _broadcast(self, data):
         for user in self._users.values():
-            user._conn.send(data)
+            user.send(data)
 
     def add_user(self, user):
         if user not in self._users:
@@ -30,8 +30,7 @@ class Channel:
         except KeyError:
             return False
     
-    def send(self, msg, fr):
-        data = {"type": "MSG", "msg": msg, "from": fr, "channel": self.name}
-        self._broadcast(data)
-
+    def broadcast_msg(self, msg, fr):
+        for user in self._users.values():
+            user.send_msg(msg, fr, self.name)
 

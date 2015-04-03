@@ -1,23 +1,55 @@
 #! /usr/bin/env python
 
 import asyncio
+from asyncio.queues import Queue, QueueEmpty
 import json
 import logging
 
 logger = logging.getLogger()
 
 class Connection:
-    def __init__(self, sr, sw):
+    def __init__(self, sr, sw, *, loop=None):
+        if not loop:
+            loop = asyncio.get_event_loop()
+        self._loop = loop
         self._sr = sr
         self._sw = sw
+        self._msgs = Queue(loop=loop)
+        self._worker = loop.create_task(self._run())
+
+    @asyncio.coroutine
+    def _run(self):
+        while self.alive():
+            try:
+                data = yield from self._sr.readline()
+                logger.debug("get: {}".format(data))
+                if len(data):
+                    self._msgs.put_nowait(self._convert(data))
+            except asyncio.CancelledError:
+                logger.debug("readline from stream reader was cancelled.")
+            except ConnectionError:
+                logger.debug("connection error")
+        logger.debug("connection closed")
+
+    def _convert(self, data):
+        return data.strip()
 
     @asyncio.coroutine
     def recv(self):
-        if not self.alive():
-            raise ConnectionError("connection was closed.")
-        data = yield from self._sr.readline()
-        data = data.strip()
-        return data
+        try:
+            return self._msgs.get_nowait()
+        except QueueEmpty:
+            pass
+
+        # Wait for a message until the connection is closed
+        next_message = self._loop.create_task(self._msgs.get())
+        done, pending = yield from asyncio.wait(
+                [next_message, self._worker],
+                loop=self._loop, return_when=asyncio.FIRST_COMPLETED)
+        if next_message in done:
+            return next_message.result()
+        else:
+            next_message.cancel()
 
     def send(self, data):
         if not self.alive():
@@ -45,31 +77,28 @@ class Connection:
 
     def alive(self):
         return not self._sr.at_eof()
-
+    
+    @asyncio.coroutine
+    def close(self):
+        yield from self._sw.drain()
+        self._sr.feed_eof()
+        self._sw.close()
+        self._worker.cancel()
 
 class JsonConnection(Connection):
-    def __init__(self, sr, sw):
-        super().__init__(sr, sw)
+    def __init__(self, sr, sw, *, loop=None):
+        super().__init__(sr, sw, loop=loop)
 
-    @asyncio.coroutine
-    def recv(self):
+    def _convert(self, data):
+        data = super()._convert(data)
         try:
-            data = yield from super().recv()
-            data = data.decode()
-            logger.debug("recv: {}".format(data))
-            data = json.loads(data)
-        except ConnectionError:
-            return
+            data = json.loads(data.decode())
         except UnicodeError:
             logger.debug("can't convert byte to string")
-            return
         except ValueError:
             logger.debug("get wrong json format")
-            return
-        if type(data) is not dict:
-            logger.debug("data is not a dict")
-            return
-        return data
+        else:
+            return data
 
     def send(self, data):
         try:
@@ -77,9 +106,7 @@ class JsonConnection(Connection):
             data = json.dumps(data).encode()
             super().send(data)
         except ConnectionError:
-            logger.warning("can't send data")
-            return
+            raise ConnectionError("can't send data")
         except ValueError:
-            logger.error("wrong json format")
-            return
+            raise ValueError("wrong json format")
 
