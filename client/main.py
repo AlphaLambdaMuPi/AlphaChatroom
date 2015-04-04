@@ -19,7 +19,7 @@ from quamash import QEventLoop
 #from logic import Logic
 from medium import Medium
 from connect import Connect
-from image import ImageProvider
+from image import ImageProvider, EmoticonProvider
 #import resource
 
 import logsetting
@@ -41,7 +41,9 @@ def app_setup():
     engine = QQmlApplicationEngine()
     engine.rootContext().setContextProperty('medium', medium)
     imgp = ImageProvider()
+    emoticonProvider = EmoticonProvider()
     engine.addImageProvider('avatarImage', imgp)
+    engine.addImageProvider('emoticon', emoticonProvider)
     
     engine.load(QUrl('qml/init.qml'))
     topLevel = engine.rootObjects()[0]

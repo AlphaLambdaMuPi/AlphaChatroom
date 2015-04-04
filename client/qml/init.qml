@@ -47,6 +47,10 @@ ApplicationWindow {
         console.log(mainView.chatView.model)
     }
 
+    function receiveUserJoin(ch, x) {
+        chatUsersModels[ch].append(x);
+    }
+
     function onLoggedIn() {
         loader.source = ""
         loader.sourceComponent = waitingComp

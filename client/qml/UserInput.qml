@@ -15,6 +15,18 @@ RowLayout {
         Layout.fillHeight: true
         Layout.preferredWidth: parent.width * 0.75
         anchors.margins: 20
+        Keys.onReturnPressed: {
+            if(!(event.modifiers & Qt.ShiftModifier)) {
+                ta.send()
+                event.accepted = true
+            } else {
+                ta.append('')
+            }
+        }
+        function send() {
+            medium.Qsend(activeChannel, ta.text)
+            ta.text = ''
+        }
     }
     Button {
         Layout.fillHeight: true
@@ -22,7 +34,7 @@ RowLayout {
         anchors.margins: 20
         text: 'Send'
         onClicked: {
-            medium.Qsend(activeChannel, ta.text)
+            ta.send()
         }
     }
 }

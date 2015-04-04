@@ -1,6 +1,7 @@
 import logging
 import asyncio
 import json
+import re
 
 from PyQt5.QtCore import QObject, pyqtSlot, pyqtSignal
 from PyQt5.QtWidgets import *
@@ -74,6 +75,11 @@ class Medium(QObject):
         if channel_name not in self.channels:
             logger.warning( 'You are not in the channel.' )
             return
+        mesg = re.sub(r'\^_\^;;', r"<img src='Image://emoticon/4-16'>", mesg)
+        mesg = re.sub('\n', r'<br>', mesg)
+        mesg = re.sub('\$([^$]+)\$', r'<img src="http://latex.codecogs.com/png.latex?\1"/>', mesg)
+        logger.info(mesg)
+
 
         self.connect.putq({
             'type': 'CALL',
@@ -135,6 +141,11 @@ class Medium(QObject):
             print(1293890128390183)
 
         self.root.receiveChatUsersList(ch, [{'name': x['nick']} for x in ls])
+
+    def Suser_join_channel(self, x, ch='Lobby'):
+        self.engine.imageProvider('avatarImage').pushImage(_id=x['nick'], base64=x['pic'])
+        self.root.receiveUserJoin(ch, {'name': x['nick']})
+
 
     @pyqtSlot(str)
     def Qlogin(self, nick):

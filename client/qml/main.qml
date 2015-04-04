@@ -116,16 +116,15 @@ Rectangle {
         Row {
             width: parent.width
             height: childrenRect.height
-            Rectangle {
+            Image {
                 id: picRec
                 //width: childrenRect.width
                 //height: childrenRect.height
                 //Image {
-                //source: '../img/alpha.png'
                 //width: 60
                 //height: 60
                 //}
-                color: 'blue'
+                source: 'Image://avatarImage/' + sender
                 width: 60
                 height: 60
             }
@@ -142,22 +141,57 @@ Rectangle {
                     color: "#80000000"
                 }
                 Rectangle {
-                    property int tmargin: 10
+                    property int tmargin: 15
+                    property int lineHeight: 1
                     id: rec
                     color: 'white'
-                    height: mesgText.paintedHeight + tmargin * 2
-                    width: mesgText.paintedWidth + tmargin * 2
+                    height: mesgText.paintedHeight + tmargin + lineHeight + senderText.paintedHeight + 10
+                    width: Math.max(mesgText.paintedWidth, senderText.paintedWidth) + tmargin * 2
                     Text {
                         anchors {
-                            centerIn: parent
+                            horizontalCenter: parent.horizontalCenter
+                            top: parent.top
+                            topMargin: rec.tmargin
+                            bottomMargin: rec.tmargin
                         }
                         id: mesgText
-                        text: sender + ": " + mesg
+                        text: mesg
                         wrapMode: Text.Wrap
-                        width: Math.min(parent.parent.parent.width - rec.tmargin * 2 - picRec.width, paintedWidth)
+                        width: Math.min(parent.parent.parent.width - rec.tmargin * 2 - picRec.width, implicitWidth)
+                        textFormat: Text.RichText
                         Component.onCompleted: {
-                            console.log(implicitWidth)
+                            console.log(paintedWidth)
                         }
+                    }
+
+                    Rectangle {
+                        id: line
+                        anchors {
+                            top: mesgText.bottom
+                            left: parent.left
+                            right: parent.right
+                            topMargin: 10
+                            leftMargin: 5
+                            rightMargin: 5
+                            bottomMargin: 0
+                        }
+                        height: rec.lineHeight
+                        color: 'grey'
+                    }
+
+                    Text {
+                        id: senderText
+                        anchors {
+                            top: line.bottom
+                            left: parent.left
+                            right: parent.right
+                            topMargin: 0
+                            leftMargin: 20
+                            rightMargin: 7
+                            bottomMargin: 0
+                        }
+                        text: sender
+                        color: '#444'
                     }
                 }
             }

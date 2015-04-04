@@ -53,4 +53,25 @@ class ImageProvider(QQuickImageProvider):
         return bytearray(qba.toBase64()).decode()
 
 
+class EmoticonProvider(QQuickImageProvider):
+
+    def __init__(self):
+        super().__init__(QQuickImageProvider.Image)
+        self.image = QImage('img/emoticon.png')
+
+    def requestImage(self, _id, size):
+
+        r, c = map(int, _id.split('-'))
+        SIZE = 2000 / 29
+        USE_SIZE = 30
+        emo = self.image.copy(
+                int(SIZE * c),
+                int(SIZE * r),
+                int(SIZE),
+                int(SIZE)
+            ).scaled(USE_SIZE, USE_SIZE, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+
+        
+
+        return emo, emo.size()
                 
