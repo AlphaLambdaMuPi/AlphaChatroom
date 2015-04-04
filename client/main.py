@@ -53,6 +53,7 @@ def app_setup():
     topLevel.show()
 
     app.aboutToQuit.connect(lambda: loop.close())
+    print(topLevel.loginFinish)
     app.exec_()
 
 def main():

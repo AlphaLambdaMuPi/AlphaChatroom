@@ -66,14 +66,11 @@ class Medium(QObject):
             logging.error('Cant join server: %s', str(e))
 
         logger.info('Success joined channel: %s', channel_name)
-        self.success_join(channel_name)
 
 
-    def success_join(self, channel):
-        self.channels.append(channel)
-        self.root.channelAdd(channel)
 
     def send_msg(self, channel_name, mesg):
+        logger.info(self.channels)
         if channel_name not in self.channels:
             logger.warning( 'You are not in the channel.' )
             return
@@ -117,12 +114,15 @@ class Medium(QObject):
         self.connect_server()
                 
     def Sget_message(self, msg, fr, channel):
-        self.root.receive_msg({
+        self.root.receive_msg(channel, {
             'type': 'text',
             'sender': fr,
             'mesg': msg,
         })
 
+    def Ssuccess_join(self, channel):
+        self.channels.append(channel)
+        self.root.channelAdd(channel)
 
 
 
@@ -137,10 +137,10 @@ class Medium(QObject):
         logger.info('qml request join')
         self.join_channel(channel)
 
-    @pyqtSlot(str)
-    def Qsend(self, s):
-        logger.debug(s)
-        self.send_msg('beta', s)
+    @pyqtSlot(str, str)
+    def Qsend(self, ch, s):
+        logger.debug("Qsend channel = %s : %s", ch, s)
+        self.send_msg(ch, s)
 
     @pyqtSlot(str)
     def Qavatar(self, url):

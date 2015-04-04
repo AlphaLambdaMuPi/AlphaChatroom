@@ -36,10 +36,15 @@ ApplicationWindow {
         }
     }
 
+
     property string activeChannel: ''
-    function receive_msg(s) {
-        console.log(s)
-        mainView.chatMod.append(s);
+    property variant chatModels: {'a': 10}
+    property variant zzz: {'a': 10}
+    function receive_msg(ch, s) {
+        console.log(ch, s)
+        chatModels[ch].append(s);
+        console.log(chatModels[ch])
+        console.log(mainView.chatView.model)
     }
 
     function onLoggedIn() {
@@ -49,8 +54,18 @@ ApplicationWindow {
     }
 
     function channelAdd(ch) {
-        console.log(loader.source)
+        console.log(ch)
         mainView.channelMod.append({channel: ch})
+        var newModel = chatDelegateComponent.createObject(rootApp)
+        console.log(newModel)
+        chatModels[ch] = newModel
+        console.log('ZZZZ: ', chatModels)
+    }
+
+    Component {
+        id: chatDelegateComponent
+        ListModel {
+        }
     }
 
     function loginFinish() {
@@ -61,5 +76,6 @@ ApplicationWindow {
 
     function setActiveChannel(ch) {
         activeChannel = ch
+        mainView.chatView.model = chatModels[ch]
     }
 }

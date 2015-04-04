@@ -9,7 +9,7 @@ Rectangle {
     height: 600
     width: 800
     property alias channelMod: cl.channelMod
-    property alias chatMod: chatMod
+    property alias chatView: chatView
 
     RowLayout {
         spacing: 0
@@ -51,19 +51,21 @@ Rectangle {
                     Layout.fillHeight: true
                     Layout.minimumHeight: 200
 
-                    ListView {
-                        id: chatView
-                        anchors {
-                            margins: 20
-                            fill: parent
+                    ScrollView {
+                        anchors.fill: parent
+                        ListView {
+                            id: chatView
+                            anchors {
+                                margins: 20
+                                fill: parent
+                            }
+                            spacing: 20
+                            model: ListModel {
+                                id: chatMod
+                            }
+                            delegate: chatDelegate
                         }
-                        spacing: 20
-                        model: ListModel {
-                            id: chatMod
-                        }
-                        delegate: chatDelegate
                     }
-
                 }
 
                 Rectangle {
@@ -129,4 +131,5 @@ Rectangle {
             }
         }
     }
+
 }

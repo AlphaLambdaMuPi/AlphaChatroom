@@ -22,7 +22,7 @@ RowLayout {
         anchors.margins: 20
         text: 'Send'
         onClicked: {
-            medium.Qsend(ta.text)
+            medium.Qsend(activeChannel, ta.text)
         }
     }
 }
