@@ -7,7 +7,7 @@ import logging
 
 logger = logging.getLogger()
 
-class Connection:
+class StreamConnection:
     def __init__(self, sr, sw, *, loop=None):
         if not loop:
             loop = asyncio.get_event_loop()
@@ -22,8 +22,7 @@ class Connection:
         while self.alive():
             try:
                 data = yield from self._sr.readline()
-                logger.debug("get: {}".format(data))
-                if len(data):
+                if data and len(data):
                     self._msgs.put_nowait(self._convert(data))
             except asyncio.CancelledError:
                 logger.debug("readline from stream reader was cancelled.")
@@ -54,23 +53,8 @@ class Connection:
     def send(self, data):
         if not self.alive():
             raise ConnectionError("connection was closed.")
-        data = data + b'\n'
         try:
-            self._sw.write(data)
-        except OSError:
-            raise ConnectionError("can't send data.")
-
-    @asyncio.coroutine
-    def read(self, n=-1):
-        if not self.alive():
-            raise ConnectionError("connection was closed.")
-        data = yield from self._sr.read(n)
-        return data
-    
-    def write(self, data):
-        if not self.alive():
-            raise ConnectionError("connection was closed.")
-        try:
+            data = data + b'\n'
             self._sw.write(data)
         except OSError:
             raise ConnectionError("can't send data.")
@@ -85,7 +69,7 @@ class Connection:
         self._sw.close()
         self._worker.cancel()
 
-class JsonConnection(Connection):
+class JsonConnection(StreamConnection):
     def __init__(self, sr, sw, *, loop=None):
         super().__init__(sr, sw, loop=loop)
 
@@ -98,6 +82,7 @@ class JsonConnection(Connection):
         except ValueError:
             logger.debug("get wrong json format")
         else:
+            logger.debug("get: {}".format(data))
             return data
 
     def send(self, data):
@@ -105,8 +90,6 @@ class JsonConnection(Connection):
             logger.debug("send: {}".format(data))
             data = json.dumps(data).encode()
             super().send(data)
-        except ConnectionError:
-            raise ConnectionError("can't send data")
         except ValueError:
             raise ValueError("wrong json format")
 

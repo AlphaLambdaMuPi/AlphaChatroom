@@ -5,7 +5,9 @@ import logging
 import server
 
 from server import chat_server
+from fileserver import file_server
 import logsetting
+from settings import settings as SETTINGS
 
 logsetting.log_setup()
 logger = logging.getLogger()
@@ -22,8 +24,10 @@ def check_tasks():
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
 
-    coro = asyncio.start_server(chat_server, '0.0.0.0', 9007)
+    coro = asyncio.start_server(chat_server, SETTINGS['ip'], SETTINGS['port'])
+    coro2 = asyncio.start_server(file_server, SETTINGS['ip'], SETTINGS['port'] + 1)
     s = loop.run_until_complete(coro)
+    fs = loop.run_until_complete(coro2)
 
     logger.info('serving on {}'.format(s.sockets[0].getsockname()))
     try:
@@ -31,6 +35,7 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print()
         loop.run_until_complete(chat_server.stop())
+        loop.run_until_complete(file_server.stop())
     finally:
         loop.run_until_complete(check_tasks())
         loop.close()

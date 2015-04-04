@@ -3,6 +3,7 @@
 import asyncio
 import logging
 
+from fileserver import file_server
 from connection import JsonConnection
 from user import User
 from channel import Channel
@@ -19,6 +20,7 @@ class ChatServer:
         self._name = "SYSTEM"
         self._hellostr = "Hi {}, this is your current nickname."
 
+    @asyncio.coroutine
     def __call__(self, sr, sw):
         conn = JsonConnection(sr, sw)
         yield from self.add_user(conn)
@@ -31,7 +33,7 @@ class ChatServer:
 
         if "nick" in data and data['nick'] != self._name:
             nick = self.gen_nick(data['nick'])
-        self._users[nick] = User(self, nick, conn)
+        self._users[nick] = User(self, file_server, nick, conn)
         self._users[nick].send_call('init_conn', self._name, nick)
         self._users[nick].send_msg(
             self._hellostr.format(nick),
