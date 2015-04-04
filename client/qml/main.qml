@@ -10,6 +10,7 @@ Rectangle {
     width: 800
     property alias channelMod: cl.channelMod
     property alias chatView: chatView
+    property alias userView: userView
 
     RowLayout {
         spacing: 0
@@ -45,25 +46,56 @@ Rectangle {
             ColumnLayout {
                 anchors.fill: parent
                 spacing: 0
-                Rectangle {
-                    color: '#BBBBBB'
+                RowLayout {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     Layout.minimumHeight: 200
+                    spacing: 0
 
-                    ScrollView {
-                        anchors.fill: parent
-                        ListView {
-                            id: chatView
-                            anchors {
-                                margins: 20
-                                fill: parent
+                    Rectangle {
+                        color: '#BBBBBB'
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        Layout.minimumWidth: 300
+
+                        ScrollView {
+                            anchors.fill: parent
+                            ListView {
+                                id: chatView
+                                anchors {
+                                    margins: 20
+                                    fill: parent
+                                }
+                                spacing: 20
+                                model: ListModel {
+                                    id: chatMod
+                                }
+                                delegate: chatDelegate
                             }
-                            spacing: 20
-                            model: ListModel {
-                                id: chatMod
+                        }
+                    }
+
+                    Rectangle {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        Layout.preferredWidth: 120
+                        Layout.maximumWidth: 180
+
+                        ScrollView {
+                            anchors.fill: parent
+                            horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff
+                            ListView {
+                                id: userView
+                                anchors {
+                                    fill: parent
+                                    topMargin: 10
+                                }
+                                spacing: 0
+                                model: ListModel {
+                                    id: userMod
+                                }
+                                delegate: userDelegate
                             }
-                            delegate: chatDelegate
                         }
                     }
                 }
@@ -132,4 +164,35 @@ Rectangle {
         }
     }
 
+    Component {
+        id: userDelegate
+        Rectangle {
+            width: parent.width
+            height: 50
+            Image {
+                id: __avatar
+                anchors {
+                    verticalCenter: parent.verticalCenter
+                    left: parent.left
+                    leftMargin: 10
+                }
+                source: 'Image://avatarImage/' + name 
+                width: 40
+                height: 40
+            }
+            Rectangle {
+                anchors {
+                    top: parent.top
+                    bottom: parent.bottom
+                    right: parent.right
+                    left: __avatar.right
+                    leftMargin: 8
+                }
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: name
+                }
+            }
+        }
+    }
 }

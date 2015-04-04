@@ -49,7 +49,6 @@ def app_setup():
     medium.setEngine(engine)
     medium.hello()
 
-
     topLevel.show()
 
     app.aboutToQuit.connect(lambda: loop.close())

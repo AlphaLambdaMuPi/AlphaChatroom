@@ -57,12 +57,12 @@ Rectangle {
                     anchors.margins: 20
                     anchors.fill: parent
 
-                    source: 'image://avatarImage/1'
+                    source: 'image://avatarImage/__self__'
                     cache: false
 
                     function reload() {
                         source = ''
-                        source = 'image://avatarImage/1'
+                        source = 'image://avatarImage/__self__'
                     }
 
                     Connections {

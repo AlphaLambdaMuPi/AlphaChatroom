@@ -38,8 +38,8 @@ ApplicationWindow {
 
 
     property string activeChannel: ''
-    property variant chatModels: {'a': 10}
-    property variant zzz: {'a': 10}
+    property variant chatModels: new Object()
+    property variant chatUsersModels: new Object()
     function receive_msg(ch, s) {
         console.log(ch, s)
         chatModels[ch].append(s);
@@ -54,16 +54,32 @@ ApplicationWindow {
     }
 
     function channelAdd(ch) {
-        console.log(ch)
         mainView.channelMod.append({channel: ch})
-        var newModel = chatDelegateComponent.createObject(rootApp)
-        console.log(newModel)
+        var newModel = listDelegate.createObject(rootApp)
         chatModels[ch] = newModel
-        console.log('ZZZZ: ', chatModels)
+
+        newModel = listDelegate.createObject(rootApp)
+        chatUsersModels[ch] = newModel
+        refreshUsersList(ch)
+
+        setActiveChannel(ch)
+    }
+
+    function refreshUsersList(ch) {
+        medium.QgetUsers(ch)
+    }
+
+    function receiveChatUsersList(ch, ls) {
+        mainView.userView.model = chatUsersModels[ch]
+        var mod = chatUsersModels[ch]
+        mod.clear()
+        ls.forEach( function(x) {
+            mod.append(x)
+        });
     }
 
     Component {
-        id: chatDelegateComponent
+        id: listDelegate
         ListModel {
         }
     }
@@ -77,5 +93,6 @@ ApplicationWindow {
     function setActiveChannel(ch) {
         activeChannel = ch
         mainView.chatView.model = chatModels[ch]
+        mainView.userView.model = chatUsersModels[ch]
     }
 }

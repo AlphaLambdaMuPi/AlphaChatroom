@@ -112,6 +112,11 @@ class Medium(QObject):
 
     def hello(self):
         self.connect_server()
+
+    def set_avatar(self):
+        self.connect.put_call('set_avatar', 
+                self.engine.imageProvider('avatarImage').base64('__self__')
+            )
                 
     def Sget_message(self, msg, fr, channel):
         self.root.receive_msg(channel, {
@@ -124,13 +129,18 @@ class Medium(QObject):
         self.channels.append(channel)
         self.root.channelAdd(channel)
 
+    def Sget_users_in_channel(self, ch, ls):
+        for x in ls:
+            self.engine.imageProvider('avatarImage').pushImage(_id=x['nick'], base64=x['pic'])
+            print(1293890128390183)
 
-
+        self.root.receiveChatUsersList(ch, [{'name': x['nick']} for x in ls])
 
     @pyqtSlot(str)
     def Qlogin(self, nick):
         self._login(nick)
         self.root.onLoggedIn()
+        self.set_avatar()
 
     @pyqtSlot(str)
     def Qjoin(self, channel):
@@ -144,5 +154,11 @@ class Medium(QObject):
 
     @pyqtSlot(str)
     def Qavatar(self, url):
-        self.engine.imageProvider('avatarImage').url = url
+        self.engine.imageProvider('avatarImage').pushImage(_id='__self__', url=url)
         self.avatarChanged.emit()
+
+    @pyqtSlot(str)
+    def QgetUsers(self, ch):
+        self.connect.put_call('request_users_in_channel', ch)
+        
+

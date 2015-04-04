@@ -14,36 +14,43 @@ class ImageProvider(QQuickImageProvider):
     def __init__(self):
         super().__init__(QQuickImageProvider.Image)
         self.USE_SIZE = 200
-        self.image = QImage(self.USE_SIZE, self.USE_SIZE, QImage.Format_RGB32)
-        self._url = ""
+        #self.image = QImage(self.USE_SIZE, self.USE_SIZE, QImage.Format_RGB32)
+        self.image = {}
+        self.image['__self__'] = QImage(self.USE_SIZE, self.USE_SIZE, QImage.Format_RGB32)
+        self.image['__self__'].fill( QColor(randint(0, 255), randint(0, 255), randint(0, 255)) )
 
-    def requestImage(self, _id, size):
-        #image = QImage(100, 100)
-        if self.url == '':
-            self.image.fill(QColor(randint(0, 255), randint(0, 255), randint(0, 255)))
-        else:
+    def pushImage(self, _id, url='', base64=''):
+        logger.debug(_id)
+        if(url != ''):
             try:
-                raw_image = QImage(QUrl(self.url).toLocalFile())
+                raw_image = QImage(QUrl(url).toLocalFile())
             except Exception as e:
                 logger.error('Get image from url %s failed: %s', self.url, str(e))
-            self.image = raw_image.scaled(self.USE_SIZE, self.USE_SIZE, Qt.KeepAspectRatio)
+            self.image[_id] = raw_image.scaled(self.USE_SIZE, self.USE_SIZE, Qt.KeepAspectRatio)
+            return
 
-        #print(self.image.format())
-        #yy = QByteArray()
-        #buf = QBuffer(yy)
-        #buf.open(QIODevice.WriteOnly)
-        #self.image.save(buf, 'PNG')
-        #qqq = QImage.fromData(yy)
-        #return qqq, QSize(self.USE_SIZE, self.USE_SIZE)
+        if(base64 != ''):
+            qba = QByteArray.fromBase64(base64.encode())
+            self.image[_id] = QImage.fromData(qba)
+            return
 
-        return self.image, QSize(self.USE_SIZE, self.USE_SIZE)
+        self.image[_id] = QImage(self.USE_SIZE, self.USE_SIZE).fill(QColor(randint(0, 255), randint(0, 255), randint(0, 255)))
+        return
 
-    @property
-    def url(self):
-        return self._url
+    def requestImage(self, _id, size):
 
-    @url.setter
-    def url(self, u):
-        self._url = u
+        if _id in self.image:
+            return self.image[_id], self.image[_id].size()
+
+        logger.error('The image %s not found', _id)
+        return QImage(), QSize(0, 0)
+
+    def base64(self, _id):
+        qba = QByteArray()
+        buf = QBuffer(qba)
+        buf.open(QIODevice.WriteOnly)
+        self.image[_id].save(buf, 'PNG')
+        return bytearray(qba.toBase64()).decode()
+
 
                 

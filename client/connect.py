@@ -36,6 +36,13 @@ class Connect:
     def putq(self, x):
         self.queue.put_nowait(x)
 
+    def put_call(self, func, *args):
+        self.putq({
+            'type': 'CALL',
+            'func': func,
+            'params': args,
+            })
+
     @asyncio.coroutine
     def start_tcp_connection(self, fut):
         try:
