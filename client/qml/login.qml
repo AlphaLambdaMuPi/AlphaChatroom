@@ -104,7 +104,7 @@ Rectangle {
                 TextField {
                     id: nickTf
                     anchors.horizontalCenter: parent.horizontalCenter
-                    text: 'alpha'
+                    text: 'alpha' + Math.floor(Math.random() * 10000)
                     style: TextFieldStyle {
                         background: Rectangle {
                             radius: 2

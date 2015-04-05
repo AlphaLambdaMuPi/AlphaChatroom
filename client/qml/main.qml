@@ -132,9 +132,6 @@ Rectangle {
                                     }
                                 }
                             ]
-                            Component.onCompleted: {
-                                console.log(chatScroll)
-                            }
 
                             Text {
                                 anchors.centerIn: parent
@@ -239,7 +236,7 @@ Rectangle {
                         width: Math.min(parent.parent.parent.parent.width - rec.tmargin * 2 - picRec.width, implicitWidth)
                         textFormat: Text.RichText
                         Component.onCompleted: {
-                            console.log(implicitWidth, parent.parent.parent.parent.parent.width - rec.tmargin*2 - picRec.width, width)
+                            //console.log(implicitWidth, parent.parent.parent.parent.parent.width - rec.tmargin*2 - picRec.width, width)
                         }
                         onLinkActivated: Qt.openUrlExternally(link)
                     }

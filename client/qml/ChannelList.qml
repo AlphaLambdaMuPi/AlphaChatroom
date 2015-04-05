@@ -19,6 +19,16 @@ Item {
             id: channelMod
         }
 
+        add: Transition {
+            id: _t
+            NumberAnimation {
+                properties: 'y'
+                from: _t.ViewTransition.destination.y + 100
+                easing.type: Easing.OutBounce
+                duration: 500
+            }
+        }
+
         delegate: Item {
             width: parent.width
             height: childrenRect.height
@@ -31,11 +41,49 @@ Item {
                 radius: 5
                 color: '#AAAAAA'
             }
-            Rectangle {
+            Item {
                 id: textRect
                 width: parent.width
                 height: childrenRect.height + 20
-                color: 'transparent'
+                MouseArea {
+                    id: _ma
+                    anchors.fill: parent
+                    onClicked: {
+                        setActiveChannel(channel)
+                    }
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                }
+                Image {
+                    id: _img
+                    anchors.left: parent.left
+                    anchors.leftMargin: 10
+                    anchors.verticalCenter: parent.verticalCenter
+                    source: '../img/delete.png'
+                    width: 32
+                    height: 32
+                    visible: false
+
+                    MouseArea {
+                        z: 100
+                        id: _imgma
+                        anchors.fill: parent
+                        onClicked: {
+                            leaveChannel(channel)
+                        }
+                        cursorShape: Qt.PointingHandCursor
+                    }
+
+                    states: [
+                        State {
+                            when: _ma.containsMouse
+                            PropertyChanges {
+                                target: _img
+                                visible: true
+                            }
+                        }
+                    ]
+                }
                 Text {
                     anchors.centerIn: parent
                     font {
@@ -44,10 +92,22 @@ Item {
                     text: channel
                     color: 'black'
                 }
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        setActiveChannel(channel)
+
+                Rectangle {
+                    color: 'red'
+                    width: 30
+                    height: 30
+                    radius: 15
+                    anchors {
+                        right: parent.right
+                        verticalCenter: parent.verticalCenter
+                        rightMargin: 10
+                    }
+                    Text {
+                        anchors.centerIn: parent
+                        text: '0'
+                        color: 'white'
+                        font.bold: true
                     }
                 }
             }
@@ -68,7 +128,7 @@ Item {
             states: [
                 State {
                     name: 'active'
-                    when: activeChannel == channel
+                    when: activeChannel == channel || _ma.containsMouse
                     PropertyChanges {
                         target: indRec
                         visible: true
@@ -76,7 +136,7 @@ Item {
                 },
                 State {
                     name: 'nonActive'
-                    when: activeChannel != channel
+                    when: activeChannel != channel && !_ma.containsMouse
                     PropertyChanges {
                         target: indRec
                         visible: false

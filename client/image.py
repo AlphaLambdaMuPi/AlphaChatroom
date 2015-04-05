@@ -20,7 +20,7 @@ class ImageProvider(QQuickImageProvider):
         self.image['__self__'].fill( QColor(randint(0, 255), randint(0, 255), randint(0, 255)) )
 
     def pushImage(self, _id, url='', base64=''):
-        logger.debug(_id)
+        logger.debug("Push Image: %s", _id)
         if(url != ''):
             try:
                 raw_image = QImage(QUrl(url).toLocalFile())

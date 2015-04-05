@@ -41,10 +41,7 @@ ApplicationWindow {
     property variant chatModels: new Object()
     property variant chatUsersModels: new Object()
     function receive_msg(ch, s) {
-        console.log(ch, s)
         chatModels[ch].append(s);
-        console.log(chatModels[ch])
-        console.log(mainView.chatView.model)
         var timer = _timer
         timer.start()
     }
@@ -115,7 +112,6 @@ ApplicationWindow {
     function scrollToBottom() {
         //mainView.chatScroll.flickableItem.contentY = 1000000
         //console.log(mainView.chatScroll.flickableItem.contentHeight)
-        console.log(mainView.chatScroll.flickableItem.contentHeight, mainView.chatScroll.height, mainView.chatScroll.flickableItem.contentY)
         mainView.chatScroll.animation.to = Math.max(mainView.chatScroll.flickableItem.contentHeight -
                                            mainView.chatScroll.height, 0)
         //mainView.chatScroll.animation.to = 10

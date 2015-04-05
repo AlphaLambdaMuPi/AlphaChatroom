@@ -72,7 +72,6 @@ class Medium(QObject):
 
 
     def send_msg(self, channel_name, mesg):
-        logger.info(self.channels)
         if channel_name not in self.channels:
             logger.warning( 'You are not in the channel.' )
             return
@@ -140,7 +139,6 @@ class Medium(QObject):
     def Sget_users_in_channel(self, ch, ls):
         for x in ls:
             self.engine.imageProvider('avatarImage').pushImage(_id=x['nick'], base64=x['pic'])
-            print(1293890128390183)
 
         self.root.receiveChatUsersList(ch, [{'name': x['nick']} for x in ls])
 
