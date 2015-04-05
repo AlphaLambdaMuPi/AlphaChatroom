@@ -45,6 +45,8 @@ ApplicationWindow {
         chatModels[ch].append(s);
         console.log(chatModels[ch])
         console.log(mainView.chatView.model)
+        var timer = _timer
+        timer.start()
     }
 
     function receiveUserJoin(ch, x) {
@@ -98,5 +100,25 @@ ApplicationWindow {
         activeChannel = ch
         mainView.chatView.model = chatModels[ch]
         mainView.userView.model = chatUsersModels[ch]
+        scrollToBottom()
+    }
+
+    Timer {
+        id: _timer
+        interval: 100
+        repeat: false
+        onTriggered: {
+            scrollToBottom()
+        }
+    }
+
+    function scrollToBottom() {
+        //mainView.chatScroll.flickableItem.contentY = 1000000
+        //console.log(mainView.chatScroll.flickableItem.contentHeight)
+        console.log(mainView.chatScroll.flickableItem.contentHeight, mainView.chatScroll.height, mainView.chatScroll.flickableItem.contentY)
+        mainView.chatScroll.animation.to = Math.max(mainView.chatScroll.flickableItem.contentHeight -
+                                           mainView.chatScroll.height, 0)
+        //mainView.chatScroll.animation.to = 10
+        mainView.chatScroll.animation.start()
     }
 }

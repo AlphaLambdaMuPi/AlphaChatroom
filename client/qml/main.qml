@@ -11,6 +11,7 @@ Rectangle {
     property alias channelMod: cl.channelMod
     property alias chatView: chatView
     property alias userView: userView
+    property alias chatScroll: chatScroll
 
     RowLayout {
         spacing: 0
@@ -59,19 +60,97 @@ Rectangle {
                         Layout.minimumWidth: 300
 
                         ScrollView {
+                            id: chatScroll
                             anchors.fill: parent
-                            ListView {
-                                id: chatView
-                                anchors {
-                                    margins: 20
-                                    fill: parent
-                                }
-                                spacing: 20
-                                model: ListModel {
-                                    id: chatMod
-                                }
-                                delegate: chatDelegate
+                            flickableItem.anchors.margins: 20
+                            property alias animation: __ani
+                            NumberAnimation on flickableItem.contentY {
+                                id: __ani
+                                duration: 400
+                                easing.type: Easing.OutBounce
                             }
+                            Item {
+                                width: parent.width
+                                height: childrenRect.height
+                                ListView {
+                                    id: chatView
+                                    width: parent.width
+                                    height: childrenRect.height
+                                    anchors {
+                                        top: parent.top
+                                    }
+                                    spacing: 20
+                                    model: ListModel {
+                                        id: chatMod
+                                    }
+                                    delegate: chatDelegate
+                                } 
+                                Item {
+                                    id: bugFixRect
+                                    width: parent.width
+                                    height: 40
+                                    anchors {
+                                        top: chatView.bottom
+                                    }
+                                }
+                            }
+                        }
+
+                        Rectangle {
+                            id: _rec
+                            anchors {
+                                horizontalCenter: parent.horizontalCenter
+                                bottom: parent.bottom
+                                bottomMargin: 20
+                            }
+                            radius: 20
+                            height: 40
+                            width: 300
+                            opacity: 0
+                            Behavior on opacity {
+                                NumberAnimation { duration: 500 }
+                            }
+                            states: [
+                                State {
+                                    when: (chatScroll.flickableItem.contentHeight - chatScroll.flickableItem.contentY -
+                                                chatScroll.height) > 100
+                                    PropertyChanges {
+                                        target: _rec
+                                        opacity: 0.8
+                                    }
+                                    PropertyChanges {
+                                        target: _ma
+                                        visible: true
+                                    }
+                                },
+                                State {
+                                    when: (chatScroll.flickableItem.contentHeight - chatScroll.flickableItem.contentY -
+                                                chatScroll.height) <= 100
+                                    PropertyChanges {
+                                        target: _rec
+                                        opacity: 0
+                                    }
+                                }
+                            ]
+                            Component.onCompleted: {
+                                console.log(chatScroll)
+                            }
+
+                            Text {
+                                anchors.centerIn: parent
+                                text: "Click to scroll to the bottom"
+                                color: 'white'
+                            }
+                            MouseArea {
+                                id: _ma
+                                anchors.fill: parent
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: {
+                                    scrollToBottom()
+                                }
+                                visible: false
+                            }
+                            color: '#444'
                         }
                     }
 
