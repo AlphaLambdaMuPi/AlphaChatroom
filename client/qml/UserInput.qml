@@ -4,37 +4,126 @@ import QtQuick.Layouts 1.1
 import QtQuick.Controls.Styles 1.3
 import QtQuick.Dialogs 1.2
 
-RowLayout {
-    spacing: 20
-    anchors {
-        fill: parent
-        margins: 20
-    }
-    TextArea {
-        id: ta
-        Layout.fillHeight: true
-        Layout.preferredWidth: parent.width * 0.75
-        anchors.margins: 20
-        Keys.onReturnPressed: {
-            if(!(event.modifiers & Qt.ShiftModifier)) {
-                ta.send()
-                event.accepted = true
-            } else {
-                ta.append('')
+Column {
+    anchors.fill: parent
+    Row {
+        id: _row
+        anchors {
+            left: parent.left
+            right: parent.right
+            top: parent.top
+            leftMargin: 20
+            rightMargin: 20
+        }
+        Rectangle {
+            id: _recE
+            border {
+                width: 2
+                color: 'grey'
+            }
+            width: 100
+            height: 36
+            color: '#EEE'
+            radius: 3
+            Image {
+                anchors.centerIn: parent
+                source: '../img/smile.png'
+                height: 32
+                width: 32
+            }
+            MouseArea {
+                id: _ma
+                cursorShape: Qt.PointingHandCursor
+                hoverEnabled: true 
+                anchors.fill: parent
+                onClicked: {
+                    _recES.visible = !_recES.visible
+                }
+            }
+
+            states: [
+                State {
+                    name: 'mouse-over'
+                    when: _ma.containsMouse
+                    PropertyChanges { target: _recE; color: '#99CCFF'; }
+                }
+            ]
+
+
+            Rectangle {
+                id: _recES
+                width: childrenRect.width
+                height: childrenRect.height
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.bottom: parent.top
+                visible: false
+                ScrollView {
+                    width: 315
+                    height: 100
+                    Grid {
+                        columns: 10
+                        Repeater {
+                            model: 29*29
+                            Image {
+                                source: 'Image://emoticon/' + Math.floor(index/29) + '-' + (index%29)
+                                MouseArea {
+                                    anchors.fill: parent
+                                    cursorShape: Qt.PointingHandCursor
+                                    onClicked: {
+                                        ta.insert(ta.cursorPosition,
+                                            '\\((emoticon:' + Math.floor(index/29) + '-' + (index%29) + '))'
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                color: 'white'
+                border {
+                    color: '#555'
+                    width: 2
+                }
+                radius: 5
+
             }
         }
-        function send() {
-            medium.Qsend(activeChannel, ta.text)
-            ta.text = ''
-        }
     }
-    Button {
-        Layout.fillHeight: true
-        Layout.fillWidth: true
-        anchors.margins: 20
-        text: 'Send'
-        onClicked: {
-            ta.send()
+    RowLayout {
+        spacing: 20
+        anchors {
+            left: parent.left
+            right: parent.right
+            bottom: parent.bottom
+            top: _row.bottom
+            margins: 20
+        }
+        TextArea {
+            id: ta
+            Layout.fillHeight: true
+            Layout.preferredWidth: parent.width * 0.75
+            anchors.margins: 20
+            Keys.onReturnPressed: {
+                if(!(event.modifiers & Qt.ShiftModifier)) {
+                    ta.send()
+                    event.accepted = true
+                } else {
+                    ta.append('')
+                }
+            }
+            function send() {
+                medium.Qsend(activeChannel, ta.text)
+                ta.text = ''
+            }
+        }
+        Button {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            anchors.margins: 20
+            text: 'Send'
+            onClicked: {
+                ta.send()
+            }
         }
     }
 }

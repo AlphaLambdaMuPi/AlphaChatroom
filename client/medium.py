@@ -10,6 +10,7 @@ from PyQt5.QtQuick import *
 from quamash import QEventLoop
 
 from settings import *
+import regex
 
 from connect import Connect
 
@@ -75,9 +76,9 @@ class Medium(QObject):
         if channel_name not in self.channels:
             logger.warning( 'You are not in the channel.' )
             return
-        mesg = re.sub(r'\^_\^;;', r"<img src='Image://emoticon/4-16'>", mesg)
-        mesg = re.sub('\n', r'<br>', mesg)
-        mesg = re.sub('\$([^$]+)\$', r'<img src="http://latex.codecogs.com/png.latex?\1"/>', mesg)
+        #mesg = re.sub(r'\^_\^;;', r"<img src='Image://emoticon/4-16'>", mesg)
+        #mesg = re.sub('\$([^$]+)\$', r'<img src="http://latex.codecogs.com/png.latex?\1"/>', mesg)
+        #mesg = re.sub('\n', r'<br>', mesg)
         logger.info(mesg)
 
 
@@ -125,6 +126,7 @@ class Medium(QObject):
             )
                 
     def Sget_message(self, msg, fr, channel):
+        msg = regex.do_sub(msg)
         self.root.receive_msg(channel, {
             'type': 'text',
             'sender': fr,

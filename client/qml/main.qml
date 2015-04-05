@@ -70,7 +70,7 @@ Rectangle {
                                 easing.type: Easing.OutBounce
                             }
                             Item {
-                                width: parent.width
+                                width: parent.parent.width
                                 height: childrenRect.height
                                 ListView {
                                     id: chatView
@@ -236,11 +236,12 @@ Rectangle {
                         id: mesgText
                         text: mesg
                         wrapMode: Text.Wrap
-                        width: Math.min(parent.parent.parent.width - rec.tmargin * 2 - picRec.width, implicitWidth)
+                        width: Math.min(parent.parent.parent.parent.width - rec.tmargin * 2 - picRec.width, implicitWidth)
                         textFormat: Text.RichText
                         Component.onCompleted: {
-                            console.log(paintedWidth)
+                            console.log(implicitWidth, parent.parent.parent.parent.parent.width - rec.tmargin*2 - picRec.width, width)
                         }
+                        onLinkActivated: Qt.openUrlExternally(link)
                     }
 
                     Rectangle {
@@ -308,4 +309,5 @@ Rectangle {
             }
         }
     }
+
 }
