@@ -3,11 +3,11 @@ import QtQuick.Controls 1.3
 import QtQuick.Layouts 1.1
 import QtQuick.Controls.Styles 1.3
 import QtGraphicalEffects 1.0
-import QtQuick.Dialogs 1.2
 
 Rectangle {
     height: 600
     width: 800
+    property alias cl: cl
     property alias channelMod: cl.channelMod
     property alias chatView: chatView
     property alias userView: userView
@@ -18,7 +18,7 @@ Rectangle {
         anchors.fill: parent
 
         Rectangle {
-            width: 200
+            Layout.preferredWidth: 250
             Layout.fillHeight: true
             color: '#DDDDDD'
             ChannelList {
@@ -27,19 +27,6 @@ Rectangle {
         }
 
 
-        Dialog {
-            standardButtons: StandardButton.Ok | StandardButton.Cancel
-            id: addChannelDialog
-            TextField {
-                id: addChannelText
-                text: '0.0'
-                anchors.centerIn: parent
-                width: parent.width - 20
-            }
-            onAccepted: {
-                medium.Qjoin(addChannelText.text)
-            }
-        }
 
         Rectangle {
             Layout.fillWidth: true
@@ -170,7 +157,7 @@ Rectangle {
                                 model: ListModel {
                                     id: userMod
                                 }
-                                delegate: userDelegate
+                                delegate: UserDelegate{}
                             }
                         }
                     }
@@ -270,38 +257,6 @@ Rectangle {
                         text: sender
                         color: '#444'
                     }
-                }
-            }
-        }
-    }
-
-    Component {
-        id: userDelegate
-        Rectangle {
-            width: parent.width
-            height: 50
-            Image {
-                id: __avatar
-                anchors {
-                    verticalCenter: parent.verticalCenter
-                    left: parent.left
-                    leftMargin: 10
-                }
-                source: 'Image://avatarImage/' + name 
-                width: 40
-                height: 40
-            }
-            Rectangle {
-                anchors {
-                    top: parent.top
-                    bottom: parent.bottom
-                    right: parent.right
-                    left: __avatar.right
-                    leftMargin: 8
-                }
-                Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: name
                 }
             }
         }

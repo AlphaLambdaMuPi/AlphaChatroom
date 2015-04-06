@@ -3,10 +3,14 @@ import QtQuick.Controls 1.3
 import QtQuick.Layouts 1.1
 import QtQuick.Controls.Styles 1.3
 import QtGraphicalEffects 1.0
+import QtQuick.Dialogs 1.2
 
 Item {
+    id: _clRoot
     anchors.fill: parent
     property alias channelMod: channelMod
+    signal newMessage(string ch)
+    signal changeActiveChannel(string ch)
     ListView {
         id: channelView
         //anchors.fill: parent
@@ -32,6 +36,26 @@ Item {
         delegate: Item {
             width: parent.width
             height: childrenRect.height
+            property int newMessageNum: 0
+            Connections {
+                target: _clRoot
+                onNewMessage: {
+                    if(ch == channel) {
+                        newMessageNum += 1
+                        _bani1.to = _redCirc.y - 30
+                        _bani2.to = _redCirc.y
+                        _bani.start()
+                    }
+                }
+            }
+            Connections {
+                target: _clRoot
+                onChangeActiveChannel: {
+                    if(ch == channel) {
+                        newMessageNum = 0
+                    }
+                }
+            }
             Rectangle {
                 id: indRec
                 anchors {
@@ -69,7 +93,7 @@ Item {
                         id: _imgma
                         anchors.fill: parent
                         onClicked: {
-                            leaveChannel(channel)
+                            leaveChannel(channel, index)
                         }
                         cursorShape: Qt.PointingHandCursor
                     }
@@ -87,27 +111,62 @@ Item {
                 Text {
                     anchors.centerIn: parent
                     font {
-                        pointSize: 20
+                        pointSize: 16
                     }
                     text: channel
                     color: 'black'
                 }
 
-                Rectangle {
-                    color: 'red'
-                    width: 30
-                    height: 30
-                    radius: 15
+                Item {
                     anchors {
                         right: parent.right
                         verticalCenter: parent.verticalCenter
                         rightMargin: 10
                     }
-                    Text {
-                        anchors.centerIn: parent
-                        text: '0'
-                        color: 'white'
-                        font.bold: true
+                    width: 30
+                    height: 30
+                    Rectangle {
+                        id: _redCirc
+                        color: 'red'
+                        width: 30
+                        height: 30
+                        radius: 15
+                        visible: false
+                        y: parent.verticalCenter
+                        Text {
+                            anchors.centerIn: parent
+                            text: '' + newMessageNum
+                            color: 'white'
+                            font.bold: true
+                        }
+                        SequentialAnimation {
+                            id: _bani
+                            NumberAnimation { 
+                                id: _bani1
+                                target: _redCirc; 
+                                property: 'y'; 
+                                duration: 200;
+                                easing.type: Easing.OutQuad
+                            }
+                            NumberAnimation { 
+                                id: _bani2
+                                target: _redCirc; 
+                                property: 'y'; 
+                                duration: 350;
+                                easing.amplitude: 2
+                                easing.type: Easing.OutBounce
+                            }
+                        }
+                        states: [
+                            State {
+                                name: 'on'
+                                when: newMessageNum != 0
+                                PropertyChanges {
+                                    target: _redCirc
+                                    visible: true
+                                }
+                            }
+                        ]
                     }
                 }
             }
@@ -164,6 +223,19 @@ Item {
             onClicked: {
                 addChannelDialog.open()
             }
+        }
+    }
+    Dialog {
+        standardButtons: StandardButton.Ok | StandardButton.Cancel
+        id: addChannelDialog
+        TextField {
+            id: addChannelText
+            text: '0.0'
+            anchors.centerIn: parent
+            width: parent.width - 20
+        }
+        onAccepted: {
+            medium.Qjoin(addChannelText.text)
         }
     }
 }

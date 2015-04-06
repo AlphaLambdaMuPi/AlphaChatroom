@@ -27,6 +27,7 @@ class Medium(QObject):
         self.connect = Connect(self)
         self.state = 0
         self.channels = []
+        self.name = ''
         pass
 
 
@@ -46,6 +47,7 @@ class Medium(QObject):
         self.state = 1
 
     def _login(self, nick):
+        self.name = nick
         try:
             self.connect.putq( {'nick': nick} )
         except Exception as e:
@@ -56,25 +58,25 @@ class Medium(QObject):
         self.state = 2
         self.channels = []
 
-    def join_channel(self, channel_name):
+    def join_channel(self, channel):
 
         try:
             self.connect.putq({
                 'type': 'CALL',
                 'func': 'join',
-                'params': [channel_name],
+                'params': [channel],
             })
         except Exception as e:
             logging.error('Cant join server: %s', str(e))
 
-        logger.info('Success joined channel: %s', channel_name)
+        logger.info('Success joined channel: %s', channel)
 
 
 
-    def send_msg(self, channel_name, mesg):
-        if channel_name not in self.channels:
+    def send_msg(self, channel_type, channel, mesg):
+        if channel_type == 'CHANNEL' and (channel not in self.channels):
             logger.warning( 'You are not in the channel.' )
-            return
+            #return
         #mesg = re.sub(r'\^_\^;;', r"<img src='Image://emoticon/4-16'>", mesg)
         #mesg = re.sub('\$([^$]+)\$', r'<img src="http://latex.codecogs.com/png.latex?\1"/>', mesg)
         #mesg = re.sub('\n', r'<br>', mesg)
@@ -84,7 +86,7 @@ class Medium(QObject):
         self.connect.putq({
             'type': 'CALL',
             'func': 'route_message',
-            'params': ['CHANNEL', channel_name, mesg],
+            'params': [channel_type, channel, mesg],
         })
 
     def receive_msg(self, data):
@@ -125,6 +127,9 @@ class Medium(QObject):
             )
                 
     def Sget_message(self, msg, fr, channel):
+        if(channel is None):
+            channel = 'User:' + fr
+            print(fr)
         msg = regex.do_sub(msg)
         self.root.receive_msg(channel, {
             'type': 'text',
@@ -134,7 +139,7 @@ class Medium(QObject):
 
     def Ssuccess_join(self, channel):
         self.channels.append(channel)
-        self.root.channelAdd(channel)
+        self.root.channelAddActive(channel)
 
     def Sget_users_in_channel(self, ch, ls):
         for x in ls:
@@ -142,8 +147,9 @@ class Medium(QObject):
 
         self.root.receiveChatUsersList(ch, [{'name': x['nick']} for x in ls])
 
-    def Suser_join_channel(self, x, ch='Lobby'):
+    def Suser_join_channel(self, x, ch):
         self.engine.imageProvider('avatarImage').pushImage(_id=x['nick'], base64=x['pic'])
+        logger.debug('Get user <%s> join channel [%s].', x['nick'], ch)
         self.root.receiveUserJoin(ch, {'name': x['nick']})
 
 
@@ -161,7 +167,14 @@ class Medium(QObject):
     @pyqtSlot(str, str)
     def Qsend(self, ch, s):
         logger.debug("Qsend channel = %s : %s", ch, s)
-        self.send_msg(ch, s)
+        if(ch[:5] == 'User:'):
+            self.send_msg('USER', ch[5:], s)
+            self.root.receive_msg('User:' + ch[5:], {
+                'type': 'text',
+                'sender': self.name,
+                'mesg': s,
+            })
+        else: self.send_msg('CHANNEL', ch, s)
 
     @pyqtSlot(str)
     def Qavatar(self, url):
@@ -170,6 +183,11 @@ class Medium(QObject):
 
     @pyqtSlot(str)
     def QgetUsers(self, ch):
+        if(ch[:5] == 'User:'): return
         self.connect.put_call('request_users_in_channel', ch)
+
+    @pyqtSlot(str)
+    def QleaveChannel(self, ch):
+        self.connect.put_call('leave', ch)
         
 

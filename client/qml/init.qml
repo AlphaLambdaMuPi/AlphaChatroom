@@ -40,10 +40,20 @@ ApplicationWindow {
     property string activeChannel: ''
     property variant chatModels: new Object()
     property variant chatUsersModels: new Object()
+
     function receive_msg(ch, s) {
+
+        if (!(ch in chatModels)) {
+            channelAdd(ch, false)
+        }
         chatModels[ch].append(s);
-        var timer = _timer
-        timer.start()
+        if ( ch == activeChannel ) {
+            var timer = _timerToBottom
+            timer.start()
+        } else {
+            console.log(mainView.cl)
+            mainView.cl.newMessage(ch)
+        }
     }
 
     function receiveUserJoin(ch, x) {
@@ -53,7 +63,7 @@ ApplicationWindow {
     function onLoggedIn() {
         loader.source = ""
         loader.sourceComponent = waitingComp
-        rootApp.width = 800
+        rootApp.width = 900
     }
 
     function channelAdd(ch) {
@@ -64,7 +74,10 @@ ApplicationWindow {
         newModel = listDelegate.createObject(rootApp)
         chatUsersModels[ch] = newModel
         refreshUsersList(ch)
+    }
 
+    function channelAddActive(ch) {
+        channelAdd(ch)
         setActiveChannel(ch)
     }
 
@@ -97,11 +110,23 @@ ApplicationWindow {
         activeChannel = ch
         mainView.chatView.model = chatModels[ch]
         mainView.userView.model = chatUsersModels[ch]
+        mainView.cl.changeActiveChannel(ch)
         scrollToBottom()
     }
 
+    function leaveChannel(ch, index) {
+        if(activeChannel == ch) {
+            activeChannel = 'Lobby'
+            mainView.cl.changeActiveChannel('Lobby')
+        }
+        mainView.channelMod.remove(index)
+        delete chatModels[ch]
+        delete chatUsersModels[ch]
+        medium.QleaveChannel(ch)
+    }
+
     Timer {
-        id: _timer
+        id: _timerToBottom
         interval: 100
         repeat: false
         onTriggered: {

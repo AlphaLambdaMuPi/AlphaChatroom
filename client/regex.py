@@ -52,8 +52,8 @@ class Regex:
         for reg in self.emoregexs:
             s = reg[0].sub(reg[1], s)
 
-        s = self.latexregex[0].sub(self.latexregex[1], s)
         s = self.urlregex[0].sub(self.urlregex[1], s)
+        s = self.latexregex[0].sub(self.latexregex[1], s)
 
         return s
 
