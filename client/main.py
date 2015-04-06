@@ -48,6 +48,8 @@ def app_setup():
     engine.load(QUrl('qml/init.qml'))
     topLevel = engine.rootObjects()[0]
 
+    engine.load(QUrl('qml/camera.qml'))
+
     medium.setEngine(engine)
     medium.hello()
 
