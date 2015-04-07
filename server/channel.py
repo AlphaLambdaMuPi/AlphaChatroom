@@ -22,7 +22,8 @@ class Channel:
     def add_user(self, user):
         if user not in self._users:
             self._users[user.nick] = user
-            self.broadcast_call("user_join_channel", user.get_info())
+            self.broadcast_call("user_join_channel", user.get_info(),
+                                self.name)
             # asyncio.call_soon(self.broadcast_call, "user_join_channel",
                               # user.get_info());
             return True
@@ -32,7 +33,8 @@ class Channel:
     def remove_user(self, user):
         try:
             del self._users[user.nick]
-            self.broadcast_call("user_leave_channel", user.nick)
+            self.broadcast_call("user_leave_channel", user.nick,
+                                self.name)
             # asyncio.call_soon(self.broadcast_call, "user_leave_channel",
                               # user.nick);
             return True

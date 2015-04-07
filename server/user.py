@@ -14,7 +14,7 @@ class User:
         self._fileserver = fileserver
         self._conn = conn
         self._own_chs = {}
-        self._chs = set()
+        self._chs = {}
 
         self._funcs = {}
         self._funcs['set_nick'] = self.set_nick
@@ -24,6 +24,7 @@ class User:
         self._funcs['request_channels'] = self.request_channels
         self._funcs['request_users_in_channel'] = self.request_users_in_channel
         self._funcs['set_avatar'] = self.set_avatar
+        self._funcs['send_file'] = self.send_file
 
     def _send(self, data):
         try:
@@ -61,7 +62,7 @@ class User:
                     self.send_error("invalid operation")
             else:
                 self.send_error("invalid operation")
-        self._server.del_user(self)
+        self.disconnect()
 
     def set_nick(self, nick):
         if nick == self.nick:
@@ -79,16 +80,15 @@ class User:
     def join(self, chname):
         ch = self._server.get_channel(chname, create=True)
         if ch and ch.add_user(self):
+            self._chs[chname] = ch
             self.send_call('success_join', chname)
-            self._chs.add(chname)
         else:
             self.send_error("can't join channel #{}".format(chname))
 
     def leave(self, chname):
-        ch = self._server.get_channel(chname)
-        if ch and ch.remove_user(self):
+        if chname in self._chs:
+            del self._chs[chname]
             self.send_return(123, True)
-            self._chs.remove(chname)
         else:
             self.send_return(123, False)
 
@@ -102,9 +102,17 @@ class User:
         else:
             self.send_error("channel #{} doesn't exist.".format(chname))
 
-    def send_file(self, filename, filesize):
-        token = self._fileserver.request_token(filesize)
-        return token
+    def send_file(self, filename, filesize, md5, target, retid):
+        if target not in self._chs:
+            return
+        token = self._fileserver.request_token(filename, filesize, md5)
+        self.send_call('send_file_accepted', token, retid)
+        fut = self._fileserver.get_future(token)
+        info = (filename, filesize, md5)
+        self._fileserver.add_recv_callback(
+            lambda: ch.broadcast_call('file_uploaded', token, info, fr),
+            token
+        )
 
     def route_msg(self, target_type, target, msg):
         self._server.route_msg(target_type, target, msg, self)
@@ -114,3 +122,8 @@ class User:
             "nick": self.nick, 
             "pic": self.pic,
         }
+
+    def disconnect(self):
+        for ch in self._chs.values():
+            ch.remove_user(self)
+        self._server.del_user(self)
