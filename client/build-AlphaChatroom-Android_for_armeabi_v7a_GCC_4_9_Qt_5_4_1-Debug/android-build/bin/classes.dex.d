@@ -1,0 +1,27 @@
+/home/step5/AlphaChatroom/client/build-AlphaChatroom-Android_for_armeabi_v7a_GCC_4_9_Qt_5_4_1-Debug/android-build/bin/classes.dex : \
+/home/step5/AlphaChatroom/client/build-AlphaChatroom-Android_for_armeabi_v7a_GCC_4_9_Qt_5_4_1-Debug/android-build/bin/classes/org/qtproject/example/AlphaChatroom/BuildConfig.class \
+/home/step5/AlphaChatroom/client/build-AlphaChatroom-Android_for_armeabi_v7a_GCC_4_9_Qt_5_4_1-Debug/android-build/bin/classes/org/qtproject/example/AlphaChatroom/R.class \
+/home/step5/AlphaChatroom/client/build-AlphaChatroom-Android_for_armeabi_v7a_GCC_4_9_Qt_5_4_1-Debug/android-build/bin/classes/org/qtproject/example/AlphaChatroom/R$layout.class \
+/home/step5/AlphaChatroom/client/build-AlphaChatroom-Android_for_armeabi_v7a_GCC_4_9_Qt_5_4_1-Debug/android-build/bin/classes/org/qtproject/example/AlphaChatroom/R$string.class \
+/home/step5/AlphaChatroom/client/build-AlphaChatroom-Android_for_armeabi_v7a_GCC_4_9_Qt_5_4_1-Debug/android-build/bin/classes/org/qtproject/example/AlphaChatroom/R$array.class \
+/home/step5/AlphaChatroom/client/build-AlphaChatroom-Android_for_armeabi_v7a_GCC_4_9_Qt_5_4_1-Debug/android-build/bin/classes/org/qtproject/example/AlphaChatroom/R$attr.class \
+/home/step5/AlphaChatroom/client/build-AlphaChatroom-Android_for_armeabi_v7a_GCC_4_9_Qt_5_4_1-Debug/android-build/bin/classes/org/qtproject/qt5/android/bindings/QtActivity$2.class \
+/home/step5/AlphaChatroom/client/build-AlphaChatroom-Android_for_armeabi_v7a_GCC_4_9_Qt_5_4_1-Debug/android-build/bin/classes/org/qtproject/qt5/android/bindings/QtActivity$3$1$1.class \
+/home/step5/AlphaChatroom/client/build-AlphaChatroom-Android_for_armeabi_v7a_GCC_4_9_Qt_5_4_1-Debug/android-build/bin/classes/org/qtproject/qt5/android/bindings/QtActivity$3.class \
+/home/step5/AlphaChatroom/client/build-AlphaChatroom-Android_for_armeabi_v7a_GCC_4_9_Qt_5_4_1-Debug/android-build/bin/classes/org/qtproject/qt5/android/bindings/QtApplication.class \
+/home/step5/AlphaChatroom/client/build-AlphaChatroom-Android_for_armeabi_v7a_GCC_4_9_Qt_5_4_1-Debug/android-build/bin/classes/org/qtproject/qt5/android/bindings/QtActivity$3$1.class \
+/home/step5/AlphaChatroom/client/build-AlphaChatroom-Android_for_armeabi_v7a_GCC_4_9_Qt_5_4_1-Debug/android-build/bin/classes/org/qtproject/qt5/android/bindings/QtApplication$InvokeResult.class \
+/home/step5/AlphaChatroom/client/build-AlphaChatroom-Android_for_armeabi_v7a_GCC_4_9_Qt_5_4_1-Debug/android-build/bin/classes/org/qtproject/qt5/android/bindings/QtActivity$6.class \
+/home/step5/AlphaChatroom/client/build-AlphaChatroom-Android_for_armeabi_v7a_GCC_4_9_Qt_5_4_1-Debug/android-build/bin/classes/org/qtproject/qt5/android/bindings/QtActivity.class \
+/home/step5/AlphaChatroom/client/build-AlphaChatroom-Android_for_armeabi_v7a_GCC_4_9_Qt_5_4_1-Debug/android-build/bin/classes/org/qtproject/qt5/android/bindings/QtActivity$4.class \
+/home/step5/AlphaChatroom/client/build-AlphaChatroom-Android_for_armeabi_v7a_GCC_4_9_Qt_5_4_1-Debug/android-build/bin/classes/org/qtproject/qt5/android/bindings/QtActivity$1.class \
+/home/step5/AlphaChatroom/client/build-AlphaChatroom-Android_for_armeabi_v7a_GCC_4_9_Qt_5_4_1-Debug/android-build/bin/classes/org/qtproject/qt5/android/bindings/QtActivity$5.class \
+/home/step5/AlphaChatroom/client/build-AlphaChatroom-Android_for_armeabi_v7a_GCC_4_9_Qt_5_4_1-Debug/android-build/bin/classes/org/kde/necessitas/ministro/IMinistroCallback$Stub$Proxy.class \
+/home/step5/AlphaChatroom/client/build-AlphaChatroom-Android_for_armeabi_v7a_GCC_4_9_Qt_5_4_1-Debug/android-build/bin/classes/org/kde/necessitas/ministro/IMinistro$Stub.class \
+/home/step5/AlphaChatroom/client/build-AlphaChatroom-Android_for_armeabi_v7a_GCC_4_9_Qt_5_4_1-Debug/android-build/bin/classes/org/kde/necessitas/ministro/IMinistro.class \
+/home/step5/AlphaChatroom/client/build-AlphaChatroom-Android_for_armeabi_v7a_GCC_4_9_Qt_5_4_1-Debug/android-build/bin/classes/org/kde/necessitas/ministro/IMinistroCallback.class \
+/home/step5/AlphaChatroom/client/build-AlphaChatroom-Android_for_armeabi_v7a_GCC_4_9_Qt_5_4_1-Debug/android-build/bin/classes/org/kde/necessitas/ministro/IMinistroCallback$Stub.class \
+/home/step5/AlphaChatroom/client/build-AlphaChatroom-Android_for_armeabi_v7a_GCC_4_9_Qt_5_4_1-Debug/android-build/bin/classes/org/kde/necessitas/ministro/IMinistro$Stub$Proxy.class \
+/home/step5/AlphaChatroom/client/build-AlphaChatroom-Android_for_armeabi_v7a_GCC_4_9_Qt_5_4_1-Debug/android-build/bin/dexedLibs/QtAndroid-bundled-0d3d9d4c9996fd6c5761753e5f9fc452.jar \
+/home/step5/AlphaChatroom/client/build-AlphaChatroom-Android_for_armeabi_v7a_GCC_4_9_Qt_5_4_1-Debug/android-build/bin/dexedLibs/QtAndroidBearer-bundled-b9744cd73dd557cd46bad16657d29c68.jar \
+/home/step5/AlphaChatroom/client/build-AlphaChatroom-Android_for_armeabi_v7a_GCC_4_9_Qt_5_4_1-Debug/android-build/bin/dexedLibs/QtAndroidAccessibility-bundled-26fecccbe5b0c3a1d61fac162569d0ea.jar \

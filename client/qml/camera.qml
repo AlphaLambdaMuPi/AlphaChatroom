@@ -8,23 +8,14 @@ ApplicationWindow {
     width: 300
     height: 300
     visible: true
-    id: zz
+
     VideoOutput {
-        source: vdo
+        source: media
     }
+
     MediaPlayer {
-        id: vdo
-        source: "/home/meteor/Videos/big_buck_bunny.mp4"
+        id: media
+        source: "rtsp://140.112.18.212:7122/test.mpg"
         autoPlay: true
     }
-
-    VideoProbe {
-        id: pb
-        source: vdo
-        onFramed: {
-            console.log('zzz')
-        }
-        medium: medium
-    }
 }
-
