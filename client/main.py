@@ -20,6 +20,7 @@ from quamash import QEventLoop
 from medium import Medium
 from connect import Connect
 from image import ImageProvider, EmoticonProvider
+from VideoProbe import VideoProbe
 #import resource
 
 import logsetting
@@ -40,6 +41,10 @@ def app_setup():
 
     engine = QQmlApplicationEngine()
     engine.rootContext().setContextProperty('medium', medium)
+
+    qmlRegisterType(VideoProbe, 'VideoProbe', 1, 0, 'VideoProbe')
+    qmlRegisterType(VideoProbe, 'VideoProbe', 1, 0, 'VideoProbe')
+
     imgp = ImageProvider()
     emoticonProvider = EmoticonProvider()
     engine.addImageProvider('avatarImage', imgp)
