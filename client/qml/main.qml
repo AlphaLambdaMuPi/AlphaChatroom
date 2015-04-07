@@ -179,6 +179,7 @@ Rectangle {
         Row {
             width: parent.width
             height: childrenRect.height
+            spacing: 0
             Image {
                 id: picRec
                 //width: childrenRect.width

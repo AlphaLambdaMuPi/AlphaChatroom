@@ -15,6 +15,7 @@ Column {
             leftMargin: 20
             rightMargin: 20
         }
+        spacing: 2
         Rectangle {
             id: _recE
             border {
@@ -86,6 +87,48 @@ Column {
                 }
                 radius: 5
 
+            }
+        }
+        Rectangle {
+            id: _recF
+            border {
+                width: 2
+                color: 'grey'
+            }
+            width: 100
+            height: 36
+            color: '#EEE'
+            radius: 3
+            Image {
+                anchors.centerIn: parent
+                source: '../img/file.png'
+                height: 24
+                width: 24
+            }
+            MouseArea {
+                id: _maF
+                cursorShape: Qt.PointingHandCursor
+                hoverEnabled: true 
+                anchors.fill: parent
+                onClicked: {
+                    fileDialog.visible = true
+                }
+            }
+
+            states: [
+                State {
+                    name: 'mouse-over'
+                    when: _maF.containsMouse
+                    PropertyChanges { target: _recF; color: '#99CCFF'; }
+                }
+            ]
+            FileDialog {
+                id: fileDialog
+                title: 'Choose file to send'
+                //modality: Qt.NonModal
+                onAccepted: {
+                    medium.QsendFile(fileDialog.fileUrl)
+                }
             }
         }
     }

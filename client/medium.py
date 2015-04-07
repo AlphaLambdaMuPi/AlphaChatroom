@@ -3,7 +3,7 @@ import asyncio
 import json
 import re
 
-from PyQt5.QtCore import QObject, pyqtSlot, pyqtSignal
+from PyQt5.QtCore import QObject, pyqtSlot, pyqtSignal, QUrl
 from PyQt5.QtWidgets import *
 from PyQt5.QtQml import *
 from PyQt5.QtQuick import *
@@ -12,7 +12,7 @@ from quamash import QEventLoop
 from settings import *
 import regex
 
-from connect import Connect
+from connect import Connect, FileSendConnect
 
 from logsetting import *
 logger = logging.getLogger('root')
@@ -25,9 +25,11 @@ class Medium(QObject):
     def __init__(self):
         super().__init__()
         self.connect = Connect(self)
+        self.file_connect = Connect(self)
         self.state = 0
         self.channels = []
         self.name = ''
+        self._f = ''
         pass
 
 
@@ -152,6 +154,9 @@ class Medium(QObject):
         logger.debug('Get user <%s> join channel [%s].', x['nick'], ch)
         self.root.receiveUserJoin(ch, {'name': x['nick']})
 
+    def Ssend_file_accepted(self, token, retid):
+        fsc = FileSendConnect(self._f, token)
+        fsc.start()
 
     @pyqtSlot(str)
     def Qlogin(self, nick):
@@ -180,6 +185,20 @@ class Medium(QObject):
     def Qavatar(self, url):
         self.engine.imageProvider('avatarImage').pushImage(_id='__self__', url=url)
         self.avatarChanged.emit()
+
+    @pyqtSlot(str)
+    def QsendFile(self, url):
+        qurl = QUrl(url)
+        self._f = qurl.toLocalFile()
+        self.connect.put_call(
+            'send_file',
+            qurl.fileName(),
+            123,
+            '12345MD512345',
+            'Lobby',
+            '1234567'
+        )
+        #self.avatarChanged.emit()
 
     @pyqtSlot(str)
     def QgetUsers(self, ch):
