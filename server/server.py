@@ -18,7 +18,6 @@ class ChatServer:
         self._channels = {}
         self._users = {}
         self._name = "SYSTEM"
-        self._hellostr = "Hi {}, this is your current nickname."
 
     @asyncio.coroutine
     def __call__(self, sr, sw):
@@ -35,10 +34,6 @@ class ChatServer:
             nick = self.gen_nick(data['nick'])
         self._users[nick] = User(self, file_server, nick, conn)
         self._users[nick].send_call('init_conn', self._name, nick)
-        self._users[nick].send_msg(
-            self._hellostr.format(nick),
-            self._name
-        )
         yield from self._users[nick].run()
 
     def del_user(self, user):

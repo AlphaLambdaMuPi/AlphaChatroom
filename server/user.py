@@ -62,7 +62,7 @@ class User:
                     self.send_error("invalid operation")
             else:
                 self.send_error("invalid operation")
-        self.disconnect()
+        yield from self.disconnect()
 
     def set_nick(self, nick):
         if nick == self.nick:
@@ -107,10 +107,12 @@ class User:
             return
         token = self._fileserver.request_token(filename, filesize, md5)
         self.send_call('send_file_accepted', token, retid)
-        fut = self._fileserver.get_future(token)
         info = (filename, filesize, md5)
         self._fileserver.add_recv_callback(
-            lambda: ch.broadcast_call('file_uploaded', token, info, fr),
+            lambda: self._chs[target].broadcast_call(
+                'file_uploaded',
+                token, info, self.nick, target
+            ),
             token
         )
 
@@ -123,7 +125,10 @@ class User:
             "pic": self.pic,
         }
 
+    @asyncio.coroutine
     def disconnect(self):
+        yield from self._conn.close()
         for ch in self._chs.values():
             ch.remove_user(self)
         self._server.del_user(self)
+

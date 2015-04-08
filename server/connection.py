@@ -58,14 +58,23 @@ class StreamConnection:
             self._sw.write(data)
         except OSError:
             raise ConnectionError("can't send data.")
+        except Exception:
+            logger.debug("Q___Q")
 
     def alive(self):
         return not self._sr.at_eof()
+
+    @asyncio.coroutine
+    def drain():
+        yield from self._sw.drain()
     
     @asyncio.coroutine
     def close(self):
-        yield from self._sw.drain()
+        if self.alive():
+            yield from self._sw.drain()
+            self._sw.write_eof()
         self._sr.feed_eof()
+        yield from asyncio.sleep(0)
         self._sw.close()
         self._worker.cancel()
 

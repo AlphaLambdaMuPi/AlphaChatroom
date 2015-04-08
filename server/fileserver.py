@@ -2,6 +2,7 @@
 
 import asyncio
 import logging
+import binascii
 import base64
 import uuid
 import json
@@ -20,6 +21,7 @@ class FileServer:
         self._filemap = {}
         self._connmap = {}
         self._filefutures = {}
+        self._recv_cbs = {}
         self._loop = loop
         if not self._loop:
             self._loop = asyncio.get_event_loop()
@@ -37,6 +39,7 @@ class FileServer:
         else:
             if op == "PUT":
                 result = yield from self.recv_file(conn, token)
+                self._filefutures[token].set_result(result)
             elif op == "GET":
                 result = yield from self.send_file(conn, token)
     
@@ -60,21 +63,25 @@ class FileServer:
     def send_file(self, conn, token):
         if token not in self._filemap:
             return False
+        logger.debug("open the file...")
         try:
             tmpfile = open(os.path.join(self._tmpdir, token), 'rb')
         except OSError:
             logger.debug("file {} doens't exist".format(token))
             return False
+        logger.debug("start send file...")
         while conn.alive():
-            data = tmpfile.read(BLOCK_SIZE)
+            data = tmpfile.read(FileServer.BLOCK_SIZE)
             if data:
-                data = base64.b64decode(data)
+                data = base64.b64encode(data)
                 conn.send(data)
+                # yield from conn.drain()
                 yield from asyncio.sleep(0)
             else:
                 break
         tmpfile.close()
-        conn.close()
+        yield from conn.close()
+        logger.debug("send file done.")
 
     @asyncio.coroutine
     def recv_file(self, conn, token):
@@ -86,12 +93,17 @@ class FileServer:
         while conn.alive():
             data = yield from conn.recv()
             if data:
-                data = base64.b64decode(data)
-                tmpfile.write(data)
-                m.update(data)
+                try:
+                    data = base64.b64decode(data)
+                    tmpfile.write(data)
+                    m.update(data)
+                except binascii.Error:
+                    logger.debug("get incorrect padding b64data")
+
         md5 = m.hexdigest()
         tmpfile.close()
         logger.debug("recv_file done.")
+        yield from conn.close()
         return True # debugging
 
         if hmac.compare_digest(md5, self._filemap[token][2]):
@@ -115,6 +127,17 @@ class FileServer:
         m.update(uuid.uuid4().bytes)
         token = m.hexdigest()
         self._filemap[token] = (filename, filesize, md5)
+        self._filefutures[token] = asyncio.Future()
+        self._recv_cbs[token] = []
+        @asyncio.coroutine
+        def task():
+            yield from asyncio.wait_for(self._filefutures[token], None)
+            if self._filefutures[token].result():
+                for cb in self._recv_cbs[token]:
+                    cb()
+            del self._filefutures[token]
+            del self._recv_cbs[token]
+        self._loop.create_task(task())
         return token
 
     def get_file_info(self, token):
@@ -124,8 +147,8 @@ class FileServer:
             return None
 
     def add_recv_callback(self, cb, token):
-        pass
-        # if token in self._filemap
+        if token in self._recv_cbs:
+            self._recv_cbs[token].append(cb)
 
     @asyncio.coroutine
     def stop(self):
