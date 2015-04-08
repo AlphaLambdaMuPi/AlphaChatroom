@@ -15,7 +15,7 @@ ApplicationWindow {
 
     MediaPlayer {
         id: media
-        source: "rtsp://140.112.18.212:7122/test.mpg"
+        source: "rtsp://140.112.18.212:7122/test.sdp"
         autoPlay: true
     }
 }
