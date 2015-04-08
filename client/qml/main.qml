@@ -76,8 +76,9 @@ Rectangle {
                                         height: childrenRect.height
                                         property var modelData: model
                                         sourceComponent: {
-                                            if( model.type == 'text' ) return chatTextDelegate;
-                                            else if( model.type == 'file' ) return chatFileDelegate;
+                                            print(model.type)
+                                            if( type == 'text' ) return chatTextDelegate;
+                                            else if( type == 'file' ) return chatFileDelegate;
                                         }
                                     }
                                 } 
@@ -196,7 +197,10 @@ Rectangle {
     Component {
         id: chatTextDelegate
         Row {
-            property var datas: parent.modelData
+            property var datas: parent.modelData.data
+            Component.onCompleted: {
+                print(datas.mesg)
+            }
             width: parent.width
             height: childrenRect.height
             spacing: 0
@@ -283,7 +287,7 @@ Rectangle {
     Component {
         id: chatFileDelegate
         Row {
-            property var datas: parent.modelData
+            property var datas: parent.modelData.data
             width: parent.width
             height: childrenRect.height
             spacing: 0

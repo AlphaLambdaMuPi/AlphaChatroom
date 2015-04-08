@@ -103,8 +103,10 @@ class Medium(QObject):
             logger.info("Get call:" + str(data))
             self.root.receive_msg({
                 'type': 'text',
-                'sender': data['params'][1],
-                'mesg': data['params'][0]
+                'data': {
+                    'sender': data['params'][1],
+                    'mesg': data['params'][0]
+                }
             })
 
     def receive(self, data):
@@ -140,9 +142,11 @@ class Medium(QObject):
         msg = regex.do_sub(msg)
         self.root.receive_msg(channel, {
             'type': 'text',
-            'sender': fr,
-            'mesg': msg,
-            'timeStr': datetime.now().strftime('%H:%M')
+            'data': {
+                'sender': fr,
+                'mesg': msg,
+                'timeStr': datetime.now().strftime('%H:%M')
+            }
         })
 
     def Ssuccess_join(self, channel):
@@ -170,10 +174,12 @@ class Medium(QObject):
     def Sfile_uploaded(self, token, info, user, ch):
         self.root.receive_msg(ch, {
             'type': 'file',
-            'sender': user,
-            'file_name': info[0],
-            'file_size': info[1],
-            'token': token
+            'data': {
+                'sender': user,
+                'file_name': info[0],
+                'file_size': info[1],
+                'token': token
+            }
         })
 
     @pyqtSlot(str)
@@ -194,8 +200,10 @@ class Medium(QObject):
             self.send_msg('USER', ch[5:], s)
             self.root.receive_msg('User:' + ch[5:], {
                 'type': 'text',
-                'sender': self.name,
-                'mesg': s,
+                'data': {
+                    'sender': self.name,
+                    'mesg': s,
+                }
             })
         else: self.send_msg('CHANNEL', ch, s)
 
