@@ -40,6 +40,7 @@ ApplicationWindow {
     property string activeChannel: ''
     property variant chatModels: new Object()
     property variant chatUsersModels: new Object()
+    property variant tokenToProgress: new Object()
 
     function receive_msg(ch, s) {
 
@@ -141,5 +142,9 @@ ApplicationWindow {
                                            mainView.chatScroll.height, 0)
         //mainView.chatScroll.animation.to = 10
         mainView.chatScroll.animation.start()
+    }
+
+    function refreshProgress(token, l) {
+        tokenToProgress[token].addByte(l)
     }
 }

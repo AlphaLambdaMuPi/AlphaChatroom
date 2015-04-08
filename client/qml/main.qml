@@ -322,13 +322,14 @@ Rectangle {
                     }
                     Text {
                         id: _tx
-                        text: datas.file_name
+                        text: datas.file_name + ' (' + datas.file_size + ')'
                         anchors {
                             horizontalCenter: parent.horizontalCenter
                             top: _img.bottom
                         }
                     }
                     Rectangle {
+                        id: _o
                         width: 24
                         height: 24
                         radius: 24
@@ -352,11 +353,13 @@ Rectangle {
                             cursorShape: Qt.PointingHandCursor
                             onClicked: {
                                 medium.QstartGetFile(datas.file_name, datas.token);
+                                rec.state = 'progressing'
                             }
                         }
                     }
 
                     Rectangle {
+                        id: _x
                         width: 24
                         height: 24
                         radius: 24
@@ -376,6 +379,45 @@ Rectangle {
                             anchors.centerIn: parent
                         }
                     }
+
+                    ProgressBar {
+                        id: _pb
+                        value: 0
+                        anchors {
+                            top: _tx.bottom
+                            topMargin: 10
+                            horizontalCenter: parent.horizontalCenter
+                        }
+                        visible: false
+                        Component.onCompleted: {
+                            tokenToProgress[datas.token] = _pb
+                        }
+                        function addByte(l) {
+                            value += l/datas.file_size;
+                        }
+                        Text {
+                            anchors.centerIn: parent
+                            text: Math.round(parent.value * 100) + '%'
+                        }
+                    }
+
+                    states: [
+                        State {
+                            name: 'progressing'
+                            PropertyChanges {
+                                target: _pb
+                                visible: true
+                            }
+                            PropertyChanges {
+                                target: _o
+                                visible: false
+                            }
+                            PropertyChanges {
+                                target: _x
+                                visible: false
+                            }
+                        }
+                    ]
                 }
             }
 

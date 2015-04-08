@@ -118,7 +118,6 @@ class Connect:
 
         with open(url, 'rb') as f:
             while True:
-                logger.debug('Send file loop!')
                 data = f.read(16384)
                 if not data: break
                 b64data = b64encode(data)
@@ -145,11 +144,11 @@ class Connect:
         with open(url, 'wb') as f:
             print(url)
             while True:
-                logger.debug('Get file loop!')
                 data = yield from reader.readline()
                 if not data: break
-                print(data)
-                f.write(b64decode(data))
+                raw_data = b64decode(data)
+                f.write(raw_data)
+                self.medium.refreshProgress(token, len(raw_data))
 
         logger.debug('Done!')
         #writer.write_eof()

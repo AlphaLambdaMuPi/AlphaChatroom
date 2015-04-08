@@ -172,6 +172,7 @@ class Medium(QObject):
             'type': 'file',
             'sender': user,
             'file_name': info[0],
+            'file_size': info[1],
             'token': token
         })
 
@@ -225,6 +226,9 @@ class Medium(QObject):
             rnd_str
         )
         #self.avatarChanged.emit()
+
+    def refreshProgress(self, token, l):
+        self.root.refreshProgress(token, l)
 
     @pyqtSlot(str)
     def QgetUsers(self, ch):
