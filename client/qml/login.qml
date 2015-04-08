@@ -124,7 +124,15 @@ Rectangle {
                         }
                     }
                     onClicked: {
-                        medium.Qlogin(nickTf.text)
+                        flag = medium.Qlogin(nickTf.text)
+                        if(!flag) {
+                        }
+                    }
+
+                    Dialog {
+                        Text {
+                            text: 'Username invalid'
+                        }
                     }
                 }
             }

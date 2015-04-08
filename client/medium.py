@@ -184,6 +184,7 @@ class Medium(QObject):
 
     @pyqtSlot(str)
     def Qlogin(self, nick):
+        #if len(nick) > 30 or len(nic) <= 0 or 
         self._login(nick)
         self.root.onLoggedIn()
         self.set_avatar()
