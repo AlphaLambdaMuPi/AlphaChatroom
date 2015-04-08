@@ -167,6 +167,13 @@ class Medium(QObject):
         #fsc.start()
         self.connect.put_file('SEND', self._file_map[retid], token)
 
+    def Sfile_uploaded(self, token, info, user, ch):
+        self.root.receive_msg(ch, {
+            'type': 'file',
+            'sender': user,
+            'file_name': info[0],
+        })
+
     @pyqtSlot(str)
     def Qlogin(self, nick):
         self._login(nick)
@@ -204,6 +211,7 @@ class Medium(QObject):
         file_url = QUrl(url).toLocalFile()
         if not os.path.isfile(file_url):
             logger.warning('file %s isn\'t a regular file', file_url)
+            return
 
         rnd_str = self.random_string()
         self._file_map[rnd_str] = file_url
@@ -225,5 +233,11 @@ class Medium(QObject):
     @pyqtSlot(str)
     def QleaveChannel(self, ch):
         self.connect.put_call('leave', ch)
+
+    @pyqtSlot(str)
+    def Qstart_get_file(self, file_name, token):
+        fn = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'download')
+        logger.debug('Start get file, %s, %s', fn, token)
+        self.connect.put_file('GET', ch, fn, token)
         
 

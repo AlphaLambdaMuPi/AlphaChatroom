@@ -100,6 +100,10 @@ class Connect:
                 fut = asyncio.Future()
                 self.loop.create_task(self.start_tcp_connection(fut, 9008))
                 self.loop.create_task(self.send_file_loop(fut, url, token))
+            elif typ == 'GET':
+                fut = asyncio.Future()
+                self.loop.create_task(self.start_tcp_connection(fut, 9008))
+                self.loop.create_task(self.receive_file_loop(fut, url, token))
 
     @asyncio.coroutine
     def send_file_loop(self, fut, url, token):
@@ -123,6 +127,27 @@ class Connect:
                         b64data + b'\n'
                     )
                 yield from asyncio.sleep(0)
+
+        logger.debug('Done!')
+        writer.write_eof()
+
+    @asyncio.coroutine
+    def receive_file_loop(self, fut, url, token):
+        reader, writer = yield from asyncio.wait_for(fut, 20)
+        logger.info(reader)
+
+        writer.write( json.dumps({
+            'op': 'GET',
+            'token': token,
+        }).encode() + b'\n' )
+        logger.debug('Wrote first line, start get file %s...', url)
+
+        with open(url, 'wb') as f:
+            while True:
+                logger.debug('Get file loop!')
+                data = yield from reader.readline()
+                if not data: break
+                f.write(b64decode(data))
 
         logger.debug('Done!')
         writer.write_eof()

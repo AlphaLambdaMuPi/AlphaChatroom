@@ -70,7 +70,16 @@ Rectangle {
                                     model: ListModel {
                                         id: chatMod
                                     }
-                                    delegate: chatDelegate
+                                    delegate: Loader {
+                                        id: _loader
+                                        width: childrenRect.width
+                                        height: childrenRect.height
+                                        property var modelData: model
+                                        sourceComponent: {
+                                            if( model.type == 'text' ) return chatTextDelegate;
+                                            else if( model.type == 'file' ) return chatFileDelegate;
+                                        }
+                                    }
                                 } 
                                 Item {
                                     id: bugFixRect
@@ -158,6 +167,15 @@ Rectangle {
                                     id: userMod
                                 }
                                 delegate: UserDelegate{}
+                                //delegate: Loader {
+                                    //id: _loader
+                                    //width: 100
+                                    //height: 100
+                                    //property var modelData: model
+                                    //sourceComponent: {
+                                        //if( model.type == 'text' ) return chatTextDelegate;
+                                    //}
+                                //}
                             }
                         }
                     }
@@ -174,21 +192,17 @@ Rectangle {
         }
     }
 
+
     Component {
-        id: chatDelegate
+        id: chatTextDelegate
         Row {
+            property var datas: parent.modelData
             width: parent.width
             height: childrenRect.height
             spacing: 0
             Image {
                 id: picRec
-                //width: childrenRect.width
-                //height: childrenRect.height
-                //Image {
-                //width: 60
-                //height: 60
-                //}
-                source: 'Image://avatarImage/' + sender
+                source: 'Image://avatarImage/' + datas.sender
                 width: 60
                 height: 60
             }
@@ -222,7 +236,7 @@ Rectangle {
                             leftMargin: rec.tmargin
                         }
                         id: mesgText
-                        text: mesg
+                        text: datas.mesg
                         wrapMode: Text.Wrap
                         width: Math.min(parent.parent.parent.parent.width - rec.tmargin * 2 - picRec.width, implicitWidth)
                         textFormat: Text.RichText
@@ -258,12 +272,112 @@ Rectangle {
                             rightMargin: 7
                             bottomMargin: 0
                         }
-                        text: sender + ' @' + timeStr
+                        text: datas.sender + ' @' + datas.timeStr
                         color: '#444'
                     }
                 }
             }
         }
     }
+
+    Component {
+        id: chatFileDelegate
+        Row {
+            property var datas: parent.modelData
+            width: parent.width
+            height: childrenRect.height
+            spacing: 0
+            Image {
+                id: picRec
+                source: 'Image://avatarImage/' + datas.sender
+                width: 60
+                height: 60
+            }
+
+            Item {
+                height: childrenRect.height
+                width: childrenRect.width
+                RectangularGlow {
+                    anchors.fill: rec
+                    anchors.topMargin: 4
+                    anchors.leftMargin: 4
+                    glowRadius: 5
+                    spread: 0.2
+                    color: "#80000000"
+                }
+                Rectangle {
+                    id: rec
+                    width: 120
+                    height: childrenRect.height + 30
+                    Image {
+                        id: _img
+                        source: '../img/file_cute.png'
+                        width: 80
+                        height: 80
+                        anchors {
+                            horizontalCenter: parent.horizontalCenter
+                            top: parent.top
+                            topMargin: 20
+                        }
+                    }
+                    Text {
+                        id: _tx
+                        text: datas.file_name
+                        anchors {
+                            horizontalCenter: parent.horizontalCenter
+                            top: _img.bottom
+                        }
+                    }
+                    Rectangle {
+                        width: 24
+                        height: 24
+                        radius: 24
+                        color: 'green'
+                        anchors {
+                            top: _tx.bottom
+                            topMargin: 10
+                            left: parent.left
+                            leftMargin: 20
+                            //bottom: parent.bottom
+                            //bottomMargin: 10
+                        }
+                        Image {
+                            source: '../img/check.png'
+                            width: 20
+                            height: 20
+                            anchors.centerIn: parent
+                        }
+                        MouseArea {
+                            anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
+                        }
+                    }
+
+                    Rectangle {
+                        width: 24
+                        height: 24
+                        radius: 24
+                        color: 'red'
+                        anchors {
+                            top: _tx.bottom
+                            topMargin: 10
+                            right: parent.right
+                            rightMargin: 20
+                            //bottom: parent.bottom
+                            //bottomMargin: 10
+                        }
+                        Image {
+                            source: '../img/delete.png'
+                            width: 20
+                            height: 20
+                            anchors.centerIn: parent
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+
 
 }
