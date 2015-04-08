@@ -143,14 +143,16 @@ class Connect:
         logger.debug('Wrote first line, start get file %s...', url)
 
         with open(url, 'wb') as f:
+            print(url)
             while True:
                 logger.debug('Get file loop!')
                 data = yield from reader.readline()
                 if not data: break
+                print(data)
                 f.write(b64decode(data))
 
         logger.debug('Done!')
-        writer.write_eof()
+        #writer.write_eof()
 
             
 

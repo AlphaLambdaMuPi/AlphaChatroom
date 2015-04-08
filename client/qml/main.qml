@@ -307,7 +307,7 @@ Rectangle {
                 }
                 Rectangle {
                     id: rec
-                    width: 120
+                    width: childrenRect.width + 30
                     height: childrenRect.height + 30
                     Image {
                         id: _img
@@ -350,6 +350,9 @@ Rectangle {
                         MouseArea {
                             anchors.fill: parent
                             cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                medium.QstartGetFile(datas.file_name, datas.token);
+                            }
                         }
                     }
 

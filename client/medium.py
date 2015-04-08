@@ -172,6 +172,7 @@ class Medium(QObject):
             'type': 'file',
             'sender': user,
             'file_name': info[0],
+            'token': token
         })
 
     @pyqtSlot(str)
@@ -234,10 +235,11 @@ class Medium(QObject):
     def QleaveChannel(self, ch):
         self.connect.put_call('leave', ch)
 
-    @pyqtSlot(str)
-    def Qstart_get_file(self, file_name, token):
+    @pyqtSlot(str, str)
+    def QstartGetFile(self, file_name, token):
         fn = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'download')
+        fn = os.path.join(fn, file_name)
         logger.debug('Start get file, %s, %s', fn, token)
-        self.connect.put_file('GET', ch, fn, token)
+        self.connect.put_file('GET', fn, token)
         
 
