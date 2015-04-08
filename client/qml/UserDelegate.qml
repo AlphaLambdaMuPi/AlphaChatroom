@@ -8,6 +8,8 @@ import QtQuick.Dialogs 1.2
 Rectangle {
     width: parent.width
     height: 50
+    color: 'white'
+    id: _rec
     Image {
         id: __avatar
         anchors {
@@ -19,7 +21,7 @@ Rectangle {
         width: 40
         height: 40
     }
-    Rectangle {
+    Item {
         anchors {
             top: parent.top
             bottom: parent.bottom
@@ -31,10 +33,23 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             text: name
         }
+
+        states: [
+            State {
+                name: 'hover'
+                when: _ma.containsMouse
+                PropertyChanges {
+                    target: _rec
+                    color: '#99CCFF'
+                }
+            }
+        ]
     }
     MouseArea {
+        id: _ma
         anchors.fill: parent
         hoverEnabled: true
+        cursorShape: Qt.PointingHandCursor
 
         onClicked: {
             channelAddActive('User:' + name)

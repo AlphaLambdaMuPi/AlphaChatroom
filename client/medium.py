@@ -2,12 +2,17 @@ import logging
 import asyncio
 import json
 import re
+import os
+import random
+import string
 
 from PyQt5.QtCore import QObject, pyqtSlot, pyqtSignal, QUrl
 from PyQt5.QtWidgets import *
 from PyQt5.QtQml import *
 from PyQt5.QtQuick import *
 from quamash import QEventLoop
+
+from datetime import datetime
 
 from settings import *
 import regex
@@ -29,7 +34,7 @@ class Medium(QObject):
         self.state = 0
         self.channels = []
         self.name = ''
-        self._f = ''
+        self._file_map = {}
         pass
 
 
@@ -137,6 +142,7 @@ class Medium(QObject):
             'type': 'text',
             'sender': fr,
             'mesg': msg,
+            'timeStr': datetime.now().strftime('%H:%M')
         })
 
     def Ssuccess_join(self, channel):
@@ -155,8 +161,11 @@ class Medium(QObject):
         self.root.receiveUserJoin(ch, {'name': x['nick']})
 
     def Ssend_file_accepted(self, token, retid):
-        fsc = FileSendConnect(self._f, token)
-        fsc.start()
+        print(self._file_map)
+        logger.debug('retid = %s, file_url = %s', retid, self._file_map[retid])
+        #fsc = FileSendConnect(self._file_map[retid], token)
+        #fsc.start()
+        self.connect.put_file('SEND', self._file_map[retid], token)
 
     @pyqtSlot(str)
     def Qlogin(self, nick):
@@ -181,22 +190,30 @@ class Medium(QObject):
             })
         else: self.send_msg('CHANNEL', ch, s)
 
+    def random_string(self, length = 20):
+        return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(length))
+
+
     @pyqtSlot(str)
     def Qavatar(self, url):
         self.engine.imageProvider('avatarImage').pushImage(_id='__self__', url=url)
         self.avatarChanged.emit()
 
-    @pyqtSlot(str)
-    def QsendFile(self, url):
-        qurl = QUrl(url)
-        self._f = qurl.toLocalFile()
+    @pyqtSlot(str, str)
+    def QsendFile(self, url, ch):
+        file_url = QUrl(url).toLocalFile()
+        if not os.path.isfile(file_url):
+            logger.warning('file %s isn\'t a regular file', file_url)
+
+        rnd_str = self.random_string()
+        self._file_map[rnd_str] = file_url
         self.connect.put_call(
             'send_file',
-            qurl.fileName(),
-            123,
+            os.path.basename(file_url),
+            os.path.getsize(file_url),
             '12345MD512345',
-            'Lobby',
-            '1234567'
+            ch,
+            rnd_str
         )
         #self.avatarChanged.emit()
 

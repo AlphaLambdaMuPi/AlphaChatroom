@@ -127,7 +127,7 @@ Column {
                 title: 'Choose file to send'
                 //modality: Qt.NonModal
                 onAccepted: {
-                    medium.QsendFile(fileDialog.fileUrl)
+                    medium.QsendFile(fileDialog.fileUrl, activeChannel)
                 }
             }
         }

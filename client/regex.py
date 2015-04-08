@@ -7,6 +7,7 @@ class Regex:
         self.init_latex_regex()
         self.init_url_regex()
         #self.init_youtube_regex()
+        self.init_linebreak_regix()
 
     def init_forbidden_char(self):
         self.forbid = {
@@ -47,6 +48,12 @@ class Regex:
             r'<a href="\1">\1</a>',
         )
 
+    def init_linebreak_regix(self):
+        self.linebreakregex = (
+            re.compile(r'\n'),
+            r'<br>',
+        )
+
 
     def sub(self, s):
         for reg in self.emoregexs:
@@ -54,6 +61,7 @@ class Regex:
 
         s = self.urlregex[0].sub(self.urlregex[1], s)
         s = self.latexregex[0].sub(self.latexregex[1], s)
+        s = self.linebreakregex[0].sub(self.linebreakregex[1], s)
 
         return s
 

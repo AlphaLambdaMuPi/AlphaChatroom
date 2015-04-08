@@ -213,10 +213,13 @@ Rectangle {
                     width: Math.max(mesgText.paintedWidth, senderText.paintedWidth) + tmargin * 2
                     Text {
                         anchors {
-                            horizontalCenter: parent.horizontalCenter
+                            //horizontalCenter: parent.horizontalCenter
+                            //verticalCenter: parent.verticalCenter
                             top: parent.top
                             topMargin: rec.tmargin
                             bottomMargin: rec.tmargin
+                            left: rec.left
+                            leftMargin: rec.tmargin
                         }
                         id: mesgText
                         text: mesg
@@ -255,7 +258,7 @@ Rectangle {
                             rightMargin: 7
                             bottomMargin: 0
                         }
-                        text: sender
+                        text: sender + ' @' + timeStr
                         color: '#444'
                     }
                 }
