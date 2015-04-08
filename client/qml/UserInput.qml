@@ -151,7 +151,7 @@ Column {
                     ta.send()
                     event.accepted = true
                 } else {
-                    ta.append('')
+                    ta.insert(ta.cursorPosition, '\n')
                 }
             }
             function send() {
