@@ -19,13 +19,20 @@ ApplicationWindow {
         autoPlay: true
       
     }
+
+    Audio {
+        id: music
+        source: "rtp://asdjfklasdfj"
+    }
     Timer {
         running: true
         repeat: true
         interval: 1000
         onTriggered: {
-            console.log(media.hasAudio)
-            console.log(media.hasVideo)
+            console.log('Media has audio: ', media.hasAudio)
+            console.log('Media has video: ', media.hasVideo)
+            console.log('Audio has audio: ', music.hasAudio)
+            console.log('Audio has video: ', music.hasVideo)
         }
     }
 }
