@@ -181,6 +181,34 @@ Rectangle {
                                         //if( model.type == 'text' ) return chatTextDelegate;
                                     //}
                                 //}
+                                add: Transition {
+                                    id: _t
+                                    ParallelAnimation {
+                                        NumberAnimation {
+                                            properties: 'y'
+                                            from: _t.ViewTransition.destination.y + 100
+                                            easing.type: Easing.OutBounce
+                                            duration: 500
+                                        }
+                                        NumberAnimation {
+                                            properties: 'scale'
+                                            from: 0.0
+                                            to: 1.0
+                                            easing.type: Easing.OutBounce
+                                            duration: 500
+                                        }
+                                    }
+                                }
+                                displaced: Transition {
+                                    id: _t2
+                                    SequentialAnimation {
+                                        NumberAnimation {
+                                            properties: 'y'
+                                            easing.type: Easing.OutBounce
+                                            duration: 500
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -251,7 +279,9 @@ Rectangle {
                         Component.onCompleted: {
                             //console.log(implicitWidth, parent.parent.parent.parent.parent.width - rec.tmargin*2 - picRec.width, width)
                         }
-                        onLinkActivated: Qt.openUrlExternally(link)
+                        onLinkActivated: {
+                            Qt.openUrlExternally(link)
+                        }
                     }
 
                     Rectangle {
@@ -552,6 +582,7 @@ Rectangle {
                             title: datas.sender + "'s broadcast"
                             width: 600
                             height: 600
+                            modality: Qt.NonModal
 
                             VideoOutput {
                                 width: 600

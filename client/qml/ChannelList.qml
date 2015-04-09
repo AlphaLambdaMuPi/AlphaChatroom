@@ -25,15 +25,88 @@ Item {
 
         add: Transition {
             id: _t
+            ParallelAnimation {
+                NumberAnimation {
+                    properties: 'y'
+                    from: _t.ViewTransition.destination.y + 100
+                    easing.type: Easing.OutBounce
+                    duration: 500
+                }
+                NumberAnimation {
+                    properties: 'scale'
+                    from: 0.0
+                    to: 1.0
+                    easing.type: Easing.OutBounce
+                    duration: 500
+                }
+            }
+        }
+        displaced: Transition {
+            id: _t2
+            SequentialAnimation {
+                NumberAnimation {
+                    properties: 'y'
+                    easing.type: Easing.OutBounce
+                    duration: 500
+                }
+            }
+        }
+        remove: Transition {
+            id: _t3
+            ScriptAction { 
+                script: {
+                    console.log('123')
+                }
+            }
             NumberAnimation {
-                properties: 'y'
-                from: _t.ViewTransition.destination.y + 100
+                properties: 'x'
+                from: 500
+                to: 1000
                 easing.type: Easing.OutBounce
                 duration: 500
+            }
+            ScriptAction { 
+                script: {
+                    console.log(_t.ViewTransition.targetItems[0].x)
+                }
             }
         }
 
         delegate: Item {
+            //ListView.delayRemove: true
+            id: _ii
+            ListView.onRemove: SequentialAnimation {
+                // enable delayed removal
+                PropertyAction {
+                    target: _ii
+                    property: "ListView.delayRemove"
+                    value: true
+                }
+                ParallelAnimation {
+                    NumberAnimation {
+                        target : _ii
+                        property : "opacity"
+                        from : 1.0
+                        to   : 0
+                        duration: 500
+                        easing.type: Easing.InQuad
+                    }
+                    NumberAnimation {
+                        target : _ii
+                        property : "x"
+                        from : _ii.x
+                        to   : _ii.x - 200
+                        duration: 500
+                        easing.type: Easing.InExpo
+                    }
+                }
+                // disable delayed removal
+                PropertyAction {
+                    target: _ii
+                    property: "ListView.delayRemove"
+                    value: false
+                }
+            }
             width: parent.width
             height: childrenRect.height
             property int newMessageNum: 0

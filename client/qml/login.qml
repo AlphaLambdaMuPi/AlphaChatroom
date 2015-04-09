@@ -19,7 +19,6 @@ Rectangle {
 
             Text {
                 anchors.centerIn: parent
-                text: 'Welcome to Alllpha chatroom'
                 color: 'white'
                 font {
                     pointSize: 12
@@ -126,13 +125,13 @@ Rectangle {
                     onClicked: {
                         var flag = medium.Qlogin(nickTf.text)
                         if(!flag) {
+                            dddaren.open()
                         }
                     }
 
-                    Dialog {
-                        Text {
-                            text: 'Username invalid'
-                        }
+                    MessageDialog {
+                        id: dddaren
+                        text: "Username invalid!!!"
                     }
                 }
             }

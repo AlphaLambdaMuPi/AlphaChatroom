@@ -59,6 +59,7 @@ class Medium(QObject):
         self.state = 1
 
     def _login(self, nick):
+        
         self.name = nick
         try:
             self.connect.putq( {'nick': nick} )
@@ -134,6 +135,9 @@ class Medium(QObject):
     def hello(self):
         self.connect_server()
 
+    def time_string(self):
+        return datetime.now().strftime('%H:%M')
+
     def set_avatar(self):
         self.connect.put_call('set_avatar', 
                 self.engine.imageProvider('avatarImage').base64('__self__')
@@ -149,7 +153,7 @@ class Medium(QObject):
             'data': {
                 'sender': fr,
                 'mesg': msg,
-                'timeStr': datetime.now().strftime('%H:%M')
+                'timeStr': self.time_string()
             }
         })
 
@@ -210,10 +214,12 @@ class Medium(QObject):
 
     @pyqtSlot(str)
     def Qlogin(self, nick):
-        #if len(nick) > 30 or len(nic) <= 0 or 
+        if len(nick) > 30: return False
+        if not re.match('[\w-]+', nick): return False
         self._login(nick)
         self.root.onLoggedIn()
         self.set_avatar()
+        return True
 
     @pyqtSlot(str)
     def Qjoin(self, channel):
@@ -230,6 +236,7 @@ class Medium(QObject):
                 'data': {
                     'sender': self.name,
                     'mesg': s,
+                    'timeStr': self.time_string(),
                 }
             })
         else: self.send_msg('CHANNEL', ch, s)

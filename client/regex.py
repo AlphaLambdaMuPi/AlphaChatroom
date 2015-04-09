@@ -43,9 +43,14 @@ class Regex:
     #def 
 
     def init_url_regex(self):
+        def _z(s):
+            url = s.group(0)
+            if not not re.match('^.*\.(jpg|png|jpeg|gif)$', url):
+                return '<img src="{}" width="300" />'.format(url) 
+            return '<a href="{0}">{0}</a>'.format(url)
         self.urlregex = (
             re.compile('(http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+)'),
-            r'<a href="\1">\1</a>',
+            _z,
         )
 
     def init_linebreak_regix(self):
