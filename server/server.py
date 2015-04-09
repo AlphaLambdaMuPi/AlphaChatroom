@@ -2,6 +2,9 @@
 
 import asyncio
 import logging
+import uuid
+import hashlib
+import hmac
 
 from fileserver import file_server
 from connection import JsonConnection
@@ -18,6 +21,13 @@ class ChatServer:
         self._channels = {}
         self._users = {}
         self._name = "SYSTEM"
+
+        self._rtsppath = "rtsp://{}:{}/".format('140.112.18.210', 7122)
+        self._feedpath = "http://{}:{}/".format('140.112.18.210', 8090)
+        self._feedext = '.ffm'
+        self._rtspext = '.sdp'
+        self._available_feeds = ['feed1']
+        self._busy_feeds = set()
 
     @asyncio.coroutine
     def __call__(self, sr, sw):
@@ -68,6 +78,25 @@ class ChatServer:
             else:
                 return None
         return self._channels[chname]
+
+    def get_streaming_path(self):
+        if len(self._available_feeds):
+            feedfile = self._available_feeds.pop()
+            self._busy_feeds.add(feedfile)
+            return (feedfile,
+                    self._feedpath + feedfile + self._feedext,
+                    self._rtsppath + feedfile + self._rtspext)
+        else:
+            return None, None
+
+    def release_streaming_path(self, feedfile):
+        try:
+            self._busy_feeds.remove(feedfile)
+        except KeyError:
+            return
+        else:
+            self._available_feeds.append(feedfile)
+        
 
     def route_msg(self, target_type, target, msg, user):
         if target_type == "CHANNEL":

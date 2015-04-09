@@ -4,8 +4,8 @@ import asyncio
 import logging
 import binascii
 import base64
-import uuid
 import json
+import uuid
 import hashlib
 import hmac
 import os.path

@@ -15,6 +15,7 @@ class User:
         self._conn = conn
         self._own_chs = {}
         self._chs = {}
+        self._streams = {}
 
         self._funcs = {}
         self._funcs['set_nick'] = self.set_nick
@@ -25,12 +26,15 @@ class User:
         self._funcs['request_users_in_channel'] = self.request_users_in_channel
         self._funcs['set_avatar'] = self.set_avatar
         self._funcs['send_file'] = self.send_file
+        self._funcs['start_streaming'] = self.start_streaming
+        self._funcs['stop_streaming'] = self.stop_streaming
 
     def _send(self, data):
         try:
             self._conn.send(data)
         except ConnectionError:
             logger.debug("connection error")
+            self.disconnect()
 
     def send_error(self, errmsg):
         data = {"type": "ERROR", "msg": errmsg}
@@ -87,6 +91,7 @@ class User:
 
     def leave(self, chname):
         if chname in self._chs:
+            self._chs[chname].remove_user(self)
             del self._chs[chname]
             self.send_return(123, True)
         else:
@@ -116,6 +121,28 @@ class User:
             token
         )
 
+    def start_streaming(self, target):
+        if target not in self._chs or target in self._streams:
+            return
+        feedfile, feed, point = self._server.get_streaming_path()
+        if not feedfile:
+            return
+        self._streams[target] = feedfile
+        self.send_call('get_streaming_feed', feed)
+        self._chs[target].broadcast_call(
+            'get_streaming_point',
+            point,
+            self.nick,
+            target
+        )
+
+    def stop_streaming(self, target):
+        if target not in self._streams:
+            return
+        res = self._server.release_streaming_path(self._streams[target])
+        if res:
+            del self._streams[target]
+
     def route_msg(self, target_type, target, msg):
         self._server.route_msg(target_type, target, msg, self)
 
@@ -130,5 +157,7 @@ class User:
         yield from self._conn.close()
         for ch in self._chs.values():
             ch.remove_user(self)
+        for feedfile in self._streams.values():
+            self._server.release_streaming_path(feedfile)
         self._server.del_user(self)
 
