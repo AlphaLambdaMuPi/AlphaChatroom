@@ -11,13 +11,44 @@ Item {
     property alias channelMod: channelMod
     signal newMessage(string ch)
     signal changeActiveChannel(string ch)
+    Rectangle {
+        id: selfItem
+        anchors.top: parent.top
+        width: parent.width
+        height: 80
+        color: '#888'
+
+        Image {
+            id: _i
+            anchors {
+                verticalCenter: parent.verticalCenter
+                left: parent.left
+                leftMargin: 10
+            }
+            width: 60
+            height: 60
+            source: 'Image://avatarImage/__self__'
+        }
+
+        Text {
+            anchors {
+                left: _i.right
+                leftMargin: 20
+                verticalCenter: parent.verticalCenter
+            }
+            text: selfName 
+            font {
+                pointSize: 16
+            }
+        }
+    }
     ListView {
         id: channelView
         //anchors.fill: parent
         width: parent.width
         height: childrenRect.height
         anchors {
-            top: parent.top
+            top: selfItem.bottom
         }
         model: ListModel {
             id: channelMod

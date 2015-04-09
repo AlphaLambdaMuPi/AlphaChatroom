@@ -209,6 +209,19 @@ Rectangle {
                                         }
                                     }
                                 }
+                                remove: Transition {
+                                    id: _t3
+                                    SequentialAnimation {
+                                        NumberAnimation {
+                                            properties: 'scale'
+                                            from: 1.0
+                                            to: 0
+                                            easing.type: Easing.InBack
+                                            easing.overshoot: 1.8
+                                            duration: 500
+                                        }
+                                    }
+                                }
                             }
                         }
                     }

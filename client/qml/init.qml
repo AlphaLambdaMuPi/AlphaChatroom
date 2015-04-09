@@ -58,6 +58,14 @@ ApplicationWindow {
         }
     }
 
+    function receiveUserLeave(ch, x) {
+        for(var i=0; i<chatUsersModels[ch].count; i++) {
+            if(chatUsersModels[ch].get(i).name == x) {
+                chatUsersModels[ch].remove(i);
+            }
+        }
+    }
+
     function receiveUserJoin(ch, x) {
         chatUsersModels[ch].append(x);
     }

@@ -172,6 +172,9 @@ class Medium(QObject):
         logger.debug('Get user <%s> join channel [%s].', x['nick'], ch)
         self.root.receiveUserJoin(ch, {'name': x['nick']})
 
+    def Suser_leave_channel(self, x, ch):
+        self.root.receiveUserLeave(ch, x)
+
     def Ssend_file_accepted(self, token, retid):
         print(self._file_map)
         logger.debug('retid = %s, file_url = %s', retid, self._file_map[retid])
