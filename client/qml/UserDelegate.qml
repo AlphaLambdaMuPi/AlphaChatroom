@@ -52,7 +52,7 @@ Rectangle {
         cursorShape: Qt.PointingHandCursor
 
         onClicked: {
-            channelAddActive('User:' + name)
+            if(name != selfName) channelAddActive('User:' + name);
         }
     }
 }

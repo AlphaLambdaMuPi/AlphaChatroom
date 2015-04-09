@@ -217,7 +217,7 @@ class Medium(QObject):
         if len(nick) > 30: return False
         if not re.match('[\w-]+', nick): return False
         self._login(nick)
-        self.root.onLoggedIn()
+        self.root.onLoggedIn(nick)
         self.set_avatar()
         return True
 

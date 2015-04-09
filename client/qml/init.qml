@@ -38,6 +38,7 @@ ApplicationWindow {
 
 
     property string activeChannel: ''
+    property string selfName: ''
     property variant chatModels: new Object()
     property variant chatUsersModels: new Object()
     property variant tokenToProgress: new Object()
@@ -61,7 +62,8 @@ ApplicationWindow {
         chatUsersModels[ch].append(x);
     }
 
-    function onLoggedIn() {
+    function onLoggedIn(s) {
+        selfName = s
         loader.source = ""
         loader.sourceComponent = waitingComp
         rootApp.width = 900
