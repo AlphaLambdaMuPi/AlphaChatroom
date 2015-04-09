@@ -87,15 +87,16 @@ class ChatServer:
                     self._feedpath + feedfile + self._feedext,
                     self._rtsppath + feedfile + self._rtspext)
         else:
-            return None, None
+            return None, None, None
 
     def release_streaming_path(self, feedfile):
         try:
             self._busy_feeds.remove(feedfile)
         except KeyError:
-            return
+            return False
         else:
             self._available_feeds.append(feedfile)
+            return True
         
 
     def route_msg(self, target_type, target, msg, user):

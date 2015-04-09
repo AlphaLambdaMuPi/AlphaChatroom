@@ -72,11 +72,14 @@ class StreamConnection:
     @asyncio.coroutine
     def close(self):
         if self.alive():
-            yield from self._sw.drain()
-            self._sw.write_eof()
-        self._sr.feed_eof()
-        yield from asyncio.sleep(0)
-        self._sw.close()
+            try:
+                yield from self._sw.drain()
+                self._sw.write_eof()
+            except ConnectionError:
+                pass
+            else:
+                self._sr.feed_eof()
+                self._sw.close()
         self._worker.cancel()
 
 class JsonConnection(StreamConnection):
