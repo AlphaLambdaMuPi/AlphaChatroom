@@ -28,6 +28,7 @@ class StreamConnection:
                 logger.debug("readline from stream reader was cancelled.")
             except ConnectionError:
                 logger.debug("connection error")
+                break
         logger.debug("connection closed")
 
     def _convert(self, data):
