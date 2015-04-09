@@ -131,6 +131,42 @@ Column {
                 }
             }
         }
+
+        Rectangle {
+            id: _recV
+            border {
+                width: 2
+                color: 'grey'
+            }
+            width: 100
+            height: 36
+            color: '#EEE'
+            radius: 3
+            Image {
+                anchors.centerIn: parent
+                source: '../img/video.png'
+                height: 30
+                width: 30
+            }
+            MouseArea {
+                id: _maV
+                cursorShape: Qt.PointingHandCursor
+                hoverEnabled: true 
+                anchors.fill: parent
+                onClicked: {
+                    medium.QstartStreaming(activeChannel)
+                }
+            }
+
+
+            states: [
+                State {
+                    name: 'mouse-over'
+                    when: _maV.containsMouse
+                    PropertyChanges { target: _recV; color: '#99CCFF'; }
+                }
+            ]
+        }
     }
     RowLayout {
         spacing: 20

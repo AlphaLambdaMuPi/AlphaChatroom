@@ -132,7 +132,7 @@ Item {
                         height: 30
                         radius: 15
                         visible: false
-                        y: parent.verticalCenter
+                        //y: parent.verticalCenter
                         Text {
                             anchors.centerIn: parent
                             text: '' + newMessageNum

@@ -53,7 +53,10 @@ def app_setup():
 
     topLevel.show()
 
-    app.aboutToQuit.connect(lambda: loop.close())
+    def close_func():
+        medium.goodbye()
+        loop.close()
+    app.aboutToQuit.connect(close_func)
     app.exec_()
 
 def main():

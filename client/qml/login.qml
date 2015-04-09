@@ -124,7 +124,7 @@ Rectangle {
                         }
                     }
                     onClicked: {
-                        flag = medium.Qlogin(nickTf.text)
+                        var flag = medium.Qlogin(nickTf.text)
                         if(!flag) {
                         }
                     }

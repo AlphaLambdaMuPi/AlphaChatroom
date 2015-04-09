@@ -5,6 +5,8 @@ import re
 import os
 import random
 import string
+import subprocess
+import signal
 
 from PyQt5.QtCore import QObject, pyqtSlot, pyqtSignal, QUrl
 from PyQt5.QtWidgets import *
@@ -37,6 +39,9 @@ class Medium(QObject):
         self._file_map = {}
         pass
 
+    def goodbye(self):
+        if not self._ps is None:
+            self._ps.kill()
 
     def setEngine(self, engine):
         self.engine = engine
@@ -77,7 +82,6 @@ class Medium(QObject):
             logging.error('Cant join server: %s', str(e))
 
         logger.info('Success joined channel: %s', channel)
-
 
 
     def send_msg(self, channel_type, channel, mesg):
@@ -134,7 +138,7 @@ class Medium(QObject):
         self.connect.put_call('set_avatar', 
                 self.engine.imageProvider('avatarImage').base64('__self__')
             )
-                
+
     def Sget_message(self, msg, fr, channel):
         if(channel is None):
             channel = 'User:' + fr
@@ -178,9 +182,31 @@ class Medium(QObject):
                 'sender': user,
                 'file_name': info[0],
                 'file_size': info[1],
-                'token': token
+                'token': token,
+                'timeStr': datetime.now().strftime('%H:%M')
             }
         })
+
+
+    def Sget_streaming_feed(self, url):
+        
+        logger.debug("exec ffmpeg -f v4l2 -i /dev/video0 -thread_queue_size 512 -f alsa -i hw:0,0 -async 1 {} > /dev/null 2>&1".format(url))
+        self._ps = subprocess.Popen(
+                "exec ffmpeg -f v4l2 -i /dev/video0 -thread_queue_size 512 -f alsa -i hw:0,0 -async 1 {} > /dev/null 2>&1".format(url),
+                shell = True
+            )
+        
+
+    def Sget_streaming_point(self, url, user, ch):
+        logger.debug("Get point: %s, %s, %s", url, user, ch)
+        self.root.receive_msg(ch, {
+            'type': 'streaming',
+            'data': {
+                'sender': user,
+                'url': url
+            }
+        })
+
 
     @pyqtSlot(str)
     def Qlogin(self, nick):
@@ -254,5 +280,29 @@ class Medium(QObject):
         fn = os.path.join(fn, file_name)
         logger.debug('Start get file, %s, %s', fn, token)
         self.connect.put_file('GET', fn, token)
+
+    @pyqtSlot(str)
+    def QstartGetStreaming(self, url):
+        fn = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'download')
+        fn = os.path.join(fn, file_name)
+        logger.debug('Start get file, %s, %s', fn, token)
+        self.connect.put_file('GET', fn, token)
+
+    @pyqtSlot(str)
+    def QstartStreaming(self, ch):
+        self.connect.put_call('start_streaming', ch)
+        self.root.receive_msg(ch, {
+            'type': 'streamingIndicate',
+            'data': {},
+        })
+
+    @pyqtSlot(str)
+    def QcallReleaseFeed(self, ch):
+        logger.debug('Kill subprocess %s', self._ps.pid)
+        self.connect.put_call('stop_streaming', ch)
+        #os.killpg(self._ps.pid, signal.SIGTERM)
+        self._ps.kill()
+
+    
         
 
