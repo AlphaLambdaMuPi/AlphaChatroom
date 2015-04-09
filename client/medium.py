@@ -146,7 +146,7 @@ class Medium(QObject):
     def Sget_message(self, msg, fr, channel):
         if(channel is None):
             channel = 'User:' + fr
-            print(fr)
+
         msg = regex.do_sub(msg)
         self.root.receive_msg(channel, {
             'type': 'text',
@@ -234,11 +234,12 @@ class Medium(QObject):
         logger.debug("Qsend channel = %s : %s", ch, s)
         if(ch[:5] == 'User:'):
             self.send_msg('USER', ch[5:], s)
+            msg = regex.do_sub(s)
             self.root.receive_msg('User:' + ch[5:], {
                 'type': 'text',
                 'data': {
                     'sender': self.name,
-                    'mesg': s,
+                    'mesg': msg,
                     'timeStr': self.time_string(),
                 }
             })
