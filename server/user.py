@@ -3,25 +3,59 @@
 import asyncio
 import logging
 
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
 
 class User:
-    def __init__(self, server, nick, conn):
+    def __init__(self, server, fileserver, nick, conn):
+        self.nick = nick
+        self.pic = ""
+
         self._server = server
-        self._nick = nick
+        self._fileserver = fileserver
         self._conn = conn
+        self._own_chs = {}
+        self._chs = {}
+        self._streams = {}
 
         self._funcs = {}
         self._funcs['set_nick'] = self.set_nick
         self._funcs['join'] = self.join
         self._funcs['leave'] = self.leave
+        self._funcs['route_message'] = self.route_msg
+        self._funcs['request_channels'] = self.request_channels
+        self._funcs['request_users_in_channel'] = self.request_users_in_channel
+        self._funcs['set_avatar'] = self.set_avatar
+        self._funcs['send_file'] = self.send_file
+        self._funcs['start_streaming'] = self.start_streaming
+        self._funcs['stop_streaming'] = self.stop_streaming
+
+    def _send(self, data):
+        try:
+            self._conn.send(data)
+        except ConnectionError:
+            logger.debug("connection error")
+            self.disconnect()
+
+    def send_error(self, errmsg):
+        data = {"type": "ERROR", "msg": errmsg}
+        self._send(data)
+    
+    def send_return(self, rid, ret):
+        data = {"type": "RETURN", "retid": rid, "ret": ret}
+        self._send(data)
+
+    def send_call(self, funcname, *args):
+        data = {"type": "CALL", "func": funcname, "params": args}
+        self._send(data)
+    
+    def send_msg(self, msg, fr, ch=None):
+        self.send_call("get_message", msg, fr, ch)
 
     @asyncio.coroutine
     def run(self):
-        while self._conn.is_connected():
+        while self._conn.alive():
             data = yield from self._conn.recv()
-            if not data:
+            if not isinstance(data, dict):
                 continue
             if "type" in data and data["type"] == "CALL":
                 try:
@@ -32,46 +66,98 @@ class User:
                     self.send_error("invalid operation")
             else:
                 self.send_error("invalid operation")
-        return False
-
-    def get_nick(self, nick):
-        return self._nick
+        yield from self.disconnect()
 
     def set_nick(self, nick):
-        if self._server.change_nick(self._nick, nick):
-            self._nick = nick
+        if nick == self.nick:
             self.send_return(True)
+        elif self._server.change_nick(self, nick):
+            self.nick = nick
+            self.send_return(123, True)
         else:
-            self.send_return(False)
+            self.send_return(123, False)
+
+    def set_avatar(self, pic):
+        self.pic = pic
+        self.send_return(123, True)
 
     def join(self, chname):
-        ch = self._server.get_channel(chname)
-        if  not ch.add_user(self):
-            self.send_error(
-                "can't join channel #{}".format(chname)
-            )
+        ch = self._server.get_channel(chname, create=True)
+        if ch and ch.add_user(self):
+            self._chs[chname] = ch
+            self.send_call('success_join', chname)
+        else:
+            self.send_error("can't join channel #{}".format(chname))
 
     def leave(self, chname):
-        ch = self._server.get_channel(chname)
-        if ch.remove_user(self):
-            self.send_return(True)
+        if chname in self._chs:
+            self._chs[chname].remove_user(self)
+            del self._chs[chname]
+            self.send_return(123, True)
         else:
-            self.send_return(False)
+            self.send_return(123, False)
 
-    def send_error(self, errmsg):
-        data = {"type": "ERROR", "msg": errmsg}
-        self._conn.send(data)
-    
-    def send_return(self, rid, ret):
-        data = {"type": "RETURN", "retid": rid, "ret": ret}
-        self._conn.send(data)
+    def request_channels(self):
+        self.send_call("get_channels", list(self._chs))
 
-    def send_call(self, funcname, *args):
-        data = {"type": "CALL", "func": funcname, "params": args}
-        self._conn.send(data)
-    
-    def send(self, msg, fr, ch=None):
-        data = {"type": "MSG", "msg": msg, "from": fr, "channel": ch}
-        self._conn.send(data)
-    
+    def request_users_in_channel(self, chname):
+        ch = self._server.get_channel(chname)
+        if ch:
+            self.send_call("get_users_in_channel", chname, ch.get_users())
+        else:
+            self.send_error("channel #{} doesn't exist.".format(chname))
+
+    def send_file(self, filename, filesize, md5, target, retid):
+        if target not in self._chs:
+            return
+        token = self._fileserver.request_token(filename, filesize, md5)
+        self.send_call('send_file_accepted', token, retid)
+        info = (filename, filesize, md5)
+        self._fileserver.add_recv_callback(
+            lambda: self._chs[target].broadcast_call(
+                'file_uploaded',
+                token, info, self.nick, target
+            ),
+            token
+        )
+
+    def start_streaming(self, target):
+        if target not in self._chs or target in self._streams:
+            return
+        feedfile, feed, point = self._server.get_streaming_path()
+        if not feedfile:
+            return
+        self._streams[target] = feedfile
+        self.send_call('get_streaming_feed', feed)
+        self._chs[target].broadcast_call(
+            'get_streaming_point',
+            point,
+            self.nick,
+            target
+        )
+
+    def stop_streaming(self, target):
+        if target not in self._streams:
+            return
+        res = self._server.release_streaming_path(self._streams[target])
+        if res:
+            del self._streams[target]
+
+    def route_msg(self, target_type, target, msg):
+        self._server.route_msg(target_type, target, msg, self)
+
+    def get_info(self):
+        return {
+            "nick": self.nick, 
+            "pic": self.pic,
+        }
+
+    @asyncio.coroutine
+    def disconnect(self):
+        yield from self._conn.close()
+        for ch in self._chs.values():
+            ch.remove_user(self)
+        for feedfile in self._streams.values():
+            self._server.release_streaming_path(feedfile)
+        self._server.del_user(self)
 
