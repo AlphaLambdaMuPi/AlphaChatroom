@@ -3,6 +3,7 @@
 import asyncio
 import logging
 import server
+import subprocess
 
 from server import chat_server
 from fileserver import file_server
@@ -29,11 +30,14 @@ if __name__ == "__main__":
     s = loop.run_until_complete(coro)
     fs = loop.run_until_complete(coro2)
 
+    ffserver = subprocess.Popen("exec ffserver", shell=True)
+
     logger.info('serving on {}'.format(s.sockets[0].getsockname()))
     try:
         loop.run_forever()
     except KeyboardInterrupt:
         print()
+        ffserver.kill()
         loop.run_until_complete(chat_server.stop())
         loop.run_until_complete(file_server.stop())
     finally:
